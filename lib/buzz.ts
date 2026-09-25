@@ -4,13 +4,16 @@ import type { Team } from "./data";
 
 export type Post = {
   handle: string; name: string; avatar: string; text: string; likes: number; reposts: number;
-  url: string; at: string; side: "both" | "home" | "away"; role: string;
+  url: string; at: string; side: "both" | "home" | "away"; role: string; links?: string[];
 };
 export type Headline = { title: string; url: string; source: string; at: string };
 export type Buzz = { posts: Post[]; news: Headline[]; volume: { away: number; home: number } };
 
 // Who counts as a pro: reporters, analysts, outlets. Checked against the author's Bluesky bio.
 const PRO = /\b(reporter|writer|editor|analyst|insider|columnist|beat|covers?|covering|host|podcast|journalist|correspondent|recruiting|contributor|radio|broadcaster|anchor|newsroom|producer|espn|the athletic|247sports|247|on3|rivals|cbs ?sports|fox ?sports|usa today|sports illustrated|si\.com|yahoo|bleacher|sb ?nation|the ringer|associated press|gazette|times|tribune|herald|news|journal|chronicle|observer|dispatch|courier|daily)\b/i;
+
+// Links to real sports coverage mark a post as coming from someone who covers the game.
+const NEWSLINK = /(espn|theathletic|nytimes|on3\.com|247sports|rivals\.com|si\.com|cbssports|foxsports|yahoo|usatoday|apnews|nbcsports|sbnation|bleacherreport|theringer|wholehogsports|arkansasonline|tulsaworld|newson6|al\.com|dawgnation|sportsillustrated|athlonsports|saturdaydownsouth|footballscoop|\/sports\/|\/football\/|\/college-football\/)/i;
 
 async function profiles(handles: string[]) {
   const out = new Map<string, { bio: string; followers: number }>();
@@ -101,6 +104,7 @@ export async function getBuzz(away: Team, home: Team): Promise<Buzz> {
       text: text.slice(0, 320), likes, reposts, at,
       url: `https://bsky.app/profile/${p.author?.handle}/post/${String(p.uri).split("/").pop()}`,
       side: both ? "both" : a ? "away" : "home", role: "",
+      links: [p.record?.embed?.external?.uri, p.embed?.external?.uri, ...(p.record?.facets || []).flatMap((f: any) => (f.features || []).map((x: any) => x.uri))].filter(Boolean),
       rank: (both ? 3 : 1) * (1 + Math.log1p(likes + 2 * reposts + (p.replyCount || 0))) / (1 + Math.max(0, age) / 24),
     });
   }
@@ -111,10 +115,12 @@ export async function getBuzz(away: Team, home: Team): Promise<Buzz> {
     const a = prof.get(p.handle);
     if (!a) return false;
     const custom = !p.handle.endsWith(".bsky.social");
-    return a.followers >= 500 && (PRO.test(a.bio) || PRO.test(p.name) || (custom && a.followers >= 1500));
+    const covers = (p.links || []).some((u) => NEWSLINK.test(u));
+    return a.followers >= 10 && (PRO.test(a.bio) || PRO.test(p.name) || covers || (custom && a.followers >= 50));
   }).map((p) => {
     const a = prof.get(p.handle)!;
-    return { ...p, role: a.bio.split(/[\n|•·]/)[0].trim().slice(0, 80), rank: p.rank * (1 + Math.log10(1 + a.followers)) };
+    const site = (p.links || []).map((u) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return ""; } }).find((h) => h && NEWSLINK.test(h));
+    return { ...p, role: a.bio.split(/[\n|•·]/)[0].trim().slice(0, 80) || (site ? `Covers it for ${site}` : ""), rank: p.rank * (1 + Math.log10(1 + a.followers)) };
   }).sort((x, y) => y.rank - x.rank);
 
   const tseen = new Set<string>();
@@ -125,7 +131,7 @@ export async function getBuzz(away: Team, home: Team): Promise<Buzz> {
     .slice(0, 6);
 
   return {
-    posts: pros.slice(0, 10).map(({ rank, ...p }) => p),
+    posts: pros.slice(0, 10).map(({ rank, links, ...p }) => p),
     news: headlines,
     volume: { away: vol.away.size, home: vol.home.size },
   };

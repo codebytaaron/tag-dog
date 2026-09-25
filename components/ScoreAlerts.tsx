@@ -24,7 +24,7 @@ export default function ScoreAlerts() {
       fresh.forEach((f) => setTimeout(() => setToasts((t) => t.filter((x) => x.key !== f.key)), 8000));
     };
     const load = async () => {
-      if (document.hidden) return;
+      if (document.hidden && !(first && demo)) return;
       try {
         const r = await fetch("/api/live", { cache: "no-store" });
         if (!r.ok) return;
