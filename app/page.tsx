@@ -69,7 +69,7 @@ export default function Home() {
       <header className="hero">
         <div className="brand"><span className="pulse" /> TRAP GAME RADAR</div>
         <h1>Which favorites are about to<br /><span className="grad">get got</span> this Saturday?</h1>
-        <p className="sub">Every FBS game scored for look-ahead spots, letdowns, travel, rest, weather and line value — then Claude writes the scouting brief.</p>
+        <p className="sub">Every FBS game scored for look-ahead spots, letdowns, travel, rest, weather and line value — then AI writes the scouting brief.</p>
         {data && (
           <div className="stats">
             <div><b>{data.season}</b><span>Season</span></div>
@@ -154,7 +154,7 @@ export default function Home() {
             </ul>
 
             <div className="ai">
-              <div className="aihead"><span className="spark">✦</span> Claude's scouting brief</div>
+              <div className="aihead"><span className="spark">✦</span> AI scouting brief</div>
               {!b && <button className="cta" onClick={() => ask(sel)}>Generate brief</button>}
               {b === "loading" && <div className="thinking"><i /><i /><i /> Watching film…</div>}
               {b && b !== "loading" && (b.error ? <p className="err">{b.error}</p> : (
@@ -173,7 +173,7 @@ export default function Home() {
         </div>
       )}
 
-      <footer>Data: ESPN · Open-Meteo · Analysis: Claude. Not betting advice — just vibes with receipts.</footer>
+      <footer>Data: ESPN · Open-Meteo · Analysis: Groq. Not betting advice — just vibes with receipts.</footer>
     </main>
   );
 }

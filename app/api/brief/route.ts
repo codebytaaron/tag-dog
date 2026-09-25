@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 
-const MODEL = process.env.ANTHROPIC_MODEL || "claude-sonnet-5";
+const MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
 
 export async function POST(req: Request) {
-  const key = process.env.ANTHROPIC_API_KEY;
-  if (!key) return NextResponse.json({ error: "Set ANTHROPIC_API_KEY to unlock Claude's scouting briefs." }, { status: 503 });
+  const key = process.env.GROQ_API_KEY;
+  if (!key) return NextResponse.json({ error: "Set GROQ_API_KEY (free at console.groq.com) to unlock AI scouting briefs." }, { status: 503 });
   const g = await req.json();
   const fav = g[g.favorite], dog = g[g.favorite === "home" ? "away" : "home"];
   const facts = {
@@ -30,14 +30,18 @@ Write a trap-game scouting brief. Only use the facts provided plus general, well
   "coachSpeak": "a one-line fake-but-plausible warning the favorite's coach should give the locker room"
 }`;
   try {
-    const r = await fetch("https://api.anthropic.com/v1/messages", {
+    const r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
-      headers: { "content-type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01" },
-      body: JSON.stringify({ model: MODEL, max_tokens: 700, messages: [{ role: "user", content: prompt }] }),
+      headers: { "content-type": "application/json", authorization: `Bearer ${key}` },
+      body: JSON.stringify({
+        model: MODEL, max_tokens: 700, temperature: 0.7,
+        response_format: { type: "json_object" },
+        messages: [{ role: "user", content: prompt }],
+      }),
     });
     const d = await r.json();
-    if (!r.ok) return NextResponse.json({ error: d.error?.message || "Claude request failed" }, { status: 502 });
-    const text: string = d.content?.find((c: any) => c.type === "text")?.text || "";
+    if (!r.ok) return NextResponse.json({ error: d.error?.message || "AI request failed" }, { status: 502 });
+    const text: string = d.choices?.[0]?.message?.content || "";
     const json = JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1));
     return NextResponse.json(json);
   } catch (e: any) {
