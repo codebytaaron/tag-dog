@@ -1022,3 +1022,5 @@ button.btn.ghost { background: transparent; }
   .brow .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .thead.brow { display: none; }
 }
+
+@media (max-width: 900px) { .brow .mt .rc { display: none; } }
