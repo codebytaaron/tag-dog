@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useFollow } from "./SaveButton";
 
 type T = { id: string; name: string; short: string; abbr: string; loc: string; nick: string; logo: string; color: string };
 const POPULAR = ["333", "61", "194", "251", "130", "87", "2483", "99", "228", "245"];
@@ -20,6 +21,7 @@ export default function Search() {
   const [sel, setSel] = useState(0);
   const router = useRouter();
   const input = useRef<HTMLInputElement>(null);
+  const { ids: followed } = useFollow();
 
   useEffect(() => {
     const k = (e: KeyboardEvent) => {
@@ -41,7 +43,10 @@ export default function Search() {
   const res = useMemo(() => {
     if (!teams) return [];
     const s = q.trim().toLowerCase();
-    if (!s) return POPULAR.map((id) => teams.find((t) => t.id === id)).filter(Boolean) as T[];
+    if (!s) {
+      const pick = (list: string[]) => list.map((id) => teams.find((t) => t.id === id)).filter(Boolean) as T[];
+      return [...pick(followed), ...pick(POPULAR.filter((id) => !followed.includes(id)))].slice(0, 10);
+    }
     const alias = ALIAS[s.replace(/[^a-z]/g, "")];
     const rank = (t: T) => {
       if (t.id === alias) return -2;
@@ -53,7 +58,7 @@ export default function Search() {
     };
     const boost = (t: T) => (POPULAR.includes(t.id) ? -0.5 : 0);
     return teams.map((t) => [rank(t) + (rank(t) < 9 ? boost(t) : 0), t] as const).filter(([r]) => r < 9).sort((a, b) => a[0] - b[0]).slice(0, 8).map(([, t]) => t);
-  }, [teams, q]);
+  }, [teams, q, followed]);
 
   const go = (t?: T) => { if (!t) return; setOpen(false); router.push(`/team/${t.id}`); };
 
@@ -76,7 +81,7 @@ export default function Search() {
                 }} />
               <kbd onClick={() => setOpen(false)}>ESC</kbd>
             </div>
-            <div className="pallabel mono">{q ? "TEAMS" : "POPULAR"}</div>
+            <div className="pallabel mono">{q ? "TEAMS" : followed.length ? "YOUR TEAMS · POPULAR" : "POPULAR"}</div>
             <div className="palres">
               {!teams && <div className="palempty mono">Loading teams…</div>}
               {teams && res.length === 0 && <div className="palempty">No team matches “{q}”.</div>}
@@ -84,7 +89,7 @@ export default function Search() {
                 <button key={t.id} className={`palrow ${k === sel ? "on" : ""}`} onMouseEnter={() => setSel(k)} onClick={() => go(t)}>
                   <span className="palsw" style={{ background: t.color }} />
                   {t.logo ? <img src={t.logo} alt="" /> : <span className="palimg" />}
-                  <span className="palname">{t.name}</span>
+                  <span className="palname">{t.name}{followed.includes(t.id) && <em className="star"> ★</em>}</span>
                   <span className="mono muted">{t.abbr}</span>
                   <span className="palgo">↵</span>
                 </button>

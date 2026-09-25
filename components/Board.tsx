@@ -3,20 +3,35 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import type { LiteGame } from "@/lib/data";
 import type { Live } from "@/lib/live";
-import SaveButton, { useSaved } from "./SaveButton";
+import SaveButton, { useSaved, useFollow } from "./SaveButton";
 import Kickoff from "./Kickoff";
 import { useLive } from "./useLive";
 
-type Tab = "fade" | "scores" | "heat" | "saved";
+type Tab = "board" | "scores" | "saved";
+type Lens = "upset" | "watch" | "live" | "mine" | "ranked" | "steam" | "weather" | "prime" | "all";
+const NATIONAL = ["ABC", "CBS", "FOX", "NBC", "ESPN"];
+const etHour = (d: string) => (new Date(d).getUTCHours() + 20) % 24;
 
-function Matchup({ g, lv }: { g: LiteGame; lv?: Live }) {
+const LENSES: { id: Lens; label: string; hint: string }[] = [
+  { id: "upset", label: "Upset watch", hint: "Favorites most likely to slip" },
+  { id: "watch", label: "Must-watch", hint: "Close lines, big names, big buzz" },
+  { id: "live", label: "Live now", hint: "Games in progress" },
+  { id: "mine", label: "Your teams", hint: "Teams you follow" },
+  { id: "ranked", label: "Ranked on alert", hint: "Top-25 favorites flagged" },
+  { id: "steam", label: "Line moving", hint: "Spread sliding to the dog" },
+  { id: "weather", label: "Weather games", hint: "Wind, rain or cold" },
+  { id: "prime", label: "Primetime", hint: "Night games on national TV" },
+  { id: "all", label: "All games", hint: "Everything left to play" },
+];
+
+function Matchup({ g, lv, mine }: { g: LiteGame; lv?: Live; mine: string[] }) {
   const scored = lv && lv.state !== "pre" && lv.home != null;
   const T = ({ t, side }: { t: any; side: "home" | "away" }) => {
     const sc = scored ? lv![side] : null, other = scored ? lv![side === "home" ? "away" : "home"] : null;
     return (
       <div className={`mt ${g.favorite === side ? "fav" : ""} ${scored && sc! > other! ? "win" : ""}`}>
         {t.logo ? <img src={t.logo} alt="" /> : <span className="dotc" style={{ background: t.color }} />}
-        <span className="nm">{t.rank && <sup>{t.rank}</sup>}{t.short}</span>
+        <span className="nm">{t.rank && <sup>{t.rank}</sup>}{t.short}{mine.includes(t.id) && <em className="star"> ★</em>}</span>
         {scored ? <span className="sc mono">{sc}</span> : <span className="rc mono">{t.record}</span>}
       </div>
     );
@@ -31,7 +46,20 @@ function Status({ g, lv }: { g: LiteGame; lv?: Live }) {
   return <span className="ln"><b>{g.line}</b><small className="mono"><Kickoff date={g.date} />{g.network ? ` · ${g.network}` : ""}</small></span>;
 }
 
-function ScoreCard({ g, lv }: { g: LiteGame; lv?: Live }) {
+function Feature({ label, g, note }: { label: string; g?: LiteGame; note: string }) {
+  if (!g) return null;
+  return (
+    <Link href={`/game/${g.id}`} className="feat" style={{ ["--c" as any]: g[g.favorite].color }}>
+      <span className="mono flabel">{label}</span>
+      <div className="flogos">{g.away.logo && <img src={g.away.logo} alt="" />}<span className="mono">@</span>{g.home.logo && <img src={g.home.logo} alt="" />}</div>
+      <b className="fname">{g.away.short} @ {g.home.short}</b>
+      <span className="mono muted small">{g.line} · <Kickoff date={g.date} /></span>
+      <span className="fnote">{note}</span>
+    </Link>
+  );
+}
+
+function ScoreCard({ g, lv, mine }: { g: LiteGame; lv?: Live; mine: string[] }) {
   const st = lv?.state ?? g.state;
   return (
     <Link href={`/game/${g.id}`} className={`scard ${st}`} style={{ ["--c" as any]: g[g.favorite].color }}>
@@ -39,7 +67,7 @@ function ScoreCard({ g, lv }: { g: LiteGame; lv?: Live }) {
         {st === "in" ? <span className="livetag"><i />LIVE · {lv?.detail}</span> : st === "post" ? <span>FINAL</span> : <span><Kickoff date={g.date} />{g.network ? ` · ${g.network}` : ""}</span>}
         <span className={`tiny t-${g.tier}`}>{g.tier} {g.score}</span>
       </div>
-      <Matchup g={g} lv={lv} />
+      <Matchup g={g} lv={lv} mine={mine} />
       <div className="sfoot mono">
         {st === "in" && lv?.down ? <span className={lv.redZone ? "c-fade" : ""}>{lv.down}</span> : <span className="muted">{g.line}{g.total ? ` · O/U ${g.total}` : ""}</span>}
       </div>
@@ -48,30 +76,39 @@ function ScoreCard({ g, lv }: { g: LiteGame; lv?: Live }) {
 }
 
 export default function Board({ games, week, season, updated, initialTab, initialLive }: {
-  games: LiteGame[]; week: number | null; season: number | null; updated: string; initialTab: Tab; initialLive: Record<string, Live>;
+  games: LiteGame[]; week: number | null; season: number | null; updated: string; initialTab: string; initialLive: Record<string, Live>;
 }) {
-  const [tab, setTab] = useState<Tab>(initialTab);
-  const [tier, setTier] = useState<"ALL" | "FADE" | "WATCH">("ALL");
-  const [ranked, setRanked] = useState(false);
+  const startTab: Tab = initialTab === "scores" ? "scores" : initialTab === "saved" ? "saved" : "board";
+  const [tab, setTab] = useState<Tab>(startTab);
+  const [lens, setLens] = useState<Lens>(initialTab === "heat" ? "watch" : "upset");
   const [q, setQ] = useState("");
-  const { ids } = useSaved();
+  const { ids: saved } = useSaved();
+  const { ids: mine, list: myTeams, toggle: toggleTeam } = useFollow();
   const live = useLive(initialLive);
-  useEffect(() => setTab(initialTab), [initialTab]);
+  useEffect(() => { setTab(startTab); if (initialTab === "heat") setLens("watch"); }, [initialTab]); // eslint-disable-line
 
   const stateOf = (g: LiteGame) => live[g.id]?.state ?? g.state;
   const match = (g: LiteGame) => !q || `${g.home.name} ${g.away.name} ${g.home.abbr} ${g.away.abbr}`.toLowerCase().includes(q.toLowerCase());
   const open = useMemo(() => games.filter((g) => stateOf(g) !== "post"), [games, live]); // eslint-disable-line
-  const liveCount = useMemo(() => games.filter((g) => stateOf(g) === "in").length, [games, live]); // eslint-disable-line
+  const test: Record<Lens, (g: LiteGame) => boolean> = {
+    all: () => true,
+    upset: (g) => g.tier !== "HOLD",
+    watch: () => true,
+    live: (g) => stateOf(g) === "in",
+    mine: (g) => mine.includes(g.home.id) || mine.includes(g.away.id),
+    ranked: (g) => !!g[g.favorite].rank && g.tier !== "HOLD",
+    steam: (g) => g.keys.includes("steam"),
+    weather: (g) => g.keys.includes("weather"),
+    prime: (g) => etHour(g.date) >= 19 && NATIONAL.some((n) => (g.network || "").includes(n)),
+  };
+  const base = (l: Lens) => (l === "live" || l === "mine" ? games : open).filter(test[l]);
+  const counts = useMemo(() => Object.fromEntries(LENSES.map((l) => [l.id, base(l.id).length])) as Record<Lens, number>, [games, live, mine]); // eslint-disable-line
+  const byWatch = lens === "watch" || lens === "prime";
+  const list = useMemo(() => [...base(lens).filter(match)].sort((a, b) => (byWatch ? b.watch - a.watch : b.score - a.score)), [games, live, mine, lens, q]); // eslint-disable-line
 
-  const list = useMemo(() => {
-    let l = tab === "saved" ? games.filter((g) => ids.includes(g.id)) : open;
-    if (tab === "fade" || tab === "heat") {
-      if (tier === "FADE") l = l.filter((g) => g.tier === "FADE");
-      if (tier === "WATCH") l = l.filter((g) => g.tier !== "HOLD");
-      if (ranked) l = l.filter((g) => g[g.favorite].rank);
-    }
-    return [...l.filter(match)].sort((a, b) => (tab === "heat" ? b.heat - a.heat : b.score - a.score));
-  }, [games, open, tab, tier, ranked, q, ids]); // eslint-disable-line
+  const upsetPick = useMemo(() => [...open].sort((a, b) => b.score - a.score)[0], [open]);
+  const watchPick = useMemo(() => [...open].sort((a, b) => b.watch - a.watch).find((g) => g.id !== upsetPick?.id), [open, upsetPick]);
+  const steamPick = useMemo(() => [...open].filter((g) => g.keys.includes("steam")).sort((a, b) => b.score - a.score).find((g) => g.id !== upsetPick?.id && g.id !== watchPick?.id), [open, upsetPick, watchPick]);
 
   const groups = useMemo(() => {
     const all = games.filter(match);
@@ -82,92 +119,106 @@ export default function Board({ games, week, season, updated, initialTab, initia
     ].filter((x) => x.items.length);
   }, [games, live, q]); // eslint-disable-line
 
-  const go = (t: Tab) => { setTab(t); history.replaceState(null, "", t === "fade" ? "/board" : `/board?tab=${t}`); };
-  const titles: Record<Tab, [string, string]> = {
-    fade: ["The Fade Board", "Every FBS game that hasn't finished, ranked by Tape Score. Higher score means the favorite is in a worse spot."],
-    scores: ["Scores", "Live and final scores for every FBS game this week. Updates automatically."],
-    heat: ["Biggest games", "This week's biggest games, based on betting volume, rankings and TV slot."],
-    saved: ["Your saved tape", "Games you bookmarked on this device."],
-  };
+  const go = (t: Tab) => { setTab(t); history.replaceState(null, "", t === "board" ? "/board" : `/board?tab=${t}`); };
+  const cur = LENSES.find((l) => l.id === lens)!;
+
+  const Rows = ({ items }: { items: LiteGame[] }) => (
+    <div className="table">
+      <div className="thead brow mono"><span>#</span><span>Matchup</span><span>Line</span><span>Why it's flagged</span><span>Upset</span><span>Watch</span><span /></div>
+      {items.map((g, k) => (
+        <Link key={g.id} href={`/game/${g.id}`} className="row brow" style={{ ["--c" as any]: g[g.favorite].color, animationDelay: `${Math.min(k, 20) * 20}ms` }}>
+          <span className="idx mono">{String(k + 1).padStart(2, "0")}</span>
+          <Matchup g={g} lv={live[g.id]} mine={mine} />
+          <Status g={g} lv={live[g.id]} />
+          <span className="sig">{g.signals.length ? g.signals.map((s) => <em key={s}>{s}</em>) : <em className="quiet">Clean spot</em>}</span>
+          <span className={`score t-${g.tier}`}><b>{g.score}</b><small>{g.tier}</small></span>
+          <span className="wcell"><b className="mono">{g.watch}</b><i><u style={{ width: `${g.watch}%` }} /></i></span>
+          <SaveButton id={g.id} />
+        </Link>
+      ))}
+    </div>
+  );
 
   return (
     <div className="wrap board">
       <div className="bhead">
         <div>
           <div className="eyebrow mono">{season ?? ""} · WEEK {week ?? "—"} · UPDATED <Kickoff date={updated} /></div>
-          <h1 className="btitle">{titles[tab][0]}</h1>
-          <p className="muted">{titles[tab][1]}</p>
+          <h1 className="btitle">{tab === "scores" ? "Scores" : tab === "saved" ? "Your stuff" : "The Fade Board"}</h1>
+          <p className="muted">{tab === "scores" ? "Live and final scores for every FBS game this week. Updates automatically."
+            : tab === "saved" ? "Teams you follow and games you saved, on this device."
+            : "Every FBS game left to play. Upset = how shaky the favorite looks. Watch = how good the game should be."}</p>
         </div>
-        <div className="tally">
-          {liveCount > 0 && <button onClick={() => go("scores")}><b className="c-fade">{liveCount}</b><span>Live</span></button>}
-          <button onClick={() => { go("fade"); setTier("FADE"); }}><b className="c-fade">{open.filter((g) => g.tier === "FADE").length}</b><span>Fades</span></button>
-          <button onClick={() => { go("fade"); setTier("WATCH"); }}><b className="c-watch">{open.filter((g) => g.tier === "WATCH").length}</b><span>Watch</span></button>
-          <button onClick={() => { go("fade"); setTier("ALL"); }}><b>{open.length}</b><span>To play</span></button>
+        <div className="tabs">
+          <button className={tab === "board" ? "on" : ""} onClick={() => go("board")}>Board</button>
+          <button className={tab === "scores" ? "on" : ""} onClick={() => go("scores")}>Scores{counts.live > 0 && <i className="ldot" />}</button>
+          <button className={tab === "saved" ? "on" : ""} onClick={() => go("saved")}>Saved <em>{saved.length + mine.length}</em></button>
         </div>
       </div>
 
-      <div className="controls">
-        <div className="tabs">
-          <button className={tab === "fade" ? "on" : ""} onClick={() => go("fade")}>Fade Board</button>
-          <button className={tab === "scores" ? "on" : ""} onClick={() => go("scores")}>Scores{liveCount > 0 && <i className="ldot" />}</button>
-          <button className={tab === "heat" ? "on" : ""} onClick={() => go("heat")}>Biggest</button>
-          <button className={tab === "saved" ? "on" : ""} onClick={() => go("saved")}>Saved <em>{ids.length}</em></button>
+      {tab === "board" && (<>
+        <div className="feats">
+          <Feature label="UPSET OF THE WEEK" g={upsetPick} note={upsetPick ? `Tape ${upsetPick.score}: ${upsetPick.signals.slice(0, 2).join(" + ") || "situational spot"}` : ""} />
+          <Feature label="GAME OF THE WEEK" g={watchPick} note={watchPick ? `Watch ${watchPick.watch}${watchPick.spread != null ? ` · ${watchPick.spread}-pt line` : ""}${watchPick.home.rank && watchPick.away.rank ? " · ranked vs ranked" : ""}` : ""} />
+          <Feature label="SHARP MOVE" g={steamPick} note="The spread is moving toward the underdog" />
         </div>
-        <div className="filters">
-          {(tab === "fade" || tab === "heat") && (<>
-            {(["ALL", "FADE", "WATCH"] as const).map((t) => (
-              <button key={t} className={`pill ${tier === t ? "on" : ""}`} onClick={() => setTier(t)}>{t === "ALL" ? "All" : t === "FADE" ? "Fades" : "Watch+"}</button>
-            ))}
-            <button className={`pill ${ranked ? "on" : ""}`} onClick={() => setRanked(!ranked)}>Ranked favs</button>
-          </>)}
+
+        <div className="lenses" role="tablist">
+          {LENSES.filter((l) => l.id !== "live" || counts.live > 0).map((l) => (
+            <button key={l.id} role="tab" aria-selected={lens === l.id} className={`lens ${lens === l.id ? "on" : ""} ${l.id === "live" ? "islive" : ""}`} onClick={() => setLens(l.id)}>
+              <span className="lt"><b>{l.label}</b><span className="mono">{counts[l.id]}</span></span>
+              <small>{l.hint}</small>
+            </button>
+          ))}
+        </div>
+
+        <div className="controls2">
+          <span className="mono muted small">{cur.label.toUpperCase()} · {list.length} GAMES · SORTED BY {byWatch ? "WATCH" : "UPSET"}</span>
           <div className="searchwrap">
-            <input className="search" placeholder="Filter this week's games" value={q} onChange={(e) => setQ(e.target.value)} />
+            <input className="search" placeholder="Filter by team" value={q} onChange={(e) => setQ(e.target.value)} />
             {q && <button className="clr" onClick={() => setQ("")} aria-label="Clear">×</button>}
           </div>
         </div>
-      </div>
 
-      {tab === "scores" ? (
+        {list.length ? <Rows items={list} /> : (
+          <div className="empty">
+            {lens === "mine" ? <>Follow teams from their page (search with ⌘K) and their games show up here.</>
+              : games.length ? <>Nothing here right now. <button className="linkbtn" onClick={() => { setQ(""); setLens("all"); }}>See all games</button></>
+              : "The slate is loading from the books. Refresh in a minute."}
+          </div>
+        )}
+      </>)}
+
+      {tab === "scores" && (
         <div className="scores">
+          <div className="controls2"><span /><div className="searchwrap"><input className="search" placeholder="Filter by team" value={q} onChange={(e) => setQ(e.target.value)} /></div></div>
           {groups.map((grp) => (
             <section key={grp.key}>
               <h2 className="gtitle mono">{grp.key === "in" && <span className="dotrec" />}{grp.title} <span className="muted">{grp.items.length}</span></h2>
-              <div className="scoregrid">{grp.items.map((g) => <ScoreCard key={g.id} g={g} lv={live[g.id]} />)}</div>
+              <div className="scoregrid">{grp.items.map((g) => <ScoreCard key={g.id} g={g} lv={live[g.id]} mine={mine} />)}</div>
             </section>
           ))}
           {groups.length === 0 && <div className="empty">No games match “{q}”.</div>}
         </div>
-      ) : (
-        <div className="table">
-          <div className="thead mono">
-            <span>#</span><span>Matchup</span><span>Line</span><span>{tab === "heat" ? "Heat" : "Why it's flagged"}</span><span>{tab === "heat" ? "Action" : "Tape"}</span><span />
-          </div>
-          {list.map((g, k) => (
-            <Link key={g.id} href={`/game/${g.id}`} className="row" style={{ ["--c" as any]: g[g.favorite].color, animationDelay: `${Math.min(k, 20) * 25}ms` }}>
-              <span className="idx mono">{String(k + 1).padStart(2, "0")}</span>
-              <Matchup g={g} lv={live[g.id]} />
-              <Status g={g} lv={live[g.id]} />
-              {tab === "heat" ? (
-                <span className="heat"><i style={{ width: `${g.heat}%` }} /><small className="mono">{g.heat}</small></span>
-              ) : (
-                <span className="sig">{g.signals.length ? g.signals.map((s) => <em key={s}>{s}</em>) : <em className="quiet">Clean spot</em>}</span>
-              )}
-              {tab === "heat" ? (
-                <span className="act mono">
-                  <b>{g.bets ? g.bets.toLocaleString() : "—"}</b><small>bets tracked</small>
-                  {g.kalshi && <small>${Math.round(g.kalshi.volume / 1000)}k on Kalshi</small>}
-                </span>
-              ) : (
-                <span className={`score t-${g.tier}`}><b>{g.score}</b><small>{g.tier}</small></span>
-              )}
-              <SaveButton id={g.id} />
-            </Link>
-          ))}
-          {list.length === 0 && (
-            <div className="empty">
-              {tab === "saved" ? <>No saved games yet. Tap the bookmark on any game to keep it here.</> : games.length ? <>Nothing matches. <button className="linkbtn" onClick={() => { setQ(""); setTier("ALL"); setRanked(false); }}>Clear filters</button></> : "The slate is loading from the books. Refresh in a minute."}
+      )}
+
+      {tab === "saved" && (
+        <div>
+          <h2 className="gtitle mono">Teams you follow <span className="muted">{myTeams.length}</span></h2>
+          {myTeams.length ? (
+            <div className="myteams">
+              {myTeams.map((t) => (
+                <div key={t.id} className="myteam">
+                  <Link href={`/team/${t.id}`}>{t.logo && <img src={t.logo} alt="" />}<b>{t.name}</b></Link>
+                  <button onClick={() => toggleTeam(t)} aria-label={`Unfollow ${t.name}`}>×</button>
+                </div>
+              ))}
             </div>
-          )}
+          ) : <p className="muted">No teams yet. Open any team (⌘K) and hit Follow.</p>}
+          <h2 className="gtitle mono">Saved games <span className="muted">{saved.length}</span></h2>
+          {games.filter((g) => saved.includes(g.id)).length
+            ? <Rows items={games.filter((g) => saved.includes(g.id))} />
+            : <p className="muted">Tap the bookmark on any game to keep it here.</p>}
         </div>
       )}
       <p className="hint mono">TIP: PRESS ⌘K OR / TO JUMP TO ANY TEAM</p>

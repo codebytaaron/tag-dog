@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getSlate } from "@/lib/data";
 import Kickoff from "@/components/Kickoff";
 import Ring from "@/components/Ring";
+import { FollowButton } from "@/components/SaveButton";
 
 export const revalidate = 60;
 export const maxDuration = 60;
@@ -56,6 +57,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
               <div className="eyebrow mono">{rank ? `#${rank} · ` : ""}{team.standingSummary || "College football"}</div>
               <h1 className="btitle">{team.location}</h1>
               <p className="muted">{team.name} · <span className="mono">{record}</span></p>
+              <FollowButton team={{ id, name: team.location, logo: team.logos?.[0]?.href || "" }} />
             </div>
           </div>
           {onSlate && (

@@ -13,7 +13,7 @@ const DAY = 86400000;
 
 export type Team = {
   id: string; name: string; short: string; location: string; abbr: string; logo: string;
-  color: string; alt: string; rank: number | null; record: string;
+  color: string; alt: string; rank: number | null; record: string; nick: string;
 };
 export type BookLine = { book: string; spreadHome: number | null; total: number | null; mlHome: number | null; mlAway: number | null };
 export type Factor = { key: string; label: string; detail: string; points: number };
@@ -27,7 +27,7 @@ export type Game = {
   bookFavProb: number | null; kalshi: { home: number; away: number; volume: number } | null;
   fpi: { home: number; away: number } | null; weather: Weather;
   favPrev: string | null; favNext: string | null; favRest: number | null; dogRest: number | null;
-  factors: Factor[]; score: number; tier: Tier; heat: number;
+  factors: Factor[]; score: number; tier: Tier; heat: number; watch: number;
 };
 export type Slate = { season: number | null; week: number | null; updated: string; games: Game[] };
 
@@ -57,7 +57,7 @@ function toTeam(c: any): Team {
   const rk = c?.curatedRank?.current;
   return {
     id: t.id, name: t.displayName || "TBD", short: t.shortDisplayName || t.name || "TBD",
-    location: t.location || t.shortDisplayName || "", abbr: t.abbreviation || "",
+    location: t.location || t.shortDisplayName || "", nick: t.name || "", abbr: t.abbreviation || "",
     logo: t.logo || t.logos?.[0]?.href || "", color: "#" + (t.color || "3a3a3a"), alt: "#" + (t.alternateColor || "1a1a1a"),
     rank: rk && rk <= 25 ? rk : null, record: c?.records?.[0]?.summary || "0-0",
   };
@@ -218,7 +218,7 @@ async function enrich(b: any, an: any[], ks: KEvent[]): Promise<Game> {
     id: b.id, date: b.date, state: b.state, status: b.status, venue: b.venue, home: b.home, away: b.away,
     favorite, spread, line, total, network: b.network, books, openFav, nowFav, bets, bookFavProb, kalshi, fpi,
     weather: wx, favPrev: tag(prev), favNext: tag(next), favRest, dogRest,
-    factors: f.sort((a, c) => c.points - a.points), score, tier, heat,
+    factors: f.sort((a, c) => c.points - a.points), score, tier, heat, watch: 0,
   };
 }
 
@@ -236,10 +236,16 @@ async function buildSlate(): Promise<Slate> {
   const games = await pool((sb.events || []).map(parseEvent), 12, (b) => enrich(b, an.games || [], kev));
   const max = Math.max(1, ...games.map((g) => g.heat));
   games.forEach((g) => { g.heat = Math.round((g.heat / max) * 100); });
+  // Watchability: close line + big names + buzz + upset potential.
+  games.forEach((g) => {
+    const close = g.spread == null ? 0.35 : Math.max(0, 1 - g.spread / 24);
+    const ranked = (g.home.rank ? 1 : 0) + (g.away.rank ? 1 : 0);
+    g.watch = Math.min(99, Math.round(close * 45 + g.heat * 0.3 + ranked * 8 + (g.tier === "FADE" ? 8 : g.tier === "WATCH" ? 4 : 0)));
+  });
   return { season: sb.season?.year ?? null, week: sb.week?.number ?? null, updated: new Date().toISOString(), games };
 }
 
-const cachedSlate = unstable_cache(buildSlate, ["tapedog-slate-v1"], { revalidate: 900 });
+const cachedSlate = unstable_cache(buildSlate, ["tapedog-slate-v2"], { revalidate: 900 });
 export async function getSlate(): Promise<Slate> {
   return safe(cachedSlate(), { season: null, week: null, updated: new Date().toISOString(), games: [] });
 }
@@ -257,9 +263,9 @@ export async function getGameDetail(id: string) {
 }
 
 // Slim shape for list views so pages stay light.
-export type LiteGame = Pick<Game, "id" | "date" | "state" | "status" | "home" | "away" | "favorite" | "line" | "spread" | "total" | "network" | "score" | "tier" | "heat" | "bets" | "kalshi"> & { signals: string[] };
+export type LiteGame = Pick<Game, "id" | "date" | "state" | "status" | "home" | "away" | "favorite" | "line" | "spread" | "total" | "network" | "score" | "tier" | "heat" | "bets" | "kalshi" | "watch"> & { signals: string[]; keys: string[] };
 export const lite = (g: Game): LiteGame => ({
   id: g.id, date: g.date, state: g.state, status: g.status, home: g.home, away: g.away, favorite: g.favorite,
   line: g.line, spread: g.spread, total: g.total, network: g.network, score: g.score, tier: g.tier, heat: g.heat,
-  bets: g.bets, kalshi: g.kalshi, signals: g.factors.filter((x) => x.points > 0).slice(0, 3).map((x) => x.label),
+  bets: g.bets, kalshi: g.kalshi, watch: g.watch, keys: g.factors.filter((x) => x.points > 0).map((x) => x.key), signals: g.factors.filter((x) => x.points > 0).slice(0, 3).map((x) => x.label),
 });

@@ -8,7 +8,7 @@ import Brief from "@/components/Brief";
 import LiveBar from "@/components/LiveBar";
 import { getLive } from "@/lib/live";
 import { getBuzz } from "@/lib/buzz";
-import Ago from "@/components/Ago";
+import BuzzPanel from "@/components/BuzzPanel";
 
 export const revalidate = 900;
 export const maxDuration = 60;
@@ -22,7 +22,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
   const d = await getGameDetail((await params).id);
   if (!d) notFound();
   const { game: g, news } = d;
-  const [liveMap, buzz] = await Promise.all([getLive(), getBuzz(g.away.location, g.home.location)]);
+  const [liveMap, buzz] = await Promise.all([getLive(), getBuzz(g.away, g.home)]);
   const live = liveMap[g.id] || null;
   const fav = g[g.favorite], dog = g[g.favorite === "home" ? "away" : "home"];
   const favSide = g.favorite;
@@ -145,33 +145,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
             <div><span className="mono muted">DOG REST</span><b>{g.dogRest != null ? `${g.dogRest} days` : "—"}</b><small>{dog.short}</small></div>
           </section>
 
-          <section className="card">
-            <div className="cardh"><h3>The buzz</h3><span className="mono muted">BLUESKY · GOOGLE NEWS</span></div>
-            {buzz.posts.length === 0 && buzz.news.length === 0 && <p className="muted">Quiet so far. Check back closer to kickoff.</p>}
-            {buzz.posts.length > 0 && (
-              <ul className="posts">
-                {buzz.posts.slice(0, 5).map((p) => (
-                  <li key={p.url}>
-                    <a href={p.url} target="_blank" rel="noreferrer">
-                      {p.avatar ? <img src={p.avatar} alt="" /> : <span className="pavi" />}
-                      <div>
-                        <div className="phead"><b>{p.name}</b><span className="mono muted">@{p.handle} · <Ago date={p.at} /></span></div>
-                        <p>{p.text}</p>
-                        {p.likes > 0 && <span className="mono muted small">♥ {p.likes}</span>}
-                      </div>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )}
-            {buzz.news.length > 0 && (
-              <ul className="wire tight">
-                {buzz.news.map((n) => (
-                  <li key={n.url}><a href={n.url} target="_blank" rel="noreferrer">{n.title}</a> <span className="mono muted small">{n.source}</span></li>
-                ))}
-              </ul>
-            )}
-          </section>
+          <BuzzPanel buzz={buzz} away={{ abbr: g.away.abbr, short: g.away.short, color: g.away.color }} home={{ abbr: g.home.abbr, short: g.home.short, color: g.home.color }} />
 
           {news.length > 0 && (
             <section className="card">
