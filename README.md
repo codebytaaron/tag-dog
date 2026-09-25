@@ -19,13 +19,13 @@ Every FBS game on the slate gets a **Trap Score (0–100)** built from the situa
 ## APIs
 - **ESPN** scoreboard + team schedules (odds, ranks, venues, records)
 - **Open-Meteo** geocoding + hourly forecast (kickoff-hour weather at the venue)
-- **Groq** (free tier, Llama 3.3 70B) — structured scouting brief (headline, upset %, reasons, x-factor, coach-speak)
+- **Google Gemini** (free tier) — structured scouting brief (headline, upset %, reasons, x-factor, coach-speak)
 
 ## Run / deploy
 ```bash
 npm install
-GROQ_API_KEY=gsk_... npm run dev
+GEMINI_API_KEY=... npm run dev
 ```
-Deploy on Vercel: import the repo and add `GROQ_API_KEY` — free at console.groq.com (optional `GROQ_MODEL`, defaults to `llama-3.3-70b-versatile`). The radar works without a key; only the AI brief needs it.
+Deploy on Vercel: import the repo and add `GEMINI_API_KEY` — free at aistudio.google.com (optional `GEMINI_MODEL`, defaults to `gemini-2.5-flash`). The radar works without a key; only the AI brief needs it.
 
 _Not betting advice. Just vibes with receipts._

@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 
-const MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 
 export async function POST(req: Request) {
-  const key = process.env.GROQ_API_KEY;
-  if (!key) return NextResponse.json({ error: "Set GROQ_API_KEY (free at console.groq.com) to unlock AI scouting briefs." }, { status: 503 });
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) return NextResponse.json({ error: "Set GEMINI_API_KEY (free at aistudio.google.com) to unlock AI scouting briefs." }, { status: 503 });
   const g = await req.json();
   const fav = g[g.favorite], dog = g[g.favorite === "home" ? "away" : "home"];
   const facts = {
@@ -30,18 +30,17 @@ Write a trap-game scouting brief. Only use the facts provided plus general, well
   "coachSpeak": "a one-line fake-but-plausible warning the favorite's coach should give the locker room"
 }`;
   try {
-    const r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`, {
       method: "POST",
-      headers: { "content-type": "application/json", authorization: `Bearer ${key}` },
+      headers: { "content-type": "application/json", "x-goog-api-key": key },
       body: JSON.stringify({
-        model: MODEL, max_tokens: 700, temperature: 0.7,
-        response_format: { type: "json_object" },
-        messages: [{ role: "user", content: prompt }],
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        generationConfig: { responseMimeType: "application/json", temperature: 0.7, maxOutputTokens: 4096 },
       }),
     });
     const d = await r.json();
     if (!r.ok) return NextResponse.json({ error: d.error?.message || "AI request failed" }, { status: 502 });
-    const text: string = d.choices?.[0]?.message?.content || "";
+    const text: string = (d.candidates?.[0]?.content?.parts || []).map((p: any) => p.text || "").join("");
     const json = JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1));
     return NextResponse.json(json);
   } catch (e: any) {

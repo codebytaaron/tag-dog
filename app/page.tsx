@@ -173,7 +173,7 @@ export default function Home() {
         </div>
       )}
 
-      <footer>Data: ESPN · Open-Meteo · Analysis: Groq. Not betting advice — just vibes with receipts.</footer>
+      <footer>Data: ESPN · Open-Meteo · Analysis: Gemini. Not betting advice — just vibes with receipts.</footer>
     </main>
   );
 }
