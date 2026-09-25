@@ -9,13 +9,14 @@ import LiveBar from "@/components/LiveBar";
 import { getLive } from "@/lib/live";
 import { getBuzz } from "@/lib/buzz";
 import BuzzPanel from "@/components/BuzzPanel";
+import PickBar from "@/components/PickBar";
 
 export const revalidate = 900;
 export const maxDuration = 60;
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const d = await getGameDetail((await params).id);
-  return { title: d ? `${d.game.away.short} @ ${d.game.home.short} — TapeDog` : "TapeDog" };
+  return { title: d ? `${d.game.away.short} @ ${d.game.home.short} | TapeDog` : "TapeDog" };
 }
 
 export default async function GamePage({ params }: { params: Promise<{ id: string }> }) {
@@ -73,6 +74,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
 
       <div className="wrap ggrid">
         <div className="col">
+          <PickBar id={g.id} date={g.date} state={g.state} fav={g.favorite} line={g.line} away={{ abbr: g.away.abbr, short: g.away.short, logo: g.away.logo, color: g.away.color }} home={{ abbr: g.home.abbr, short: g.home.short, logo: g.home.logo, color: g.home.color }} />
           <section className="card">
             <div className="cardh"><h3>Why it's flagged</h3><span className="mono muted">{g.factors.length} SIGNALS</span></div>
             {g.factors.length === 0 && <p className="muted">Nothing situational. Clean spot for {fav.short}.</p>}
@@ -97,7 +99,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                     <span className={`mono ${r.dogSpread === bestDogSpread ? "best" : ""}`}>{fmtSpread(r.dogSpread)}</span>
                     <span className={`mono ${r.dogML === bestDogML ? "best" : ""}`}>{fmtML(r.dogML)}</span>
                     <span className="mono">{fmtML(r.favML)}</span>
-                    <span className="mono">{r.total ?? "—"}</span>
+                    <span className="mono">{r.total ?? "–"}</span>
                   </div>
                 ))}
               </div>
@@ -119,7 +121,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
                 <div key={p.label} className="prob">
                   <span>{p.label}</span>
                   <div className="bar"><i style={{ width: `${p.v ?? 0}%`, background: fav.color }} /></div>
-                  <b className="mono">{p.v != null ? `${Math.round(p.v)}%` : "—"}</b>
+                  <b className="mono">{p.v != null ? `${Math.round(p.v)}%` : "–"}</b>
                 </div>
               ))}
             </div>
@@ -133,16 +135,16 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
           <section className="card">
             <div className="cardh"><h3>{fav.short}'s schedule</h3><span className="mono muted">LAST · THIS · NEXT</span></div>
             <div className="runway">
-              <div><span className="mono">LAST WEEK</span><b>{g.favPrev || "—"}</b>{g.favRest != null && <small>{g.favRest} days ago</small>}</div>
+              <div><span className="mono">LAST WEEK</span><b>{g.favPrev || "–"}</b>{g.favRest != null && <small>{g.favRest} days ago</small>}</div>
               <div className="now"><span className="mono">THIS WEEK</span><b>{dog.short}</b><small>{g.line}</small></div>
-              <div><span className="mono">NEXT WEEK</span><b>{g.favNext || "—"}</b></div>
+              <div><span className="mono">NEXT WEEK</span><b>{g.favNext || "–"}</b></div>
             </div>
           </section>
 
           <section className="card two">
-            <div><span className="mono muted">KICKOFF WEATHER</span><b>{g.weather ? `${g.weather.tempF}°F` : g.venue.indoor ? "Dome" : "—"}</b>
+            <div><span className="mono muted">KICKOFF WEATHER</span><b>{g.weather ? `${g.weather.tempF}°F` : g.venue.indoor ? "Dome" : "–"}</b>
               {g.weather && <small>{g.weather.windMph} mph wind · {g.weather.precipPct}% rain</small>}</div>
-            <div><span className="mono muted">DOG REST</span><b>{g.dogRest != null ? `${g.dogRest} days` : "—"}</b><small>{dog.short}</small></div>
+            <div><span className="mono muted">DOG REST</span><b>{g.dogRest != null ? `${g.dogRest} days` : "–"}</b><small>{dog.short}</small></div>
           </section>
 
           <BuzzPanel buzz={buzz} away={{ abbr: g.away.abbr, short: g.away.short, color: g.away.color }} home={{ abbr: g.home.abbr, short: g.home.short, color: g.home.color }} />

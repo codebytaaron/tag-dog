@@ -6,7 +6,7 @@ import Link from "next/link";
 import Logo from "@/components/Logo";
 
 export const metadata = {
-  title: "TapeDog — Find the favorites worth fading",
+  title: "TapeDog | Find the favorites worth fading",
   description: "College football trap-game radar. Every FBS favorite, graded on schedule spots, line movement, markets and weather.",
 };
 

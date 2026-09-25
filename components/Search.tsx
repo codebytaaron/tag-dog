@@ -73,7 +73,7 @@ export default function Search() {
           <div className="pal" onClick={(e) => e.stopPropagation()}>
             <div className="palin">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
-              <input ref={input} value={q} placeholder="Search any team — Alabama, UGA, Ducks…" onChange={(e) => { setQ(e.target.value); setSel(0); }}
+              <input ref={input} value={q} placeholder="Search any team: Alabama, UGA, Ducks…" onChange={(e) => { setQ(e.target.value); setSel(0); }}
                 onKeyDown={(e) => {
                   if (e.key === "ArrowDown") { e.preventDefault(); setSel((x) => Math.min(x + 1, res.length - 1)); }
                   if (e.key === "ArrowUp") { e.preventDefault(); setSel((x) => Math.max(x - 1, 0)); }

@@ -1,7 +1,7 @@
 import FeatureLine from "@/components/FeatureLine";
 import Waitlist from "@/components/Waitlist";
 
-export const metadata = { title: "Dog Zone — TapeDog Plus" };
+export const metadata = { title: "Dog Zone | TapeDog Plus" };
 
 const PERKS = [
   ["Fade alerts", "A ping the moment a game crosses 50."],

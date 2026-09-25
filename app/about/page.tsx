@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export const metadata = { title: "How it works — TapeDog" };
+export const metadata = { title: "How it works | TapeDog" };
 
 const WHY = [
   ["Spot, not strength", "Power ratings tell you who's better. TapeDog tells you who's in a bad spot this week."],
@@ -39,7 +39,7 @@ export default function How() {
       <section className="howhero">
         <div className="eyebrow mono">HOW IT WORKS</div>
         <h1 className="mega">Spot the<br /><span className="c-tape">bad spot.</span></h1>
-        <p className="lead2">TapeDog grades every FBS favorite on the stuff box scores miss — look-ahead spots, letdowns, line movement, prediction markets, rest and weather — then flags the ones worth fading.</p>
+        <p className="lead2">TapeDog scores every FBS game for upset risk. It checks odds at six sportsbooks, prediction markets, schedule spots, rest and weather, then tells you which favorites to fade and which games are worth watching.</p>
       </section>
 
       <section className="pipe" aria-label="How a game gets scored">

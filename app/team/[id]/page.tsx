@@ -32,7 +32,7 @@ async function load(id: string) {
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const d = await load((await params).id);
-  return { title: d ? `${d.team.displayName} — TapeDog` : "TapeDog" };
+  return { title: d ? `${d.team.displayName} | TapeDog` : "TapeDog" };
 }
 
 export default async function TeamPage({ params }: { params: Promise<{ id: string }> }) {
@@ -68,7 +68,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                 <div>
                   <b>{onSlate.away.short} @ {onSlate.home.short}</b>
                   <small className="mono">{onSlate.line} · <Kickoff date={onSlate.date} /></small>
-                  <small>{isFav ? `${team.location} is the favorite — ${onSlate.tier === "FADE" ? "and a fade" : onSlate.tier === "WATCH" ? "worth watching" : "in a clean spot"}` : `${team.location} is the underdog`}</small>
+                  <small>{isFav ? `${team.location} is the favorite, ${onSlate.tier === "FADE" ? "and a fade" : onSlate.tier === "WATCH" ? "worth watching" : "in a clean spot"}` : `${team.location} is the underdog`}</small>
                 </div>
               </div>
               <span className="go mono">OPEN FILE →</span>

@@ -143,7 +143,7 @@ export default function Board({ games, week, season, updated, initialTab, initia
     <div className="wrap board">
       <div className="bhead">
         <div>
-          <div className="eyebrow mono">{season ?? ""} · WEEK {week ?? "—"} · UPDATED <Kickoff date={updated} /></div>
+          <div className="eyebrow mono">{season ?? ""} · WEEK {week ?? "–"} · UPDATED <Kickoff date={updated} /></div>
           <h1 className="btitle">{tab === "scores" ? "Scores" : tab === "saved" ? "Your stuff" : "The Fade Board"}</h1>
           <p className="muted">{tab === "scores" ? "Live and final scores for every FBS game this week. Updates automatically."
             : tab === "saved" ? "Teams you follow and games you saved, on this device."

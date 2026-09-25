@@ -4,6 +4,15 @@ import { useEffect, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import Logo from "./Logo";
 import Search from "./Search";
+import { useProfile } from "./SaveButton";
+
+function Me() {
+  const { profile } = useProfile();
+  const ini = profile ? profile.name.trim().split(/\s+/).map((s) => s[0]).join("").slice(0, 2).toUpperCase() : "ME";
+  return (
+    <Link href="/profile" className={`avatar ${profile ? "has" : ""}`} title="Your profile" style={profile ? { background: profile.color } : undefined}>{ini}</Link>
+  );
+}
 
 const LINKS = [
   { href: "/board", label: "Fade Board" },
@@ -26,7 +35,7 @@ export default function Nav() {
           <Link href="/dogzone" className={`dz ${path === "/dogzone" ? "on" : ""}`}>Dog Zone <em>PLUS</em></Link>
         </nav>
         <Search />
-        <Link href="/profile" className="avatar" title="Profile">TA</Link>
+        <Me />
         <button className="burger" onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open}>
           <span className={open ? "x" : ""} />
         </button>
@@ -39,6 +48,7 @@ export default function Nav() {
           <Link href="/about" className={path === "/about" ? "on" : ""}>How it works</Link>
           <Link href="/dogzone" className={path === "/dogzone" ? "on" : ""}>Dog Zone <em className="plus">PLUS</em></Link>
           <Link href="/founder" className={path === "/founder" ? "on" : ""}>Founder</Link>
+          <Link href="/profile" className={path === "/profile" ? "on" : ""}>Your profile</Link>
         </div>
       )}
     </header>

@@ -49,8 +49,8 @@ export async function pool<T, R>(items: T[], n: number, fn: (t: T) => Promise<R>
 const norm = (s: string) => (s || "").toLowerCase().replace(/[^a-z]/g, "");
 const pct = (rec: string) => { const [w, l] = rec.split("-").map(Number); return w + l ? w / (w + l) : 0.5; };
 export const implied = (ml: number | null) => (ml == null ? null : ml < 0 ? -ml / (-ml + 100) : 100 / (ml + 100));
-export const fmtSpread = (n: number | null) => (n == null ? "—" : n === 0 ? "PK" : (n > 0 ? "+" : "") + n);
-export const fmtML = (n: number | null) => (n == null ? "—" : (n > 0 ? "+" : "") + n);
+export const fmtSpread = (n: number | null) => (n == null ? "–" : n === 0 ? "PK" : (n > 0 ? "+" : "") + n);
+export const fmtML = (n: number | null) => (n == null ? "–" : (n > 0 ? "+" : "") + n);
 
 function toTeam(c: any): Team {
   const t = c?.team || {};

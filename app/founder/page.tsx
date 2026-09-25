@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export const metadata = { title: "Founder — TapeDog" };
+export const metadata = { title: "Founder | TapeDog" };
 
 const logo = (id: string) => `https://a.espncdn.com/i/teamlogos/ncaa/500/${id}.png`;
 

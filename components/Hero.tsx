@@ -60,14 +60,14 @@ export default function Hero({ games, count, week }: { games: Fly[]; count: numb
       </div>
       <div className="vignette" aria-hidden />
       <div className="wrap herocopy">
-        <div className="rec mono"><span className="dotrec" /> REC <span ref={tc}>00:00:00:00</span> · WK {week ?? "—"} TAPE · {count} GAMES LOADED</div>
+        <div className="rec mono"><span className="dotrec" /> REC <span ref={tc}>00:00:00:00</span> · WK {week ?? "–"} TAPE · {count} GAMES LOADED</div>
         <h1>
           <span className="l1">Find the favorites</span>
           <span className={`rot ${phase}`} key={i}>
             {WORDS[i].split("").map((ch, k) => <span key={k} className="ch" style={{ animationDelay: `${k * 26}ms` }}>{ch === " " ? " " : ch}</span>)}
           </span>
         </h1>
-        <p className="lede">TapeDog grades every FBS favorite on the stuff box scores miss — look-ahead spots, letdowns, line steam, prediction markets, rest and weather — then flags the ones worth fading.</p>
+        <p className="lede">TapeDog scores every FBS game for upset risk. It checks odds at six sportsbooks, prediction markets, schedule spots, rest and weather, then tells you which favorites to fade and which games are worth watching.</p>
         <div className="ctas">
           <Link href="/board" className="btn primary">Open the Fade Board <span>→</span></Link>
           <Link href="/about" className="btn ghost">How it works</Link>

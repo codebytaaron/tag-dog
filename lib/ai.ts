@@ -30,7 +30,7 @@ export function briefPrompt(g: Game, buzz?: Buzz) {
     headlines: (buzz?.news || []).map((n) => n.title),
     tapeScore: g.score, signals: g.factors.map((f) => `${f.label}: ${f.detail} (${f.points > 0 ? "+" : ""}${f.points})`),
   };
-  return `You are TapeDog, a college football film-room analyst who hunts for favorites worth fading. Voice: confident, dry, a little funny, never corny. No emojis.
+  return `You are TapeDog, a college football film-room analyst who hunts for favorites worth fading. Voice: confident, dry, a little funny, never corny. No emojis. Never use em dashes.
 
 Situational data (JSON):
 ${JSON.stringify(facts, null, 2)}
@@ -66,7 +66,7 @@ export async function gemini(prompt: string): Promise<Brief> {
     const body = await r.json().catch(() => ({}));
     if (r.ok) {
       const text: string = (body.candidates?.[0]?.content?.parts || []).map((p: any) => p.text || "").join("");
-      return JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1));
+      return JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1).replace(/\s*\u2014\s*/g, ", "));
     }
     lastErr = body.error?.message || lastErr;
     if (![404, 429, 500, 503].includes(r.status)) break;

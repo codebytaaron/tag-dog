@@ -4,7 +4,7 @@ import Board from "@/components/Board";
 
 export const revalidate = 60;
 export const maxDuration = 60;
-export const metadata = { title: "Fade Board — TapeDog" };
+export const metadata = { title: "Fade Board | TapeDog" };
 
 export default async function BoardPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
   const [{ tab }, s, live] = await Promise.all([searchParams, getSlate(), getLive()]);

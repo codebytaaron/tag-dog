@@ -7,13 +7,14 @@ function store<T>(key: string, evt: string) {
   const write = (v: T[]) => { try { localStorage.setItem(key, JSON.stringify(v)); } catch {} window.dispatchEvent(new Event(evt)); };
   function useStore() {
     const [v, setV] = useState<T[]>([]);
+    const [ready, setReady] = useState(false);
     useEffect(() => {
-      const s = () => setV(read());
+      const s = () => { setV(read()); setReady(true); };
       s();
       window.addEventListener(evt, s); window.addEventListener("storage", s);
       return () => { window.removeEventListener(evt, s); window.removeEventListener("storage", s); };
     }, []);
-    return v;
+    return [v, ready] as const;
   }
   return { read, write, useStore };
 }
@@ -21,17 +22,43 @@ function store<T>(key: string, evt: string) {
 const games = store<string>("tapedog.saved", "tapedog-saved");
 export type FollowedTeam = { id: string; name: string; logo: string };
 const teams = store<FollowedTeam>("tapedog.teams", "tapedog-teams");
+export type Profile = { name: string; teamId: string; teamName: string; teamLogo: string; color: string; since: string };
+const profiles = store<Profile>("tapedog.profile", "tapedog-profile");
+export type Side = "home" | "away";
+export type Pick = {
+  id: string; date: string; pick: Side; fav: Side; line: string; madeAt: string;
+  away: { abbr: string; short: string; logo: string }; home: { abbr: string; short: string; logo: string };
+};
+const picks = store<Pick>("tapedog.picks", "tapedog-picks");
 
 export const readSaved = games.read;
 export function useSaved() {
-  const ids = games.useStore();
+  const [ids] = games.useStore();
   const toggle = (id: string) => { const c = games.read(); games.write(c.includes(id) ? c.filter((x) => x !== id) : [...c, id]); };
   return { ids, toggle };
 }
 export function useFollow() {
-  const list = teams.useStore();
+  const [list] = teams.useStore();
   const toggle = (t: FollowedTeam) => { const c = teams.read(); teams.write(c.some((x) => x.id === t.id) ? c.filter((x) => x.id !== t.id) : [...c, t]); };
   return { ids: list.map((t) => t.id), list, toggle };
+}
+export function useProfile() {
+  const [v, ready] = profiles.useStore();
+  return { profile: v[0] || null, ready, save: (p: Profile) => profiles.write([p]) };
+}
+export function usePicks() {
+  const [list] = picks.useStore();
+  return {
+    list,
+    set: (p: Pick) => picks.write([...picks.read().filter((x) => x.id !== p.id), p]),
+    remove: (id: string) => picks.write(picks.read().filter((x) => x.id !== id)),
+  };
+}
+export function resetAll() {
+  for (const k of ["profile", "picks", "saved", "teams"]) {
+    try { localStorage.removeItem(`tapedog.${k}`); } catch {}
+    window.dispatchEvent(new Event(`tapedog-${k}`));
+  }
 }
 
 export function FollowButton({ team }: { team: FollowedTeam }) {

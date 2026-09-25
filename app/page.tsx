@@ -4,6 +4,12 @@ import Hero from "@/components/Hero";
 import Reveal from "@/components/Reveal";
 import Kickoff from "@/components/Kickoff";
 
+const FLOW: [string, string, string, string[]][] = [
+  ["01", "Pull the odds", "Lines from six sportsbooks, the opening number, prediction markets and ESPN's model.", ["DraftKings", "FanDuel", "BetMGM", "Caesars", "bet365", "BetRivers", "Action Network", "Kalshi", "ESPN FPI"]],
+  ["02", "Check the spot", "Last week, next week, travel, rest, weather and what fans are saying.", ["ESPN schedules", "Open-Meteo", "Bluesky", "Google News"]],
+  ["03", "Score it", "Red flags add up to a 0 to 99 Tape Score. 50 or higher is a FADE.", ["TapeDog model", "Gemini AI", "Live scores"]],
+];
+
 export const revalidate = 900;
 export const maxDuration = 60;
 
@@ -44,7 +50,7 @@ export default async function Landing() {
 
       <section className="wrap sect2">
         <Reveal>
-          <div className="eyebrow mono">WEEK {s.week ?? "—"}</div>
+          <div className="eyebrow mono">WEEK {s.week ?? "–"}</div>
           <h2 className="h2">This week's tape</h2>
         </Reveal>
         <div className="twocol">
@@ -65,13 +71,15 @@ export default async function Landing() {
           <div className="eyebrow mono">HOW IT WORKS</div>
           <h2 className="h2">Three steps, every game.</h2>
         </Reveal>
-        <div className="steps3">
-          {[
-            ["01", "Pull the odds", "Six sportsbooks, the opening line, Kalshi and ESPN's model."],
-            ["02", "Check the spot", "Last week, next week, travel, rest and weather."],
-            ["03", "Score it", "Red flags add up to a 0–99 Tape Score. 50+ is a FADE."],
-          ].map(([n, t, d], k) => (
-            <Reveal key={n} delay={k * 90} className="step3"><span className="mono">{n}</span><b>{t}</b><p>{d}</p></Reveal>
+        <div className="flow3">
+          {FLOW.map(([n, t, d, tools], k) => (
+            <Reveal key={n} delay={k * 120} className="fstep">
+              <div className="fsh"><span className="mono fnum">{n}</span><b>{t}</b></div>
+              <p>{d}</p>
+              <div className="tools">
+                {tools.map((x, i) => <span key={x} className="tool" style={{ animationDelay: `${(k * 5 + i) * 0.45}s` }}><i />{x}</span>)}
+              </div>
+            </Reveal>
           ))}
         </div>
         <div className="center"><Link href="/about" className="btn ghost">See everything it checks →</Link></div>
