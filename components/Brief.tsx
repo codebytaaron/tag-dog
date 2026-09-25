@@ -34,6 +34,7 @@ export default function Brief({ id }: { id: string }) {
             <div><span className="mono">THE DOG'S PATH</span><p>{b.dogCase}</p></div>
             <div><span className="mono">X-FACTOR</span><p>{b.xFactor}</p></div>
           </div>
+          {b.crowd && <div className="crowd"><span className="mono">WHAT PEOPLE ARE SAYING</span><p>{b.crowd}</p></div>}
           <blockquote>“{b.coachSpeak}”</blockquote>
         </div>
       )}

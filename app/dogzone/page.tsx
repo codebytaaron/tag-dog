@@ -1,31 +1,44 @@
-import Link from "next/link";
+import FeatureLine from "@/components/FeatureLine";
+import Waitlist from "@/components/Waitlist";
+
 export const metadata = { title: "Dog Zone — TapeDog Plus" };
 
 const PERKS = [
-  ["Early fade alerts", "Get pinged when a game crosses 50 on the tape — before the number moves."],
-  ["Season trap tracker", "Every flagged fade, graded against the final score, all year."],
-  ["Film-room archive", "Every AI scouting brief, searchable by team and spot."],
-  ["Custom weights", "Tune the playbook. Care more about weather than rest? Your call."],
-  ["Line-move history", "Open-to-kick charts across every book we track."],
-  ["The kennel", "A members-only group chat for game-day talk."],
+  ["Fade alerts", "A ping the moment a game crosses 50."],
+  ["Season tracker", "Every flagged fade, graded against the final."],
+  ["Breakdown archive", "Every AI breakdown, searchable."],
+  ["Custom red flags", "Weight the checks your way."],
+  ["Line history", "Open-to-kickoff moves across every book."],
+  ["Members chat", "Game-day talk with other members."],
 ];
 
 export default function DogZone() {
   return (
-    <main className="wrap soon dz">
-      <div className="eyebrow mono">TAPEDOG PLUS · COMING SOON</div>
-      <h1 className="mega">The Dog <span className="c-tape">Zone.</span></h1>
-      <p className="muted lead2">TapeDog stays free. Dog Zone is an optional paid tier with alerts, tracking and extra tools.</p>
-      <div className="perks">
-        {PERKS.map(([t, d], k) => (
-          <div key={t} className="perk"><span className="mono num">{String(k + 1).padStart(2, "0")}</span><b>{t}</b><p>{d}</p></div>
-        ))}
-      </div>
-      <div className="plan">
-        <div><span className="mono muted">PLUS</span><b>Pricing TBA</b><small>Launching later this season</small></div>
-        <button className="btn primary" disabled>Coming soon</button>
-      </div>
-      <Link href="/board" className="btn ghost">Back to the free board →</Link>
+    <main className="dzpage">
+      <section className="wrap dzhero">
+        <div className="eyebrow mono">TAPEDOG PLUS · COMING 2027</div>
+        <h1 className="mega">The Dog <span className="c-tape">Zone.</span></h1>
+        <p className="lead2 muted">TapeDog stays free. Dog Zone adds alerts, tracking and extra tools.</p>
+      </section>
+
+      <FeatureLine />
+
+      <section className="wrap dzgrid">
+        <div className="price">
+          <span className="mono muted">DOG ZONE</span>
+          <div className="amt"><b>$15</b><span>/month</span></div>
+          <span className="mono small c-tape">EARLY ROLLOUT 2027</span>
+          <Waitlist />
+        </div>
+        <div className="perks2">
+          {PERKS.map(([t, d], k) => (
+            <div key={t} className="perk2" style={{ animationDelay: `${k * 0.08}s` }}>
+              <span className="mono num">{String(k + 1).padStart(2, "0")}</span>
+              <div><b>{t}</b><p>{d}</p></div>
+            </div>
+          ))}
+        </div>
+      </section>
     </main>
   );
 }

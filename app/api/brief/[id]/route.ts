@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { unstable_cache } from "next/cache";
 import { getSlate } from "@/lib/data";
 import { briefPrompt, gemini } from "@/lib/ai";
+import { getBuzz } from "@/lib/buzz";
 
 export const maxDuration = 60;
 
@@ -9,8 +10,9 @@ export const maxDuration = 60;
 const cachedBrief = unstable_cache(async (id: string) => {
   const g = (await getSlate()).games.find((x) => x.id === id);
   if (!g) throw new Error("Game not found on this week's slate.");
-  return gemini(briefPrompt(g));
-}, ["tapedog-brief-v1"], { revalidate: 21600 });
+  const buzz = await getBuzz(g.away.location, g.home.location);
+  return gemini(briefPrompt(g, buzz));
+}, ["tapedog-brief-v2"], { revalidate: 21600 });
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

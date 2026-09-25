@@ -6,10 +6,8 @@ import Logo from "./Logo";
 import Search from "./Search";
 
 const LINKS = [
-  { href: "/board", label: "Fade Board", tab: null },
-  { href: "/board?tab=scores", label: "Scores", tab: "scores" },
-  { href: "/board?tab=saved", label: "Saved", tab: "saved" },
-  { href: "/about", label: "About", tab: null },
+  { href: "/board", label: "Fade Board" },
+  { href: "/about", label: "How it works" },
 ];
 
 export default function Nav() {
@@ -17,16 +15,14 @@ export default function Nav() {
   const tab = useSearchParams().get("tab");
   const [open, setOpen] = useState(false);
   useEffect(() => setOpen(false), [path, tab]);
-
-  const active = (l: (typeof LINKS)[number]) =>
-    l.href === "/about" ? path === "/about" : path === "/board" && (l.tab ? tab === l.tab : !tab || tab === "heat");
+  const on = (href: string) => path === href || (href === "/board" && (path.startsWith("/game") || path.startsWith("/team")));
 
   return (
     <header className={`nav ${path === "/" && !open ? "nav-float" : ""}`}>
       <div className="wrap navin">
         <Link href="/" className="brand"><Logo /> <span>TAPEDOG</span></Link>
         <nav className="links">
-          {LINKS.map((l) => <Link key={l.href} href={l.href} className={active(l) ? "on" : ""}>{l.label}</Link>)}
+          {LINKS.map((l) => <Link key={l.href} href={l.href} className={on(l.href) ? "on" : ""}>{l.label}</Link>)}
           <Link href="/dogzone" className={`dz ${path === "/dogzone" ? "on" : ""}`}>Dog Zone <em>PLUS</em></Link>
         </nav>
         <Search />
@@ -37,10 +33,12 @@ export default function Nav() {
       </div>
       {open && (
         <div className="mnav">
-          {LINKS.map((l) => <Link key={l.href} href={l.href} className={active(l) ? "on" : ""}>{l.label}</Link>)}
-          <Link href="/board?tab=heat">Biggest Games</Link>
-          <Link href="/dogzone">Dog Zone <em className="plus">PLUS</em></Link>
-          <Link href="/profile">Profile</Link>
+          <Link href="/board" className={path === "/board" && !tab ? "on" : ""}>Fade Board</Link>
+          <Link href="/board?tab=scores" className={tab === "scores" ? "on" : ""}>Live scores</Link>
+          <Link href="/board?tab=saved" className={tab === "saved" ? "on" : ""}>Saved games</Link>
+          <Link href="/about" className={path === "/about" ? "on" : ""}>How it works</Link>
+          <Link href="/dogzone" className={path === "/dogzone" ? "on" : ""}>Dog Zone <em className="plus">PLUS</em></Link>
+          <Link href="/founder" className={path === "/founder" ? "on" : ""}>Founder</Link>
         </div>
       )}
     </header>

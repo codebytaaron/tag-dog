@@ -70,7 +70,7 @@ export default function Hero({ games, count, week }: { games: Fly[]; count: numb
         <p className="lede">TapeDog grades every FBS favorite on the stuff box scores miss — look-ahead spots, letdowns, line steam, prediction markets, rest and weather — then flags the ones worth fading.</p>
         <div className="ctas">
           <Link href="/board" className="btn primary">Open the Fade Board <span>→</span></Link>
-          <a href="#how" className="btn ghost">How we read tape</a>
+          <Link href="/about" className="btn ghost">How it works</Link>
         </div>
       </div>
       <div className="scrollcue mono" aria-hidden>SCROLL ↓</div>

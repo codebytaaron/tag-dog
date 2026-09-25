@@ -1,81 +1,93 @@
 import Link from "next/link";
 
-export const metadata = { title: "About — TapeDog" };
+export const metadata = { title: "How it works — TapeDog" };
 
-const STEPS = [
-  ["1. Pull the odds", "Spreads from six sportsbooks, the opening line, Kalshi prices and ESPN's win model for every FBS game."],
-  ["2. Check the spot", "Who the favorite just played, who they play next, travel, rest days and kickoff weather."],
-  ["3. Score it", "Each red flag adds points to a 0–99 Tape Score. 50 or higher is a FADE."],
+const WHY = [
+  ["Spot, not strength", "Power ratings tell you who's better. TapeDog tells you who's in a bad spot this week."],
+  ["Every number, shopped", "Six sportsbooks, the opening line, a prediction market and ESPN's model, side by side."],
+  ["AI that shows its work", "Breakdowns use only the data on the page plus what fans and media are saying. No made-up picks."],
 ];
 
-const DO = [
-  ["Fade Board", "Every upcoming game ranked by Tape Score.", "/board"],
-  ["Live scores", "Scores, down and distance and win odds, updating on their own.", "/board?tab=scores"],
-  ["Team pages", "Search any team with ⌘K for its schedule, results and this week's spot.", "/team/333"],
-  ["AI breakdown", "A short summary of each game, written only from TapeDog's data.", "/board"],
-  ["Saved games", "Bookmark games to check back on later.", "/board?tab=saved"],
+const SOURCES = [
+  ["ESPN", "Schedules, scores, rankings, news"],
+  ["DraftKings · FanDuel · BetMGM", "Spreads, totals, moneylines"],
+  ["Caesars · bet365 · BetRivers", "More books to find the best price"],
+  ["Action Network", "Opening line and bets tracked"],
+  ["Kalshi", "Prediction-market win odds"],
+  ["ESPN FPI", "Model win probability"],
+  ["Open-Meteo", "Kickoff-hour weather at the stadium"],
+  ["Bluesky · Google News", "What fans and media are saying"],
+  ["Gemini", "Writes the AI breakdown"],
 ];
 
-const GAMES = [
-  { tag: "In person", title: "Ohio State 27, Penn State 26", when: "Sept. 29, 2018", note: "Penn State led 26–14 in the fourth. Ohio State scored the last 13. I was there." },
-  { tag: "On TV", title: "Alabama 41, Georgia 34", when: "2024", note: "Alabama led 28–0, Georgia took the lead late, Alabama answered right away. ESPN's No. 2 game of 2024." },
-  { tag: "On TV", title: "Texas A&M 41, Notre Dame 40", when: "Sept. 13, 2025", note: "One-point game in South Bend. 9.7/10." },
-  { tag: "On TV", title: "Indiana 27, Miami 21", when: "2026 CFP title game", note: "Close all second half, and Miami had the ball late with a chance to win. ESPN's best game of the 2025 season." },
+const PLAYBOOK = [
+  ["Look-ahead", "+20", "Ranked opponent next week"],
+  ["Model dissent", "+16", "ESPN FPI disagrees with the books"],
+  ["Letdown", "+14", "Coming off a ranked opponent"],
+  ["Line sliding", "+12", "Spread moved toward the underdog"],
+  ["Road favorite", "+10", "Favored on the road"],
+  ["Sandwich", "+10", "Ranked teams on both sides"],
+  ["Chaos weather", "+10", "Wind, rain or cold at kickoff"],
+  ["Market doubt", "+8", "Kalshi lower on the favorite than books"],
+  ["Rest edge", "+8", "Short week for fav or bye for dog"],
+  ["Big cushion", "−12", "Spread of 24 or more"],
 ];
 
-export default function About() {
+export default function How() {
   return (
     <main className="wrap about">
-      <section>
-        <div className="eyebrow mono">ABOUT TAPEDOG</div>
-        <h1 className="big">What TapeDog does.</h1>
+      <section className="howhero">
+        <div className="eyebrow mono">HOW IT WORKS</div>
+        <h1 className="mega">Spot the<br /><span className="c-tape">bad spot.</span></h1>
         <p className="lead2">TapeDog grades every FBS favorite on the stuff box scores miss — look-ahead spots, letdowns, line movement, prediction markets, rest and weather — then flags the ones worth fading.</p>
       </section>
 
+      <section className="pipe" aria-label="How a game gets scored">
+        {[["13", "data sources"], ["10", "red-flag checks"], ["0–99", "Tape Score"], ["FADE", "or WATCH or HOLD"]].map(([b, s], k) => (
+          <div key={s} className="pnode" style={{ animationDelay: `${k * 0.15}s` }}><b className={k === 3 ? "c-fade" : ""}>{b}</b><span className="mono">{s}</span></div>
+        ))}
+        <i className="pflow" />
+      </section>
+
       <section className="sect0">
-        <div className="eyebrow mono">HOW IT WORKS</div>
+        <div className="eyebrow mono">WHY IT'S DIFFERENT</div>
         <div className="aboutsteps">
-          {STEPS.map(([t, d]) => <div key={t} className="bcard"><b>{t}</b><p>{d}</p></div>)}
+          {WHY.map(([t, d], k) => <div key={t} className="bcard why"><span className="mono num">0{k + 1}</span><b>{t}</b><p>{d}</p></div>)}
         </div>
       </section>
 
-      <section className="sect0">
-        <div className="eyebrow mono">WHAT YOU CAN DO</div>
-        <div className="aboutdo">
-          {DO.map(([t, d, h]) => (
-            <Link key={t} href={h} className="dorow"><b>{t}</b><span className="muted">{d}</span><i>→</i></Link>
-          ))}
+      <section className="sect0 split2">
+        <div>
+          <div className="eyebrow mono">THE RED FLAGS</div>
+          <h2 className="big">10 checks.<br />No vibes.</h2>
+          <p className="muted">Points add up to the Tape Score.</p>
+          <div className="scale">
+            <div><i className="hold" /><span className="mono">0–27 HOLD</span></div>
+            <div><i className="watch" /><span className="mono">28–49 WATCH</span></div>
+            <div><i className="fade" /><span className="mono">50+ FADE</span></div>
+          </div>
         </div>
-      </section>
-
-      <section className="sect0 founder2" id="founder">
-        <div className="eyebrow mono">THE FOUNDER</div>
-        <div className="fhead">
-          <div className="pav sm">TA</div>
-          <div><h2 className="big nomb">Teddy A.</h2><span className="mono muted">FOUNDER · BUILDER</span></div>
-        </div>
-        <p className="lead2">I've loved college football since I was a little kid. I've always cared more about the spot than the matchup: who's looking ahead, who just got punched in the mouth, who's traveling across the country for a noon kick.</p>
-        <p className="lead2 muted">TapeDog is the tool I wanted every Saturday. It finds the favorites in a bad spot and tells you why.</p>
-
-        <h3 className="gtitle mono">FAVORITE GAMES</h3>
-        <div className="favlist">
-          {GAMES.map((g) => (
-            <div key={g.title} className="fav-row">
-              <span className={`mono ftag ${g.tag === "In person" ? "live" : ""}`}>{g.tag}</span>
-              <div><b>{g.title}</b> <span className="mono muted">· {g.when}</span><p>{g.note}</p></div>
+        <div className="playbook">
+          {PLAYBOOK.map(([n, p, d]) => (
+            <div key={n} className="pb">
+              <span className={`pts mono ${p.startsWith("−") ? "neg" : ""}`}>{p}</span>
+              <div><b>{n}</b><small>{d}</small></div>
             </div>
           ))}
         </div>
       </section>
 
       <section className="sect0">
-        <div className="eyebrow mono">UNDER THE HOOD</div>
-        <p className="lead2 muted">TapeDog pulls public sports, odds and prediction-market data automatically, scores each game with its own model, and uses AI only to summarize that data. It updates itself; nobody runs it by hand.</p>
+        <div className="eyebrow mono">WIRED INTO</div>
+        <div className="srcgrid">
+          {SOURCES.map(([n, d]) => <div key={n} className="src2"><b>{n}</b><span className="muted">{d}</span></div>)}
+        </div>
+        <p className="mono muted small refresh">ODDS REFRESH EVERY 15 MIN · LIVE SCORES EVERY 20 SEC · RUNS ITSELF</p>
       </section>
 
       <section className="sect0 aboutcta">
         <Link href="/board" className="btn primary">Open the Fade Board →</Link>
-        <Link href="/dogzone" className="btn ghost">What's coming in Dog Zone</Link>
+        <Link href="/founder" className="btn ghost">Meet the founder →</Link>
       </section>
     </main>
   );

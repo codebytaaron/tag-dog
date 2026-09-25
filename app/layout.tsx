@@ -25,11 +25,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <div className="wrap footin">
             <div className="fbrand"><Logo size={22} /><b>TAPEDOG</b><span className="muted">Finds the college football favorites worth fading.</span></div>
             <nav className="flinks">
-              <Link href="/board">Fade Board</Link><Link href="/board?tab=scores">Scores</Link><Link href="/board?tab=saved">Saved</Link><Link href="/about">About</Link><Link href="/dogzone">Dog Zone</Link>
+              <Link href="/board">Fade Board</Link><Link href="/board?tab=scores">Scores</Link><Link href="/about">How it works</Link><Link href="/dogzone">Dog Zone</Link><Link href="/founder">Founder</Link>
             </nav>
-            <Link href="/about#founder" className="builtby">Built by <b>Teddy A.</b> <span>→</span></Link>
+            <Link href="/founder" className="builtby">Built by <b>Teddy A.</b> <span>→</span></Link>
           </div>
-          <div className="wrap fnote">Data from ESPN, sportsbooks via Action Network, Kalshi and Open-Meteo. AI summaries by Gemini. For entertainment, not betting advice.</div>
+          <div className="wrap fnote">Data from ESPN, six sportsbooks, Kalshi, Open-Meteo, Bluesky and Google News. AI summaries by Gemini. For entertainment, not betting advice.</div>
         </footer>
       </body>
     </html>

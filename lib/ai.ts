@@ -1,5 +1,6 @@
 import type { Game } from "./data";
 import { fmtSpread } from "./data";
+import type { Buzz } from "./buzz";
 
 // Free-tier Gemini; busy or retired models fall through to the next.
 const MODELS = [
@@ -9,10 +10,10 @@ const MODELS = [
 
 export type Brief = {
   headline: string; verdict: "FADE" | "WATCH" | "HOLD"; upsetChance: number; take: string;
-  why: string[]; dogCase: string; xFactor: string; coachSpeak: string;
+  why: string[]; dogCase: string; xFactor: string; coachSpeak: string; crowd?: string;
 };
 
-export function briefPrompt(g: Game) {
+export function briefPrompt(g: Game, buzz?: Buzz) {
   const fav = g[g.favorite], dog = g[g.favorite === "home" ? "away" : "home"];
   const facts = {
     matchup: `${g.away.name} (${g.away.record}${g.away.rank ? ", #" + g.away.rank : ""}) at ${g.home.name} (${g.home.record}${g.home.rank ? ", #" + g.home.rank : ""})`,
@@ -25,6 +26,8 @@ export function briefPrompt(g: Game) {
     venue: `${g.venue.name}, ${g.venue.city} ${g.venue.state}`, kickoffUTC: g.date, tv: g.network,
     weather: g.weather?.summary || (g.venue.indoor ? "indoors" : "unknown"),
     favoriteLastWeek: g.favPrev, favoriteNextWeek: g.favNext, favoriteRestDays: g.favRest, underdogRestDays: g.dogRest,
+    publicChatter: (buzz?.posts || []).slice(0, 8).map((p) => p.text.slice(0, 220)),
+    headlines: (buzz?.news || []).map((n) => n.title),
     tapeScore: g.score, signals: g.factors.map((f) => `${f.label}: ${f.detail} (${f.points > 0 ? "+" : ""}${f.points})`),
   };
   return `You are TapeDog, a college football film-room analyst who hunts for favorites worth fading. Voice: confident, dry, a little funny, never corny. No emojis.
@@ -41,7 +44,8 @@ Use only these facts plus widely known college football context. Do not invent i
   "why": ["exactly 3 short reasons tied to the data"],
   "dogCase": "one sentence: the path for the underdog",
   "xFactor": "one thing that flips the game",
-  "coachSpeak": "one-line warning the favorite's coach should give the locker room"
+  "coachSpeak": "one-line warning the favorite's coach should give the locker room",
+  "crowd": "one sentence on what fans and media are saying, based only on publicChatter and headlines; say Quiet so far. if empty"
 }`;
 }
 
