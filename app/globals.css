@@ -755,3 +755,5 @@ button.btn.ghost { background: transparent; }
 .teamgrid span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .btn.big { padding: 16px 26px; font-size: 16px; }
 .pinfo .linkbtn { padding: 0; font: inherit; }
+
+.nav-fixed { position: fixed; left: 0; right: 0; transition: background .25s, border-color .25s; }

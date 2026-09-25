@@ -23,11 +23,18 @@ export default function Nav() {
   const path = usePathname();
   const tab = useSearchParams().get("tab");
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const f = () => setScrolled(window.scrollY > 40);
+    f();
+    window.addEventListener("scroll", f, { passive: true });
+    return () => window.removeEventListener("scroll", f);
+  }, []);
   useEffect(() => setOpen(false), [path, tab]);
   const on = (href: string) => path === href || (href === "/board" && (path.startsWith("/game") || path.startsWith("/team")));
 
   return (
-    <header className={`nav ${path === "/" && !open ? "nav-float" : ""}`}>
+    <header className={`nav ${path === "/" ? "nav-fixed" : ""} ${path === "/" && !open && !scrolled ? "nav-float" : ""}`}>
       <div className="wrap navin">
         <Link href="/" className="brand"><Logo /> <span>TAPEDOG</span></Link>
         <nav className="links">
