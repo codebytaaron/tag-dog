@@ -1,6 +1,6 @@
 :root {
   --bg: #0a0a09; --bg2: #0f0f0d; --panel: #141412; --panel2: #1b1a17; --line: #26251f; --line2: #35342c;
-  --ink: #f2ede1; --muted: #8e8979; --dim: #5d5a50;
+  --ink: #f2ede1; --muted: #a39e8f; --dim: #6f6b60;
   --tape: #f5c842; --fade: #ff5533; --watch: #f5c842; --hold: #6f6b60; --ok: #7bd88f;
   --display: "Anton", Impact, sans-serif; --body: "Inter Tight", system-ui, sans-serif; --mono: "JetBrains Mono", ui-monospace, monospace;
 }
@@ -1024,3 +1024,46 @@ button.btn.ghost { background: transparent; }
 }
 
 @media (max-width: 900px) { .brow .mt .rc { display: none; } }
+/* ---------- round 13 ---------- */
+/* contrast: keep text readable over team colors */
+.ghero { background: linear-gradient(100deg, color-mix(in srgb, var(--ca) 20%, transparent) 0%, transparent 36%, transparent 64%, color-mix(in srgb, var(--ch) 20%, transparent) 100%), var(--bg2); }
+.spot { background: linear-gradient(100deg, color-mix(in srgb, var(--ca) 22%, transparent) 0%, transparent 40%, transparent 60%, color-mix(in srgb, var(--ch) 22%, transparent) 100%), var(--panel); }
+.feat { background: radial-gradient(420px 160px at 100% 0%, color-mix(in srgb, var(--c) 16%, transparent), transparent 70%), var(--panel); }
+.phero { background: radial-gradient(700px 300px at 10% 0%, color-mix(in srgb, var(--c) 24%, transparent), transparent 70%), var(--bg2); }
+.teamhero { background: linear-gradient(120deg, color-mix(in srgb, var(--c) 20%, transparent), transparent 60%), var(--bg2); }
+.ghero h2, .st b, .teamhero .btitle, .phero .btitle, .fname, .spotmid b { text-shadow: 0 2px 14px rgba(0,0,0,.65); }
+.ghero .muted, .spot .muted, .st small, .feat .small, .phero .muted, .teamhero .muted { color: #c2bcad; }
+.chip2 { background: rgba(0,0,0,.45); }
+.fly { background: rgba(20,20,18,.92); }
+
+/* experts buzz */
+.prole { font-size: 12px; color: var(--tape); opacity: .85; margin-top: 1px; }
+
+/* linked books & sources */
+.booklink { display: inline-flex; gap: 4px; align-items: center; font-weight: 600; }
+.booklink i { font-style: normal; font-size: 11px; color: var(--dim); transition: color .15s; }
+.booklink:hover { color: var(--tape); } .booklink:hover i { color: var(--tape); }
+.srcrow2 { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 13px; }
+.srcrow2 a { color: #cfc8b6; } .srcrow2 a:hover { color: var(--tape); }
+.srcrow2 .resp { margin-left: auto; font-size: 10px; }
+a.src2 { transition: border-color .15s; } a.src2:hover { border-color: var(--tape); }
+.src2 b i { font-style: normal; font-size: 12px; }
+
+/* top 25 score alerts */
+html.shake main { animation: shake .6s cubic-bezier(.36,.07,.19,.97); }
+@keyframes shake {
+  10%, 90% { transform: translate3d(-2px, 0, 0); } 20%, 80% { transform: translate3d(4px, 1px, 0); }
+  30%, 50%, 70% { transform: translate3d(-7px, -1px, 0); } 40%, 60% { transform: translate3d(7px, 1px, 0); }
+}
+.toasts { position: fixed; top: 76px; left: 50%; translate: -50% 0; z-index: 150; display: grid; gap: 8px; width: min(420px, calc(100% - 32px)); }
+.toast { display: grid; gap: 8px; padding: 14px 16px; border-radius: 16px; background: rgba(16,16,14,.96); border: 1px solid var(--c); box-shadow: 0 20px 50px rgba(0,0,0,.6), 0 0 0 1px rgba(0,0,0,.4), 0 0 30px color-mix(in srgb, var(--c) 35%, transparent); animation: tdrop .5s cubic-bezier(.2,.9,.3,1.25) both; backdrop-filter: blur(10px); }
+@keyframes tdrop { from { transform: translateY(-40px) scale(.94); opacity: 0; } }
+.tlab { display: flex; align-items: center; gap: 8px; font-size: 11px; letter-spacing: .16em; font-weight: 700; color: var(--tape); }
+.tsb { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.tsb span { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 10px; background: var(--bg2); border: 1px solid var(--line); color: var(--muted); }
+.tsb span.hot { color: var(--ink); border-color: var(--c); background: color-mix(in srgb, var(--c) 16%, var(--bg2)); }
+.tsb img { width: 26px; height: 26px; object-fit: contain; }
+.tsb em { font-style: normal; font-weight: 700; flex: 1; } .tsb sup { font-family: var(--mono); font-size: 9px; margin-right: 3px; color: var(--muted); }
+.tsb b { font-family: var(--display); font-weight: 400; font-size: 30px; line-height: 1; }
+.tdet { font-size: 10px; color: var(--muted); letter-spacing: .1em; }
+@media (prefers-reduced-motion: reduce) { html.shake main { animation: none; } .toast { animation: none; } }

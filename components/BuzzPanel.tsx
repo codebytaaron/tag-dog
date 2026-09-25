@@ -17,13 +17,13 @@ export default function BuzzPanel({ buzz, away, home }: { buzz: Buzz; away: T; h
 
       {tot > 0 && (
         <div className="loud">
-          <div className="mono loudh"><span>{away.abbr} {ap}%</span><span className="muted">WHO'S LOUDER · 48H</span><span>{100 - ap}% {home.abbr}</span></div>
+          <div className="mono loudh"><span>{away.abbr} {ap}%</span><span className="muted">WHO'S GETTING TALKED ABOUT · 48H</span><span>{100 - ap}% {home.abbr}</span></div>
           <div className="loudbar"><i style={{ width: `${ap}%`, background: away.color }} /><i style={{ width: `${100 - ap}%`, background: home.color }} /></div>
         </div>
       )}
 
       <div className="btabs">
-        <button className={tab === "fans" ? "on" : ""} onClick={() => setTab("fans")}>Fans <em>{buzz.posts.length}</em></button>
+        <button className={tab === "fans" ? "on" : ""} onClick={() => setTab("fans")}>Experts <em>{buzz.posts.length}</em></button>
         <button className={tab === "news" ? "on" : ""} onClick={() => setTab("news")}>Headlines <em>{buzz.news.length}</em></button>
       </div>
 
@@ -35,6 +35,7 @@ export default function BuzzPanel({ buzz, away, home }: { buzz: Buzz; away: T; h
                 {p.avatar ? <img src={p.avatar} alt="" /> : <span className="pavi" />}
                 <div>
                   <div className="phead"><b>{p.name}</b><span className="mono muted">@{p.handle} · <Ago date={p.at} /></span><span className={`pchip mono ${p.side}`}>{chip(p.side)}</span></div>
+                  {p.role && <div className="prole">{p.role}</div>}
                   <p>{p.text}</p>
                   {(p.likes > 0 || p.reposts > 0) && <span className="mono muted small">♥ {p.likes} · ↻ {p.reposts}</span>}
                 </div>
@@ -42,7 +43,7 @@ export default function BuzzPanel({ buzz, away, home }: { buzz: Buzz; away: T; h
             </li>
           ))}
         </ul>
-      ) : <p className="muted bempty">No fan posts about this game yet. They usually pick up the day before kickoff.</p>)}
+      ) : <p className="muted bempty">No reporter or analyst posts about this game yet. They usually show up the day before kickoff.</p>)}
 
       {tab === "news" && (buzz.news.length ? (
         <ul className="heads">
@@ -52,7 +53,7 @@ export default function BuzzPanel({ buzz, away, home }: { buzz: Buzz; away: T; h
         </ul>
       ) : <p className="muted bempty">No headlines yet.</p>)}
 
-      <p className="mono muted bfoot">Football posts about these two teams from Bluesky. Headlines from Google News.</p>
+      <p className="mono muted bfoot">Only reporters, analysts and outlets on Bluesky (checked by their bio and following). Headlines from Google News.</p>
     </section>
   );
 }

@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import Nav from "@/components/Nav";
 import Link from "next/link";
 import Logo from "@/components/Logo";
+import ScoreAlerts from "@/components/ScoreAlerts";
 
 export const metadata = {
   title: "TapeDog | Find the favorites worth fading",
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body>
         <Suspense fallback={<div className="nav" style={{ height: 64 }} />}><Nav /></Suspense>
+        <ScoreAlerts />
         {children}
         <footer className="foot">
           <div className="wrap footin">

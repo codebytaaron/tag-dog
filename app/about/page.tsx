@@ -9,17 +9,21 @@ const WHY = [
   ["AI that shows its work", "Breakdowns use only the data on the page plus what fans and media are saying. No made-up picks."],
 ];
 
-const SOURCES = [
-  ["ESPN", "Schedules, scores, rankings, news"],
-  ["DraftKings · FanDuel · BetMGM", "Spreads, totals, moneylines"],
-  ["Caesars · bet365 · BetRivers", "More books to find the best price"],
-  ["Action Network", "Opening line and bets tracked"],
-  ["Kalshi", "Prediction-market win odds"],
-  ["ESPN FPI", "Model win probability"],
-  ["Open-Meteo", "Kickoff-hour weather at the stadium"],
-  ["Bluesky · Google News", "What fans and media are saying"],
-  ["ESPN video", "Game highlights, recaps and play-by-play win odds"],
-  ["Gemini", "Writes the AI breakdown"],
+const SOURCES: [string, string, string][] = [
+  ["ESPN", "Schedules, scores, rankings, win model", "https://www.espn.com/college-football/"],
+  ["DraftKings", "Spreads, totals, moneylines", "https://sportsbook.draftkings.com/leagues/football/ncaaf"],
+  ["FanDuel", "Spreads, totals, moneylines", "https://sportsbook.fanduel.com/navigation/ncaaf"],
+  ["BetMGM", "Spreads, totals, moneylines", "https://sports.betmgm.com/en/sports/football-11/betting/usa-9/college-football-211"],
+  ["Caesars", "Spreads, totals, moneylines", "https://sportsbook.caesars.com/us/nj/bet/americanfootball"],
+  ["bet365", "Spreads, totals, moneylines", "https://www.bet365.com/#/AS/B12/"],
+  ["BetRivers", "Spreads, totals, moneylines", "https://www.betrivers.com/?page=sportsbook#sports-hub/american_football/ncaaf"],
+  ["Action Network", "Opening line and bets tracked", "https://www.actionnetwork.com/ncaaf/odds"],
+  ["Kalshi", "Prediction-market win odds", "https://kalshi.com/markets/kxncaafgame"],
+  ["Open-Meteo", "Kickoff-hour weather at the stadium", "https://open-meteo.com/"],
+  ["Bluesky", "Posts from reporters and analysts", "https://bsky.app/"],
+  ["Google News", "Game headlines", "https://news.google.com/"],
+  ["ESPN video", "Highlights and game recaps", "https://www.espn.com/college-football/"],
+  ["Gemini", "Writes the AI breakdown", "https://gemini.google.com/"],
 ];
 
 const PLAYBOOK = [
@@ -87,7 +91,7 @@ export default function How() {
       <section className="sect0">
         <div className="eyebrow mono">WIRED INTO</div>
         <div className="srcgrid">
-          {SOURCES.map(([n, d]) => <div key={n} className="src2"><b>{n}</b><span className="muted">{d}</span></div>)}
+          {SOURCES.map(([n, d, u]) => <a key={n} href={u} target="_blank" rel="noopener" className="src2"><b>{n} <i className="c-tape">↗</i></b><span className="muted">{d}</span></a>)}
         </div>
         <p className="mono muted small refresh">ODDS REFRESH EVERY 15 MIN · LIVE SCORES EVERY 20 SEC · RUNS ITSELF</p>
       </section>

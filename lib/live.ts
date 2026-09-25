@@ -5,6 +5,12 @@ export type Live = {
   state: string; detail: string; clock: string; period: number;
   home: number | null; away: number | null; poss: string | null; down: string | null;
   lastPlay: string | null; homeWP: number | null; redZone: boolean;
+  teams?: { home: LT; away: LT };
+};
+export type LT = { abbr: string; short: string; logo: string; color: string; rank: number | null };
+const lt = (x: any): LT => {
+  const rk = x?.curatedRank?.current;
+  return { abbr: x?.team?.abbreviation || "", short: x?.team?.shortDisplayName || "", logo: x?.team?.logo || "", color: "#" + (x?.team?.color || "444444"), rank: rk && rk <= 25 ? rk : null };
 };
 
 export async function getLive(): Promise<Record<string, Live>> {
@@ -26,6 +32,7 @@ export async function getLive(): Promise<Record<string, Live>> {
         away: state !== "pre" && a?.score != null ? Number(a.score) : null,
         poss: s?.possession || null, down: s?.downDistanceText || null, lastPlay: s?.lastPlay?.text || null,
         homeWP: typeof wp === "number" ? wp : null, redZone: !!s?.isRedZone,
+        teams: { home: lt(h), away: lt(a) },
       };
     }
     return out;

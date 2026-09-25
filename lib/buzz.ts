@@ -4,10 +4,26 @@ import type { Team } from "./data";
 
 export type Post = {
   handle: string; name: string; avatar: string; text: string; likes: number; reposts: number;
-  url: string; at: string; side: "both" | "home" | "away";
+  url: string; at: string; side: "both" | "home" | "away"; role: string;
 };
 export type Headline = { title: string; url: string; source: string; at: string };
 export type Buzz = { posts: Post[]; news: Headline[]; volume: { away: number; home: number } };
+
+// Who counts as a pro: reporters, analysts, outlets. Checked against the author's Bluesky bio.
+const PRO = /\b(reporter|writer|editor|analyst|insider|columnist|beat|covers?|covering|host|podcast|journalist|correspondent|recruiting|contributor|radio|broadcaster|anchor|newsroom|producer|espn|the athletic|247sports|247|on3|rivals|cbs ?sports|fox ?sports|usa today|sports illustrated|si\.com|yahoo|bleacher|sb ?nation|the ringer|associated press|gazette|times|tribune|herald|news|journal|chronicle|observer|dispatch|courier|daily)\b/i;
+
+async function profiles(handles: string[]) {
+  const out = new Map<string, { bio: string; followers: number }>();
+  for (let i = 0; i < handles.length; i += 25) {
+    const chunk = handles.slice(i, i + 25);
+    try {
+      const r = await fetch(`https://api.bsky.app/xrpc/app.bsky.actor.getProfiles?${chunk.map((h) => `actors=${encodeURIComponent(h)}`).join("&")}`, { next: { revalidate: 86400 } });
+      if (!r.ok) continue;
+      for (const p of (await r.json()).profiles || []) out.set(p.handle, { bio: p.description || "", followers: p.followersCount || 0 });
+    } catch {}
+  }
+  return out;
+}
 
 const STRONG = /\b(football|cfb|kickoff|kick-off|touchdown|tds?|qb|quarterback|head coach|spread|upset|gameday|game day|top 25|ap poll|bowl|playoffs?|cfp|halftime|4th quarter|fourth quarter|field goal|interception|rushing|passing yards)\b/i;
 const MATCHUP = /\b(vs\.?|versus|at|@|game|matchup|preview|prediction|picks?|beat|beats|win|wins|loss|lose|saturday|kickoff|week \d+)\b/i;
@@ -84,11 +100,22 @@ export async function getBuzz(away: Team, home: Team): Promise<Buzz> {
       handle: p.author?.handle || "", name: p.author?.displayName || p.author?.handle || "", avatar: p.author?.avatar || "",
       text: text.slice(0, 320), likes, reposts, at,
       url: `https://bsky.app/profile/${p.author?.handle}/post/${String(p.uri).split("/").pop()}`,
-      side: both ? "both" : a ? "away" : "home",
+      side: both ? "both" : a ? "away" : "home", role: "",
       rank: (both ? 3 : 1) * (1 + Math.log1p(likes + 2 * reposts + (p.replyCount || 0))) / (1 + Math.max(0, age) / 24),
     });
   }
   posts.sort((x, y) => y.rank - x.rank);
+  // Keep only pros: a real following plus a reporter/analyst/outlet bio (or an established custom-domain account).
+  const prof = await profiles([...new Set(posts.map((p) => p.handle))]);
+  const pros = posts.filter((p) => {
+    const a = prof.get(p.handle);
+    if (!a) return false;
+    const custom = !p.handle.endsWith(".bsky.social");
+    return a.followers >= 500 && (PRO.test(a.bio) || PRO.test(p.name) || (custom && a.followers >= 1500));
+  }).map((p) => {
+    const a = prof.get(p.handle)!;
+    return { ...p, role: a.bio.split(/[\n|•·]/)[0].trim().slice(0, 80), rank: p.rank * (1 + Math.log10(1 + a.followers)) };
+  }).sort((x, y) => y.rank - x.rank);
 
   const tseen = new Set<string>();
   const both = [...A, ...H];
@@ -98,7 +125,7 @@ export async function getBuzz(away: Team, home: Team): Promise<Buzz> {
     .slice(0, 6);
 
   return {
-    posts: posts.slice(0, 10).map(({ rank, ...p }) => p),
+    posts: pros.slice(0, 10).map(({ rank, ...p }) => p),
     news: headlines,
     volume: { away: vol.away.size, home: vol.home.size },
   };
