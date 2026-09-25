@@ -4,6 +4,14 @@ import { useRouter } from "next/navigation";
 
 type T = { id: string; name: string; short: string; abbr: string; loc: string; nick: string; logo: string; color: string };
 const POPULAR = ["333", "61", "194", "251", "130", "87", "2483", "99", "228", "245"];
+// Fan shorthand → ESPN team id.
+const ALIAS: Record<string, string> = {
+  bama: "333", roll: "333", tide: "333", uga: "61", dawgs: "61", osu: "194", buckeyes: "194", tosu: "194", horns: "251", ut: "251",
+  um: "130", michigan: "130", nd: "87", irish: "87", ducks: "2483", lsu: "99", clemson: "228", aggies: "245", tamu: "245",
+  usc: "30", trojans: "30", psu: "213", fsu: "52", noles: "52", uf: "57", gators: "57", ou: "201", sooners: "201",
+  vols: "2633", tenn: "2633", auburn: "2", barn: "2", miami: "2390", canes: "2390", ole: "145", olemiss: "145", msu: "344",
+  byu: "252", ucf: "2116", smu: "2567", tcu: "2628", wisky: "275", huskers: "158", neb: "158", uw: "264", cuse: "183",
+};
 
 export default function Search() {
   const [open, setOpen] = useState(false);
@@ -34,14 +42,17 @@ export default function Search() {
     if (!teams) return [];
     const s = q.trim().toLowerCase();
     if (!s) return POPULAR.map((id) => teams.find((t) => t.id === id)).filter(Boolean) as T[];
+    const alias = ALIAS[s.replace(/[^a-z]/g, "")];
     const rank = (t: T) => {
+      if (t.id === alias) return -2;
       if (t.abbr.toLowerCase() === s) return 0;
       if (t.loc.toLowerCase().startsWith(s) || t.name.toLowerCase().startsWith(s)) return 1;
       if (t.nick.toLowerCase().startsWith(s)) return 2;
       if (`${t.name} ${t.abbr}`.toLowerCase().includes(s)) return 3;
       return 9;
     };
-    return teams.map((t) => [rank(t), t] as const).filter(([r]) => r < 9).sort((a, b) => a[0] - b[0]).slice(0, 8).map(([, t]) => t);
+    const boost = (t: T) => (POPULAR.includes(t.id) ? -0.5 : 0);
+    return teams.map((t) => [rank(t) + (rank(t) < 9 ? boost(t) : 0), t] as const).filter(([r]) => r < 9).sort((a, b) => a[0] - b[0]).slice(0, 8).map(([, t]) => t);
   }, [teams, q]);
 
   const go = (t?: T) => { if (!t) return; setOpen(false); router.push(`/team/${t.id}`); };
