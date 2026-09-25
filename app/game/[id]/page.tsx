@@ -12,6 +12,7 @@ import Brief from "@/components/Brief";
 import LiveBar from "@/components/LiveBar";
 import BuzzPanel from "@/components/BuzzPanel";
 import PickBar from "@/components/PickBar";
+import ShareButton from "@/components/ShareButton";
 import LiveOdds from "@/components/LiveOdds";
 import Recap, { StandaloneGame } from "@/components/Recap";
 
@@ -70,7 +71,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
             {g.network && <span className="chip2">TV · {g.network}</span>}
             <span className="chip2">{g.venue.city ? `${g.venue.city}, ${g.venue.state}` : g.venue.name}</span>
             <span className="chip2 strong">{g.line}{g.total ? ` · O/U ${g.total}` : ""}</span>
-            <SaveButton id={g.id} big />
+            <span className="gact"><ShareButton title={`${g.away.short} @ ${g.home.short} on TapeDog`} /><SaveButton id={g.id} big /></span>
           </div>
         </div>
       </section>

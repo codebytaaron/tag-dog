@@ -288,9 +288,9 @@ export async function getGameDetail(id: string) {
 }
 
 // Slim shape for list views so pages stay light.
-export type LiteGame = Pick<Game, "id" | "date" | "state" | "status" | "home" | "away" | "favorite" | "line" | "spread" | "total" | "network" | "score" | "tier" | "heat" | "bets" | "kalshi" | "watch"> & { signals: string[]; keys: string[] };
+export type LiteGame = Pick<Game, "id" | "date" | "state" | "status" | "home" | "away" | "favorite" | "line" | "spread" | "total" | "network" | "score" | "tier" | "heat" | "bets" | "kalshi" | "watch" | "factors"> & { signals: string[]; keys: string[] };
 export const lite = (g: Game): LiteGame => ({
   id: g.id, date: g.date, state: g.state, status: g.status, home: g.home, away: g.away, favorite: g.favorite,
   line: g.line, spread: g.spread, total: g.total, network: g.network, score: g.score, tier: g.tier, heat: g.heat,
-  bets: g.bets, kalshi: g.kalshi, watch: g.watch, keys: g.factors.filter((x) => x.points > 0).map((x) => x.key), signals: g.factors.filter((x) => x.points > 0).slice(0, 3).map((x) => x.label),
+  bets: g.bets, kalshi: g.kalshi, watch: g.watch, factors: g.factors, keys: g.factors.filter((x) => x.points > 0).map((x) => x.key), signals: g.factors.filter((x) => x.points > 0).slice(0, 3).map((x) => x.label),
 });

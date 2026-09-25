@@ -983,3 +983,31 @@ button.btn.ghost { background: transparent; }
   .pvgrid, .pvteams { grid-template-columns: 1fr; }
   .spotfoot .btn { margin-left: 0; width: 100%; justify-content: center; }
 }
+/* ---------- round 12: fade board tools ---------- */
+.ctl { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.sortsel { display: inline-flex; align-items: center; gap: 8px; font-size: 10px; letter-spacing: .12em; color: var(--muted); }
+.sortsel select { font-family: var(--body); font-size: 13px; letter-spacing: 0; color: var(--ink); background: var(--panel); border: 1px solid var(--line2); border-radius: 999px; padding: 7px 12px; outline: none; cursor: pointer; }
+.sortsel select:focus { border-color: var(--tape); }
+.brow { grid-template-columns: 40px minmax(210px, 1.3fr) 140px 1.2fr 72px 64px 76px; }
+.rowact { display: flex; gap: 2px; justify-content: flex-end; }
+.peek { width: 34px; height: 34px; border-radius: 8px; display: grid; place-items: center; background: none; border: 1px solid transparent; color: var(--muted); transition: transform .2s, color .15s, border-color .15s; }
+.peek:hover { color: var(--ink); border-color: var(--line2); }
+.peek.on { transform: rotate(180deg); color: var(--tape); }
+.row.open { background: var(--panel); } .row.open::before { opacity: 1; }
+.peekbox { display: grid; grid-template-columns: 1.4fr 1fr; gap: 18px; padding: 16px 20px 20px 56px; background: var(--panel); border-bottom: 1px solid var(--line); animation: rowin .25s both; }
+.pkf { display: grid; gap: 8px; align-content: start; }
+.pkr { display: flex; gap: 12px; align-items: flex-start; }
+.pkr .pts { min-width: 42px; font-size: 13px; padding: 4px 0; }
+.pkr b { display: block; font-size: 14px; } .pkr small { color: var(--muted); font-size: 13px; }
+.pks { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-content: start; }
+.pks div { background: var(--bg2); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: grid; gap: 2px; }
+.pks span { font-size: 10px; color: var(--muted); letter-spacing: .1em; } .pks b { font-size: 16px; }
+.pks .btn { grid-column: 1 / -1; justify-content: center; }
+.slot { padding: 12px 16px 8px; font-size: 11px; letter-spacing: .16em; color: var(--tape); background: var(--bg2); border-bottom: 1px solid var(--line); }
+.gact { display: inline-flex; gap: 8px; margin-left: auto; }
+.gchips .gact .save { margin-left: 0; }
+@media (max-width: 900px) {
+  .brow .rowact { grid-area: v; }
+  .peekbox { grid-template-columns: 1fr; padding: 14px 16px 18px; }
+  .gact { margin-left: 0; }
+}
