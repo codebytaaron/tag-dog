@@ -5,6 +5,8 @@ import Ring from "@/components/Ring";
 import SaveButton from "@/components/SaveButton";
 import Kickoff from "@/components/Kickoff";
 import Brief from "@/components/Brief";
+import LiveBar from "@/components/LiveBar";
+import { getLive } from "@/lib/live";
 
 export const revalidate = 900;
 export const maxDuration = 60;
@@ -18,6 +20,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
   const d = await getGameDetail((await params).id);
   if (!d) notFound();
   const { game: g, news } = d;
+  const live = (await getLive())[g.id] || null;
   const fav = g[g.favorite], dog = g[g.favorite === "home" ? "away" : "home"];
   const favSide = g.favorite;
 
@@ -43,17 +46,18 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
           <div className="gtop">
             <div className="gteam">
               <img src={g.away.logo} alt="" />
-              <div><span className="mono muted">{g.away.rank ? `#${g.away.rank} · ` : ""}{g.away.record}{g.favorite === "away" ? " · FAV" : ""}</span><h2>{g.away.short}</h2></div>
+              <div><span className="mono muted">{g.away.rank ? `#${g.away.rank} · ` : ""}{g.away.record}{g.favorite === "away" ? " · FAV" : ""}</span><h2><Link href={`/team/${g.away.id}`} className="tlink">{g.away.short}</Link></h2></div>
             </div>
             <div className="gmid">
               <Ring score={g.score} tier={g.tier} size={96} />
               <div className={`stamp t-${g.tier}`}>{g.tier}</div>
             </div>
             <div className="gteam r">
-              <div><span className="mono muted">{g.home.rank ? `#${g.home.rank} · ` : ""}{g.home.record}{g.favorite === "home" ? " · FAV" : ""}</span><h2>{g.home.short}</h2></div>
+              <div><span className="mono muted">{g.home.rank ? `#${g.home.rank} · ` : ""}{g.home.record}{g.favorite === "home" ? " · FAV" : ""}</span><h2><Link href={`/team/${g.home.id}`} className="tlink">{g.home.short}</Link></h2></div>
               <img src={g.home.logo} alt="" />
             </div>
           </div>
+          <LiveBar id={g.id} date={g.date} away={g.away.abbr} home={g.home.abbr} initial={live} />
           <div className="gmeta mono">
             <span><Kickoff date={g.date} long /></span>
             {g.network && <span>{g.network}</span>}

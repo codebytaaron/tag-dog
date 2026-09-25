@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { ReactNode } from "react";
 import Nav from "@/components/Nav";
+import Link from "next/link";
 
 export const metadata = {
   title: "TapeDog — Find the favorites worth fading",
@@ -20,7 +21,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {children}
         <footer className="foot">
           <div className="wrap footin">
-            <span className="mono">TAPEDOG · EST. 2026 · BUILT BY TA</span>
+            <Link href="/about" className="mono builtby">TAPEDOG · EST. 2026 · <b>BUILT BY TA</b> <span>See about the founder →</span></Link>
             <span className="muted">Data: ESPN · Action Network · Kalshi · Open-Meteo · AI: Gemini. Not betting advice. Just tape.</span>
           </div>
         </footer>
