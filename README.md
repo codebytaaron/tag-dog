@@ -1,31 +1,32 @@
-# 🎯 Trap Game Radar
+# TapeDog
 
-**Which college football favorites are about to get got this Saturday?**
+**Find the favorites worth fading.**
 
-Every FBS game on the slate gets a **Trap Score (0–100)** built from the situational stuff sharps actually care about — then AI writes a scouting brief for any game you tap.
+TapeDog is a college football trap-game radar. Every FBS favorite on the slate gets a **Tape Score (0–99)** built from the situational stuff box scores miss, then an AI film room writes the scouting report.
 
-## What it detects
-| Factor | Signal |
+- **TA**: built by TA
+- **Tape**: film study and scouting
+- **Dog**: the underdog
+
+## Pages
+- `/`: animated landing page with live games flying across the screen
+- `/board`: the Fade Board, Biggest Games (heat index) and Saved games (stored on-device)
+- `/game/[id]`: game file with signals, line shop across six books, open-to-now line move, books vs Kalshi vs FPI, schedule runway, weather, ESPN wire and the AI brief
+- `/dogzone`: TapeDog Plus (coming soon)
+- `/profile`: accounts (coming soon)
+
+## Free data sources (no paid keys)
+| Source | Used for |
 |---|---|
-| 👀 Look-ahead | Favorite plays a ranked team *next* week |
-| 😮‍💨 Letdown | Favorite is coming off a ranked opponent |
-| 🥪 Sandwich | Both of the above — the classic trap |
-| ✈️ Road favorite / night game | Favored team is traveling, especially under the lights |
-| 🛌 Rest edge | Favorite on a short week, or underdog off a bye |
-| 🌧️ Chaos weather | Kickoff-hour wind, rain or cold from the live forecast |
-| 📏 Live spread | Line is 3–14 (reachable) vs 24+ (cushion) |
-| 🔥 Hot underdog | Unranked dog winning quietly |
+| ESPN public API | Slate, ranks, records, venues, TV, team schedules, FPI predictor, news |
+| Action Network public API | DraftKings, FanDuel, BetMGM, Caesars, bet365, BetRivers lines, opener, consensus, bets tracked |
+| Kalshi public API | Prediction-market win prices and volume |
+| Open-Meteo | Geocoding and kickoff-hour forecast |
+| Google Gemini (free tier) | Film-room scouting briefs |
 
-## APIs
-- **ESPN** scoreboard + team schedules (odds, ranks, venues, records)
-- **Open-Meteo** geocoding + hourly forecast (kickoff-hour weather at the venue)
-- **Google Gemini** (free tier) — structured scouting brief (headline, upset %, reasons, x-factor, coach-speak)
+Everything is cached server-side (slate 15 min, AI briefs 6 h per game), so it runs itself on Vercel's free plan without burning through the Gemini free quota.
 
-## Run / deploy
-```bash
-npm install
-GEMINI_API_KEY=... npm run dev
-```
-Deploy on Vercel: import the repo and add `GEMINI_API_KEY` — free at aistudio.google.com (optional `GEMINI_MODEL`, defaults to `gemini-2.5-flash`). The radar works without a key; only the AI brief needs it.
+## Setup
+Vercel env: `GEMINI_API_KEY` (free at aistudio.google.com). Optional: `GEMINI_MODEL`.
 
-_Not betting advice. Just vibes with receipts._
+_Not betting advice. Just tape._
