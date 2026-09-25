@@ -51,9 +51,9 @@ export default async function Landing() {
         <Reveal><div className="eyebrow mono">01 — THE PROCESS</div><h2 className="big">We watch the schedule,<br />not the highlights.</h2></Reveal>
         <div className="steps">
           {[
-            ["Pull every number", "Lines from six sportsbooks, the opener, tickets tracked, Kalshi prices and ESPN's FPI — refreshed all week."],
-            ["Read the spot", "Who did the favorite just play? Who's next? How far did they travel, how long did they rest, what's the wind doing?"],
-            ["Flag the fade", "Each signal adds tape points. Hit 50 and it's a FADE. Tap any game and the film room writes the scouting report."],
+            ["Pull the odds", "We collect spreads from six sportsbooks, the opening line, Kalshi prices and ESPN's win model for every FBS game."],
+            ["Check the spot", "We look at who the favorite just played, who they play next, travel, rest and kickoff weather."],
+            ["Flag the fades", "Each red flag adds points to a 0–99 Tape Score. 50 or higher is a FADE. Open any game for the details and an AI summary."],
           ].map(([t, d], k) => (
             <Reveal key={t} delay={k * 120} className="step">
               <span className="num">{String(k + 1).padStart(2, "0")}</span>
@@ -103,7 +103,7 @@ export default async function Landing() {
         <Reveal>
           <div className="eyebrow mono">03 — THE PLAYBOOK</div>
           <h2 className="big">Ten signals.<br />No vibes.</h2>
-          <p className="muted lead2">Every point on the tape score comes from a rule you can read. Nothing hidden, nothing made up — and the AI only writes about what the data already says.</p>
+          <p className="muted lead2">Every point in the Tape Score comes from one of these checks. The AI summary only uses this data.</p>
           <Link href="/board" className="btn primary">See the board →</Link>
         </Reveal>
         <div className="playbook">
@@ -129,7 +129,7 @@ export default async function Landing() {
             <div>
               <div className="eyebrow mono">COMING SOON</div>
               <h2 className="big">The Dog Zone.</h2>
-              <p>Plus members get fade alerts before lines move, a season-long trap tracker, and the full film-room archive.</p>
+              <p>A paid tier with fade alerts, a season-long results tracker and every past AI breakdown.</p>
             </div>
             <span className="btn primary">Get on the list →</span>
           </Link>

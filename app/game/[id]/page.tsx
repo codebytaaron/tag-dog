@@ -71,7 +71,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
       <div className="wrap ggrid">
         <div className="col">
           <section className="card">
-            <div className="cardh"><h3>Why it's on tape</h3><span className="mono muted">{g.factors.length} SIGNALS</span></div>
+            <div className="cardh"><h3>Why it's flagged</h3><span className="mono muted">{g.factors.length} SIGNALS</span></div>
             {g.factors.length === 0 && <p className="muted">Nothing situational. Clean spot for {fav.short}.</p>}
             <ul className="factors">
               {g.factors.map((f) => (
@@ -84,7 +84,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
           </section>
 
           <section className="card">
-            <div className="cardh"><h3>Line shop</h3><span className="mono muted">BEST DOG PRICE HIGHLIGHTED</span></div>
+            <div className="cardh"><h3>Odds by sportsbook</h3><span className="mono muted">BEST UNDERDOG PRICE HIGHLIGHTED</span></div>
             {rows.length ? (
               <div className="shop">
                 <div className="sh mono"><span>Book</span><span>{dog.abbr} spread</span><span>{dog.abbr} ML</span><span>{fav.abbr} ML</span><span>Total</span></div>
@@ -110,7 +110,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
           </section>
 
           <section className="card">
-            <div className="cardh"><h3>Who believes in {fav.short}?</h3><span className="mono muted">FAVORITE WIN PROBABILITY</span></div>
+            <div className="cardh"><h3>{fav.short} win chance</h3><span className="mono muted">FAVORITE WIN PROBABILITY</span></div>
             <div className="probs">
               {probs.map((p) => (
                 <div key={p.label} className="prob">
@@ -128,7 +128,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
           <Brief id={g.id} />
 
           <section className="card">
-            <div className="cardh"><h3>{fav.short}'s runway</h3><span className="mono muted">SCHEDULE SPOT</span></div>
+            <div className="cardh"><h3>{fav.short}'s schedule</h3><span className="mono muted">LAST · THIS · NEXT</span></div>
             <div className="runway">
               <div><span className="mono">LAST WEEK</span><b>{g.favPrev || "—"}</b>{g.favRest != null && <small>{g.favRest} days ago</small>}</div>
               <div className="now"><span className="mono">THIS WEEK</span><b>{dog.short}</b><small>{g.line}</small></div>
@@ -144,7 +144,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
 
           {news.length > 0 && (
             <section className="card">
-              <div className="cardh"><h3>The wire</h3><span className="mono muted">ESPN</span></div>
+              <div className="cardh"><h3>Latest news</h3><span className="mono muted">ESPN</span></div>
               <ul className="wire">
                 {news.map((n) => (
                   <li key={n.headline}>{n.url ? <a href={n.url} target="_blank" rel="noreferrer">{n.headline}</a> : n.headline}</li>

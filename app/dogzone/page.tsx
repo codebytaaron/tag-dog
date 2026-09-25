@@ -7,7 +7,7 @@ const PERKS = [
   ["Film-room archive", "Every AI scouting brief, searchable by team and spot."],
   ["Custom weights", "Tune the playbook. Care more about weather than rest? Your call."],
   ["Line-move history", "Open-to-kick charts across every book we track."],
-  ["The kennel", "Private community channel for people who like dogs."],
+  ["The kennel", "A members-only group chat for game-day talk."],
 ];
 
 export default function DogZone() {
@@ -15,7 +15,7 @@ export default function DogZone() {
     <main className="wrap soon dz">
       <div className="eyebrow mono">TAPEDOG PLUS · COMING SOON</div>
       <h1 className="mega">The Dog <span className="c-tape">Zone.</span></h1>
-      <p className="muted lead2">Everything on TapeDog stays free. The Dog Zone is for people who want the edge delivered.</p>
+      <p className="muted lead2">TapeDog stays free. Dog Zone is an optional paid tier with alerts, tracking and extra tools.</p>
       <div className="perks">
         {PERKS.map(([t, d], k) => (
           <div key={t} className="perk"><span className="mono num">{String(k + 1).padStart(2, "0")}</span><b>{t}</b><p>{d}</p></div>

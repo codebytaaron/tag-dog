@@ -1,59 +1,81 @@
 import Link from "next/link";
-import Logo from "@/components/Logo";
 
-export const metadata = { title: "About the founder — TapeDog" };
+export const metadata = { title: "About — TapeDog" };
 
-const GAMES = [
-  { where: "In the building", title: "Texas vs Ohio State", year: "2026", score: null, note: "The big comeback. The kind of game where the stadium goes quiet, then goes insane. Nothing on a screen beats being there for that." },
-  { where: "On the couch", title: "Alabama 41, Georgia 34", year: "2024", score: "No. 2 game of 2024 per ESPN", note: "Alabama went up 28–0. Georgia clawed all the way back and took the lead late — then Alabama answered almost immediately. Pure chaos." },
-  { where: "Instant classic", title: "Texas A&M 41, Notre Dame 40", year: "Sep 13, 2025", score: "9.7 / 10", note: "One-point game in South Bend. The definition of a spot you can't trust the favorite in." },
+const STEPS = [
+  ["1. Pull the odds", "Spreads from six sportsbooks, the opening line, Kalshi prices and ESPN's win model for every FBS game."],
+  ["2. Check the spot", "Who the favorite just played, who they play next, travel, rest days and kickoff weather."],
+  ["3. Score it", "Each red flag adds points to a 0–99 Tape Score. 50 or higher is a FADE."],
 ];
 
-const BUILD = [
-  ["Live data, everywhere", "TapeDog listens to a mix of public sports, sportsbook and prediction-market feeds and stitches them into one picture of every game — refreshed automatically all week and live on Saturdays."],
-  ["The Tape Score", "A situational model I built from how upsets actually happen: schedule spots, market movement and conditions. The exact recipe stays in the film room."],
-  ["An AI that stays honest", "The scouting briefs are written by AI, but only from the data TapeDog already pulled. No invented injuries, no fake quotes."],
-  ["Runs itself", "No one updates this by hand. It caches smartly, refreshes itself and costs nothing to keep running."],
+const DO = [
+  ["Fade Board", "Every upcoming game ranked by Tape Score.", "/board"],
+  ["Live scores", "Scores, down and distance and win odds, updating on their own.", "/board?tab=scores"],
+  ["Team pages", "Search any team with ⌘K for its schedule, results and this week's spot.", "/team/333"],
+  ["AI breakdown", "A short summary of each game, written only from TapeDog's data.", "/board"],
+  ["Saved games", "Bookmark games to check back on later.", "/board?tab=saved"],
+];
+
+const GAMES = [
+  { tag: "In person", title: "Ohio State 27, Penn State 26", when: "Sept. 29, 2018", note: "Penn State led 26–14 in the fourth. Ohio State scored the last 13. I was there." },
+  { tag: "On TV", title: "Alabama 41, Georgia 34", when: "2024", note: "Alabama led 28–0, Georgia took the lead late, Alabama answered right away. ESPN's No. 2 game of 2024." },
+  { tag: "On TV", title: "Texas A&M 41, Notre Dame 40", when: "Sept. 13, 2025", note: "One-point game in South Bend. 9.7/10." },
+  { tag: "On TV", title: "Indiana 27, Miami 21", when: "2026 CFP title game", note: "Close all second half, and Miami had the ball late with a chance to win. ESPN's best game of the 2025 season." },
 ];
 
 export default function About() {
   return (
     <main className="wrap about">
-      <section className="founder">
-        <div className="fmark"><Logo size={120} /><span className="mono">TA</span></div>
-        <div>
-          <div className="eyebrow mono">ABOUT THE FOUNDER</div>
-          <h1 className="big">Built by TA.</h1>
-          <p className="lead2">I'm TA, a builder who spends Saturdays watching way too much college football. I've always cared more about the <em>spot</em> than the matchup: who's looking ahead, who just got punched in the mouth, who's traveling across the country for a noon kick.</p>
-          <p className="lead2 muted">TapeDog is the tool I wanted every week: one place that flags the favorites that are set up to stumble, and explains why in plain English.</p>
+      <section>
+        <div className="eyebrow mono">ABOUT TAPEDOG</div>
+        <h1 className="big">What TapeDog does.</h1>
+        <p className="lead2">TapeDog grades every FBS favorite on the stuff box scores miss — look-ahead spots, letdowns, line movement, prediction markets, rest and weather — then flags the ones worth fading.</p>
+      </section>
+
+      <section className="sect0">
+        <div className="eyebrow mono">HOW IT WORKS</div>
+        <div className="aboutsteps">
+          {STEPS.map(([t, d]) => <div key={t} className="bcard"><b>{t}</b><p>{d}</p></div>)}
         </div>
       </section>
 
       <section className="sect0">
-        <div className="eyebrow mono">THE GAMES THAT MADE ME</div>
-        <div className="gamesgrid">
-          {GAMES.map((g, k) => (
-            <article key={g.title} className="fgame">
-              <div className="fgtop mono"><span>{String(k + 1).padStart(2, "0")} · {g.where.toUpperCase()}</span><span className="muted">{g.year}</span></div>
-              <h3>{g.title}</h3>
-              {g.score && <div className="fscore mono">{g.score}</div>}
-              <p>{g.note}</p>
-            </article>
+        <div className="eyebrow mono">WHAT YOU CAN DO</div>
+        <div className="aboutdo">
+          {DO.map(([t, d, h]) => (
+            <Link key={t} href={h} className="dorow"><b>{t}</b><span className="muted">{d}</span><i>→</i></Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="sect0 founder2" id="founder">
+        <div className="eyebrow mono">THE FOUNDER</div>
+        <div className="fhead">
+          <div className="pav sm">TA</div>
+          <div><h2 className="big nomb">Teddy A.</h2><span className="mono muted">FOUNDER · BUILDER</span></div>
+        </div>
+        <p className="lead2">I've loved college football since I was a little kid. I've always cared more about the spot than the matchup: who's looking ahead, who just got punched in the mouth, who's traveling across the country for a noon kick.</p>
+        <p className="lead2 muted">TapeDog is the tool I wanted every Saturday. It finds the favorites in a bad spot and tells you why.</p>
+
+        <h3 className="gtitle mono">FAVORITE GAMES</h3>
+        <div className="favlist">
+          {GAMES.map((g) => (
+            <div key={g.title} className="fav-row">
+              <span className={`mono ftag ${g.tag === "In person" ? "live" : ""}`}>{g.tag}</span>
+              <div><b>{g.title}</b> <span className="mono muted">· {g.when}</span><p>{g.note}</p></div>
+            </div>
           ))}
         </div>
       </section>
 
       <section className="sect0">
-        <div className="eyebrow mono">HOW TAPEDOG IS BUILT</div>
-        <h2 className="big">The short version.</h2>
-        <div className="buildgrid">
-          {BUILD.map(([t, d]) => <div key={t} className="bcard"><b>{t}</b><p>{d}</p></div>)}
-        </div>
+        <div className="eyebrow mono">UNDER THE HOOD</div>
+        <p className="lead2 muted">TapeDog pulls public sports, odds and prediction-market data automatically, scores each game with its own model, and uses AI only to summarize that data. It updates itself; nobody runs it by hand.</p>
       </section>
 
       <section className="sect0 aboutcta">
         <Link href="/board" className="btn primary">Open the Fade Board →</Link>
-        <Link href="/dogzone" className="btn ghost">See what's coming in Dog Zone</Link>
+        <Link href="/dogzone" className="btn ghost">What's coming in Dog Zone</Link>
       </section>
     </main>
   );

@@ -84,10 +84,10 @@ export default function Board({ games, week, season, updated, initialTab, initia
 
   const go = (t: Tab) => { setTab(t); history.replaceState(null, "", t === "fade" ? "/board" : `/board?tab=${t}`); };
   const titles: Record<Tab, [string, string]> = {
-    fade: ["The Fade Board", "Every FBS favorite still to play, graded on how badly it's set up to stumble. Tap any game for the full file."],
-    scores: ["Scores", "Every FBS game this week. Live scores update on their own — no refresh needed."],
-    heat: ["Biggest games", "Ranked by heat: bets tracked across books, prediction-market volume, rankings and TV window."],
-    saved: ["Your saved tape", "Games you bookmarked. Stored on this device."],
+    fade: ["The Fade Board", "Every FBS game that hasn't finished, ranked by Tape Score. Higher score means the favorite is in a worse spot."],
+    scores: ["Scores", "Live and final scores for every FBS game this week. Updates automatically."],
+    heat: ["Biggest games", "This week's biggest games, based on betting volume, rankings and TV slot."],
+    saved: ["Your saved tape", "Games you bookmarked on this device."],
   };
 
   return (

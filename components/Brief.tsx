@@ -14,11 +14,11 @@ export default function Brief({ id }: { id: string }) {
   }
   return (
     <section className="card film">
-      <div className="cardh"><h3>Film room</h3><span className="mono muted">AI SCOUTING BRIEF</span></div>
+      <div className="cardh"><h3>AI breakdown</h3><span className="mono muted">SUMMARY OF THIS GAME'S DATA</span></div>
       {st === "idle" && (
-        <button className="btn primary wide" onClick={roll}>▶ Roll the film</button>
+        <button className="btn primary wide" onClick={roll}>Generate AI breakdown</button>
       )}
-      {st === "loading" && <div className="strip"><i /><i /><i /><i /><i /><span className="mono">Rolling tape…</span></div>}
+      {st === "loading" && <div className="strip"><i /><i /><i /><i /><i /><span className="mono">Writing breakdown…</span></div>}
       {st === "done" && b?.error && <p className="errtxt">{b.error}</p>}
       {st === "done" && b && !b.error && (
         <div className="brief">
