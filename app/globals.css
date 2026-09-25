@@ -554,3 +554,5 @@ html, body { overflow-x: clip; }
   .price { position: static; }
   .ticket { grid-template-columns: 1fr; } .tstub { border-left: 0; border-top: 2px dashed var(--line2); padding: 14px; grid-auto-flow: column; }
 }
+
+.fhero { isolation: isolate; }
