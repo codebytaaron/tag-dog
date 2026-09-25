@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 
-const MODEL = process.env.GEMINI_MODEL || "gemini-3.8-flash";
+// Tried in order; busy/unavailable models fall through to the next one.
+const MODELS = [
+  ...(process.env.GEMINI_MODEL ? [process.env.GEMINI_MODEL] : []),
+  "gemini-3.8-flash", "gemini-flash-latest", "gemini-3.8-flash-lite", "gemini-flash-lite-latest",
+];
 
 export async function POST(req: Request) {
   const key = process.env.GEMINI_API_KEY;
@@ -30,16 +34,22 @@ Write a trap-game scouting brief. Only use the facts provided plus general, well
   "coachSpeak": "a one-line fake-but-plausible warning the favorite's coach should give the locker room"
 }`;
   try {
-    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`, {
-      method: "POST",
-      headers: { "content-type": "application/json", "x-goog-api-key": key },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: { responseMimeType: "application/json", temperature: 0.7, maxOutputTokens: 4096 },
-      }),
-    });
-    const d = await r.json();
-    if (!r.ok) return NextResponse.json({ error: d.error?.message || "AI request failed" }, { status: 502 });
+    let d: any = null, lastErr = "AI request failed";
+    for (const model of MODELS) {
+      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-goog-api-key": key },
+        body: JSON.stringify({
+          contents: [{ role: "user", parts: [{ text: prompt }] }],
+          generationConfig: { responseMimeType: "application/json", temperature: 0.7, maxOutputTokens: 4096 },
+        }),
+      });
+      const body = await r.json();
+      if (r.ok) { d = body; break; }
+      lastErr = body.error?.message || lastErr;
+      if (![404, 429, 500, 503].includes(r.status)) break;
+    }
+    if (!d) return NextResponse.json({ error: lastErr }, { status: 502 });
     const text: string = (d.candidates?.[0]?.content?.parts || []).map((p: any) => p.text || "").join("");
     const json = JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1));
     return NextResponse.json(json);
