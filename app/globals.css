@@ -733,3 +733,25 @@ html, body { overflow-x: clip; }
 }
 
 button.btn.ghost { background: transparent; }
+/* ---------- round 8 ---------- */
+/* how it works cards: equal height, tidy source lists */
+.flow3 { align-items: stretch; }
+.fstep { display: flex; flex-direction: column; gap: 10px; }
+.fstep p { min-height: 42px; }
+.toolbox { margin-top: auto; background: var(--bg2); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+.tbh { display: flex; align-items: center; gap: 8px; font-size: 10px; letter-spacing: .14em; color: var(--muted); margin-bottom: 10px; }
+.tbh i { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); }
+.tools { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; margin: 0; }
+.tool { animation: none; border: 0; background: none; padding: 0; font-size: 13px; font-weight: 500; color: #d6d0c1; display: flex; align-items: center; gap: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tool i { flex: none; width: 5px; height: 5px; background: var(--ok); }
+
+/* profile setup */
+.setup { max-width: 640px; }
+.fld em { font-style: normal; letter-spacing: 0; text-transform: none; }
+.teamgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 6px; }
+.teamgrid button { display: flex; align-items: center; gap: 8px; padding: 10px; border-radius: 10px; background: var(--panel); border: 1px solid var(--line2); font-size: 13px; font-weight: 600; text-align: left; transition: border-color .15s, background .15s; }
+.teamgrid button:hover { border-color: var(--c); background: color-mix(in srgb, var(--c) 14%, var(--panel)); }
+.teamgrid img { width: 24px; height: 24px; object-fit: contain; flex: none; }
+.teamgrid span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.btn.big { padding: 16px 26px; font-size: 16px; }
+.pinfo .linkbtn { padding: 0; font: inherit; }

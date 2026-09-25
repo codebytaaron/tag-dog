@@ -76,9 +76,9 @@ export default async function Landing() {
             <Reveal key={n} delay={k * 120} className="fstep">
               <div className="fsh"><span className="mono fnum">{n}</span><b>{t}</b></div>
               <p>{d}</p>
-              <div className="tools">
-                {tools.map((x, i) => <span key={x} className="tool" style={{ animationDelay: `${(k * 5 + i) * 0.45}s` }}><i />{x}</span>)}
-              </div>
+              <div className="toolbox"><span className="mono tbh"><i />CONNECTED · {tools.length}</span><div className="tools">
+                {tools.map((x, i) => <span key={x} className="tool"><i style={{ animationDelay: `${i * 0.3}s` }} />{x}</span>)}
+              </div></div>
             </Reveal>
           ))}
         </div>

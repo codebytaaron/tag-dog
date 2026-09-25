@@ -8,38 +8,71 @@ import Kickoff from "./Kickoff";
 type TeamOpt = { id: string; name: string; loc: string; abbr: string; logo: string; color: string };
 type Res = { state: string; home: number | null; away: number | null; winner: "home" | "away" | null };
 
+const POP = ["333", "61", "194", "251", "130", "87", "2483", "99", "228", "245", "52", "213"];
+
 function Setup({ initial, onDone }: { initial: P | null; onDone: (p: P) => void }) {
   const [name, setName] = useState(initial?.name || "");
   const [teams, setTeams] = useState<TeamOpt[]>([]);
   const [q, setQ] = useState("");
   const [team, setTeam] = useState<TeamOpt | null>(null);
-  useEffect(() => { fetch("/api/teams").then((r) => r.json()).then((t) => { setTeams(t); if (initial) setTeam(t.find((x: TeamOpt) => x.id === initial.teamId) || null); }).catch(() => {}); }, []); // eslint-disable-line
+  const [err, setErr] = useState("");
+  useEffect(() => {
+    fetch("/api/teams").then((r) => r.json()).then((t: TeamOpt[]) => {
+      setTeams(t);
+      if (initial?.teamId) setTeam(t.find((x) => x.id === initial.teamId) || null);
+    }).catch(() => {});
+  }, []); // eslint-disable-line
   const res = useMemo(() => {
     const s = q.trim().toLowerCase();
-    if (!s) return [];
-    return teams.filter((t) => t.name.toLowerCase().includes(s) || t.abbr.toLowerCase() === s).slice(0, 6);
+    if (!s) return POP.map((id) => teams.find((t) => t.id === id)).filter(Boolean) as TeamOpt[];
+    return teams.filter((t) => t.name.toLowerCase().includes(s) || t.abbr.toLowerCase() === s).slice(0, 8);
   }, [q, teams]);
-  const ok = name.trim().length > 0 && team;
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim()) { setErr("Add a name to continue."); return; }
+    onDone({
+      name: name.trim(), teamId: team?.id || "", teamName: team?.name || "", teamLogo: team?.logo || "",
+      color: team?.color || "#b8912a", since: initial?.since || new Date().toISOString(),
+    });
+  };
+
   return (
-    <div className="setup">
+    <form className="setup" onSubmit={submit}>
       <div className="eyebrow mono">{initial ? "EDIT PROFILE" : "MAKE IT YOURS"}</div>
-      <h1 className="h2">{initial ? "Update your profile" : "Set up your TapeDog profile"}</h1>
-      <p className="muted">Pick a name and your team. Your picks, record and badges build from there.</p>
-      <label className="fld"><span className="mono">YOUR NAME</span><input value={name} maxLength={24} onChange={(e) => setName(e.target.value)} placeholder="Teddy" /></label>
-      <label className="fld"><span className="mono">YOUR TEAM</span>
+      <h1 className="h2">{initial ? "Update your profile" : "Create your profile"}</h1>
+      <p className="muted">Takes 5 seconds. Your picks, record and badges build from here.</p>
+
+      <label className="fld">
+        <span className="mono">1 · YOUR NAME</span>
+        <input autoFocus value={name} maxLength={24} onChange={(e) => { setName(e.target.value); setErr(""); }} placeholder="Your name" />
+      </label>
+
+      <div className="fld">
+        <span className="mono">2 · YOUR TEAM <em className="muted">(optional)</em></span>
         {team ? (
-          <div className="picked" style={{ ["--c" as any]: team.color }}>{team.logo && <img src={team.logo} alt="" />}<b>{team.name}</b><button onClick={() => { setTeam(null); setQ(""); }}>Change</button></div>
+          <div className="picked" style={{ ["--c" as any]: team.color }}>
+            {team.logo && <img src={team.logo} alt="" />}<b>{team.name}</b>
+            <button type="button" onClick={() => { setTeam(null); setQ(""); }}>Change</button>
+          </div>
         ) : (
           <>
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search: Texas, Ohio State, Bama…" />
-            {res.length > 0 && <div className="opts">{res.map((t) => <button key={t.id} onClick={() => setTeam(t)}>{t.logo && <img src={t.logo} alt="" />}{t.name}</button>)}</div>}
+            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search any team" />
+            <div className="teamgrid">
+              {res.map((t) => (
+                <button type="button" key={t.id} onClick={() => setTeam(t)} style={{ ["--c" as any]: t.color }}>
+                  {t.logo && <img src={t.logo} alt="" />}<span>{q ? t.name : t.loc}</span>
+                </button>
+              ))}
+              {teams.length === 0 && <span className="muted small">Loading teams…</span>}
+            </div>
           </>
         )}
-      </label>
-      <button className="btn primary" disabled={!ok} onClick={() => ok && onDone({ name: name.trim(), teamId: team!.id, teamName: team!.name, teamLogo: team!.logo, color: team!.color, since: initial?.since || new Date().toISOString() })}>
-        {initial ? "Save changes" : "Create profile"}
-      </button>
-    </div>
+      </div>
+
+      <button type="submit" className="btn primary big">{initial ? "Save changes" : "Create profile →"}</button>
+      {err && <p className="errtxt small">{err}</p>}
+    </form>
   );
 }
 
@@ -96,7 +129,7 @@ export default function Profile({ games }: { games: LiteGame[] }) {
           <div className="pinfo">
             <div className="eyebrow mono">TAPEDOG PROFILE</div>
             <h1 className="btitle">{profile.name}</h1>
-            <p className="muted">Fan of <Link href={`/team/${profile.teamId}`} className="c-tape">{profile.teamName}</Link> · member since {new Date(profile.since).toLocaleDateString([], { month: "short", year: "numeric" })}</p>
+            <p className="muted">{profile.teamId ? <>Fan of <Link href={`/team/${profile.teamId}`} className="c-tape">{profile.teamName}</Link> · </> : <><button className="linkbtn" onClick={() => setEditing(true)}>Pick your team</button> · </>}member since {new Date(profile.since).toLocaleDateString([], { month: "short", year: "numeric" })}</p>
           </div>
           <button className="btn ghost" onClick={() => setEditing(true)}>Edit profile</button>
         </div>

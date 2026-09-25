@@ -2,9 +2,21 @@
 import { useEffect, useState } from "react";
 
 // Tiny localStorage store with a same-tab change event.
+// Falls back to memory when the browser blocks storage (private mode, strict settings).
+const mem: Record<string, string> = {};
 function store<T>(key: string, evt: string) {
-  const read = (): T[] => { try { return JSON.parse(localStorage.getItem(key) || "[]"); } catch { return []; } };
-  const write = (v: T[]) => { try { localStorage.setItem(key, JSON.stringify(v)); } catch {} window.dispatchEvent(new Event(evt)); };
+  const read = (): T[] => {
+    let raw: string | null = null;
+    try { raw = localStorage.getItem(key); } catch {}
+    if (raw == null) raw = mem[key] ?? null;
+    try { return JSON.parse(raw || "[]"); } catch { return []; }
+  };
+  const write = (v: T[]) => {
+    const s = JSON.stringify(v);
+    mem[key] = s;
+    try { localStorage.setItem(key, s); } catch {}
+    window.dispatchEvent(new Event(evt));
+  };
   function useStore() {
     const [v, setV] = useState<T[]>([]);
     const [ready, setReady] = useState(false);
