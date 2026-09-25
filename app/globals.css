@@ -731,3 +731,5 @@ html, body { overflow-x: clip; }
   .pstats { grid-template-columns: 1fr 1fr; }
   .pava { width: 90px; height: 90px; border-radius: 24px; } .pava img { width: 56px; height: 56px; }
 }
+
+button.btn.ghost { background: transparent; }
