@@ -11,6 +11,7 @@ export type Buzz = { posts: Post[]; news: Headline[]; volume: { away: number; ho
 
 const STRONG = /\b(football|cfb|kickoff|kick-off|touchdown|tds?|qb|quarterback|head coach|spread|upset|gameday|game day|top 25|ap poll|bowl|playoffs?|cfp|halftime|4th quarter|fourth quarter|field goal|interception|rushing|passing yards)\b/i;
 const MATCHUP = /\b(vs\.?|versus|at|@|game|matchup|preview|prediction|picks?|beat|beats|win|wins|loss|lose|saturday|kickoff|week \d+)\b/i;
+const JUNK = /\b(album|albums|song|songs|playlist|spotify|sponsor|sponsors|giveaway|recipe|concert|tickets for sale)\b/i;
 const OTHER = /\b(basketball|hoops|baseball|softball|volleyball|soccer|hockey|wrestling|golf|tennis|nba|mlb|nhl|wnba|nfl draft|gymnastics|track and field|election|senate|governor|legislature)\b/i;
 const decode = (s: string) => s.replace(/<!\[CDATA\[|\]\]>/g, "").replace(/&amp;/g, "&").replace(/&quot;/g, "\"").replace(/&#39;/g, "\x27").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
 const terms = (t: Team) => [t.location, t.nick, t.short].filter((x) => x && x.length >= 3).map((x) => x.toLowerCase());
@@ -56,19 +57,27 @@ export async function getBuzz(away: Team, home: Team): Promise<Buzz> {
   ]);
 
   const now = Date.now();
+  const year = new Date().getFullYear();
+  const otherYear = new RegExp(`\\b(20\\d\\d)\\b`, "g");
   const seen = new Set<string>();
   const posts: (Post & { rank: number })[] = [];
+  const vol = { away: new Set<string>(), home: new Set<string>() };
   for (const p of raw) {
     const text = String(p.record?.text || "").trim();
     const key = text.slice(0, 80).toLowerCase();
     const at = p.record?.createdAt || p.indexedAt;
     const age = (now - Date.parse(at)) / 3600000;
-    if (!text || seen.has(key) || age > 24 * 6 || age < -1 || text.length < 30 || OTHER.test(text)) continue;
+    if (!text || seen.has(key) || age > 24 * 5 || age < -1 || text.length < 30 || OTHER.test(text) || JUNK.test(text)) continue;
+    if ([...text.matchAll(otherYear)].some((m) => Number(m[1]) !== year)) continue;
     if ((text.match(/#/g) || []).length > 5) continue;
     const low = text.toLowerCase();
     const a = hits(low, A), h = hits(low, H);
     const both = a && h;
-    if (!(both ? STRONG.test(text) || MATCHUP.test(text) : (a || h) && STRONG.test(text) && MATCHUP.test(text))) continue;
+    // Fan volume counts any football post about either team in the last 48h.
+    if (age < 48 && STRONG.test(text)) { if (a) vol.away.add(key); if (h) vol.home.add(key); }
+    // The feed only shows posts about THIS game: both teams named, football context.
+    if (!both || !(STRONG.test(text) || MATCHUP.test(text))) continue;
+    if (age < 48) { vol.away.add(key); vol.home.add(key); }
     seen.add(key);
     const likes = p.likeCount || 0, reposts = p.repostCount || 0;
     posts.push({
@@ -80,7 +89,6 @@ export async function getBuzz(away: Team, home: Team): Promise<Buzz> {
     });
   }
   posts.sort((x, y) => y.rank - x.rank);
-  const recent = posts.filter((p) => now - Date.parse(p.at) < 48 * 3600000);
 
   const tseen = new Set<string>();
   const both = [...A, ...H];
@@ -92,6 +100,6 @@ export async function getBuzz(away: Team, home: Team): Promise<Buzz> {
   return {
     posts: posts.slice(0, 10).map(({ rank, ...p }) => p),
     news: headlines,
-    volume: { away: recent.filter((p) => p.side !== "home").length, home: recent.filter((p) => p.side !== "away").length },
+    volume: { away: vol.away.size, home: vol.home.size },
   };
 }
