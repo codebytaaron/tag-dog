@@ -119,6 +119,20 @@ export default function Board({ games, week, season, updated, initialTab, initia
     ].filter((x) => x.items.length);
   }, [games, live, q]); // eslint-disable-line
 
+  // Fade report card: how flagged games actually finished this week.
+  const report = useMemo(() => {
+    const fin = games.filter((g) => stateOf(g) === "post" && live[g.id]?.home != null);
+    if (!fin.length) return null;
+    const rows = fin.map((g) => {
+      const lv = live[g.id]!;
+      const favS = g.favorite === "home" ? lv.home! : lv.away!, dogS = g.favorite === "home" ? lv.away! : lv.home!;
+      const upset = dogS > favS;
+      return { g, upset, cover: g.spread != null ? dogS - favS + g.spread > 0 : upset };
+    });
+    const flagged = rows.filter((x) => x.g.tier !== "HOLD");
+    return { rows, upsets: rows.filter((x) => x.upset), flagged, fu: flagged.filter((x) => x.upset).length, fc: flagged.filter((x) => x.cover).length };
+  }, [games, live]); // eslint-disable-line
+
   const go = (t: Tab) => { setTab(t); history.replaceState(null, "", t === "board" ? "/board" : `/board?tab=${t}`); };
   const cur = LENSES.find((l) => l.id === lens)!;
 
@@ -192,6 +206,24 @@ export default function Board({ games, week, season, updated, initialTab, initia
       {tab === "scores" && (
         <div className="scores">
           <div className="controls2"><span /><div className="searchwrap"><input className="search" placeholder="Filter by team" value={q} onChange={(e) => setQ(e.target.value)} /></div></div>
+          {report && (
+            <div className="report">
+              <div className="rhead"><b>Fade report</b><span className="muted">How this week's finished games went</span></div>
+              <div className="rstats">
+                <div><b>{report.upsets.length}</b><span className="mono">UPSETS SO FAR</span></div>
+                <div><b>{report.fu}/{report.flagged.length}</b><span className="mono">FLAGGED FAVS THAT LOST</span></div>
+                <div><b>{report.fc}/{report.flagged.length}</b><span className="mono">FLAGGED DOGS THAT COVERED</span></div>
+              </div>
+              {report.upsets.length > 0 && (
+                <div className="ups">
+                  {report.upsets.slice(0, 8).map(({ g }) => {
+                    const dog = g[g.favorite === "home" ? "away" : "home"], fav = g[g.favorite];
+                    return <Link key={g.id} href={`/game/${g.id}`} className="upchip">{dog.logo && <img src={dog.logo} alt="" />}<b>{dog.short}</b><span className="muted">over {fav.short}</span>{g.tier !== "HOLD" && <em className="mono">FLAGGED</em>}</Link>;
+                  })}
+                </div>
+              )}
+            </div>
+          )}
           {groups.map((grp) => (
             <section key={grp.key}>
               <h2 className="gtitle mono">{grp.key === "in" && <span className="dotrec" />}{grp.title} <span className="muted">{grp.items.length}</span></h2>

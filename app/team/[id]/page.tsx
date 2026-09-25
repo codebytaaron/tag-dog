@@ -94,12 +94,10 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                     : g.state === "in" ? <span className="livetag"><i />LIVE {g.us}–{g.them}</span>
                     : <span className="muted">{g.tv || "TBA"}</span>}
                 </span>
-                <span className="sgo">{slateIds.has(g.id) ? "→" : ""}</span>
+                <span className="sgo">{g.state === "post" ? <em className="mono rcp">▶ RECAP</em> : "→"}</span>
               </>
             );
-            return slateIds.has(g.id)
-              ? <Link key={g.id} href={`/game/${g.id}`} className="srow link">{inner}</Link>
-              : <div key={g.id} className="srow">{inner}</div>;
+            return <Link key={g.id} href={`/game/${g.id}`} className="srow link">{inner}</Link>;
           })}
           {games.length === 0 && <div className="empty">No schedule posted yet.</div>}
         </div>

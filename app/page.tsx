@@ -5,9 +5,9 @@ import Reveal from "@/components/Reveal";
 import Kickoff from "@/components/Kickoff";
 
 const FLOW: [string, string, string, string[]][] = [
-  ["01", "Pull the odds", "Lines from six sportsbooks, the opening number, prediction markets and ESPN's model.", ["DraftKings", "FanDuel", "BetMGM", "Caesars", "bet365", "BetRivers", "Action Network", "Kalshi", "ESPN FPI"]],
-  ["02", "Check the spot", "Last week, next week, travel, rest, weather and what fans are saying.", ["ESPN schedules", "Open-Meteo", "Bluesky", "Google News"]],
-  ["03", "Score it", "Red flags add up to a 0 to 99 Tape Score. 50 or higher is a FADE.", ["TapeDog model", "Gemini AI", "Live scores"]],
+  ["01", "Pull the odds", "Six sportsbooks, the opening line, Kalshi and ESPN's win model.", ["DraftKings", "FanDuel", "BetMGM", "Caesars", "bet365", "BetRivers", "Action Network", "Kalshi", "ESPN FPI"]],
+  ["02", "Check the spot", "Last week, next week, travel, rest, weather and fan buzz.", ["ESPN", "Open-Meteo", "Bluesky", "Google News"]],
+  ["03", "Score it", "Red flags add up to a 0 to 99 Tape Score. 50 or higher is a fade.", ["TapeDog model", "Gemini AI", "Live scores"]],
 ];
 
 export const revalidate = 900;
@@ -71,17 +71,17 @@ export default async function Landing() {
           <div className="eyebrow mono">HOW IT WORKS</div>
           <h2 className="h2">Three steps, every game.</h2>
         </Reveal>
-        <div className="flow3">
+        <div className="how3">
           {FLOW.map(([n, t, d, tools], k) => (
-            <Reveal key={n} delay={k * 120} className="fstep">
-              <div className="fsh"><span className="mono fnum">{n}</span><b>{t}</b></div>
+            <Reveal key={n} delay={k * 100} className="hcard">
+              <span className="hnum mono">{n}</span>
+              <h3>{t}</h3>
               <p>{d}</p>
-              <div className="toolbox"><span className="mono tbh"><i />CONNECTED · {tools.length}</span><div className="tools">
-                {tools.map((x, i) => <span key={x} className="tool"><i style={{ animationDelay: `${i * 0.3}s` }} />{x}</span>)}
-              </div></div>
+              <span className="hsrc mono">{tools.length} SOURCES</span>
             </Reveal>
           ))}
         </div>
+        <p className="srcline"><span className="mono">CONNECTED TO</span>{FLOW.flatMap((f) => f[3]).join("  ·  ")}</p>
         <div className="center"><Link href="/about" className="btn ghost">See everything it checks →</Link></div>
       </section>
 

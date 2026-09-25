@@ -10,18 +10,24 @@ import { getLive } from "@/lib/live";
 import { getBuzz } from "@/lib/buzz";
 import BuzzPanel from "@/components/BuzzPanel";
 import PickBar from "@/components/PickBar";
+import { getRecap } from "@/lib/recap";
+import Recap, { StandaloneGame } from "@/components/Recap";
 
 export const revalidate = 900;
 export const maxDuration = 60;
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
-  const d = await getGameDetail((await params).id);
-  return { title: d ? `${d.game.away.short} @ ${d.game.home.short} | TapeDog` : "TapeDog" };
+  const { id } = await params;
+  const d = await getGameDetail(id);
+  if (d) return { title: `${d.game.away.short} @ ${d.game.home.short} | TapeDog` };
+  const r = await getRecap(id);
+  return { title: r ? `${r.away.short} @ ${r.home.short} | TapeDog` : "TapeDog" };
 }
 
 export default async function GamePage({ params }: { params: Promise<{ id: string }> }) {
-  const d = await getGameDetail((await params).id);
-  if (!d) notFound();
+  const id = (await params).id;
+  const [d, recap] = await Promise.all([getGameDetail(id), getRecap(id)]);
+  if (!d) { if (!recap) notFound(); return <StandaloneGame r={recap} />; }
   const { game: g, news } = d;
   const [liveMap, buzz] = await Promise.all([getLive(), getBuzz(g.away, g.home)]);
   const live = liveMap[g.id] || null;
@@ -72,6 +78,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
         </div>
       </section>
 
+      {recap && recap.state !== "pre" && <div className="wrap"><Recap r={recap} /></div>}
       <div className="wrap ggrid">
         <div className="col">
           <PickBar id={g.id} date={g.date} state={g.state} fav={g.favorite} line={g.line} away={{ abbr: g.away.abbr, short: g.away.short, logo: g.away.logo, color: g.away.color }} home={{ abbr: g.home.abbr, short: g.home.short, logo: g.home.logo, color: g.home.color }} />
