@@ -81,7 +81,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
           {games.map((g: any) => {
             const inner = (
               <>
-                <span className="sdate mono"><Kickoff date={g.date} /></span>
+                <span className="sdate mono"><Kickoff date={g.date} day /></span>
                 <span className="sopp">
                   <span className="mono muted">{g.home ? "vs" : "@"}</span>
                   {g.opp.logo ? <img src={g.opp.logo} alt="" /> : <span className="dotc" />}
