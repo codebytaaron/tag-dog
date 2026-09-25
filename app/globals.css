@@ -1011,3 +1011,14 @@ button.btn.ghost { background: transparent; }
   .peekbox { grid-template-columns: 1fr; padding: 14px 16px 18px; }
   .gact { margin-left: 0; }
 }
+
+/* mobile board rows (must come after the desktop grid) */
+@media (max-width: 900px) {
+  .brow { grid-template-columns: minmax(0, 1fr) auto auto; grid-template-areas: "m s v" "l l l" "g g g"; column-gap: 10px; }
+  .brow .idx, .brow .wcell { display: none; }
+  .brow .matchup { grid-area: m; min-width: 0; } .brow .ln { grid-area: l; } .brow .sig { grid-area: g; }
+  .brow .score { grid-area: s; min-width: 60px; } .brow .rowact { grid-area: v; flex-direction: column; }
+  .brow .mt .rc, .brow .mt .sc { white-space: nowrap; }
+  .brow .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .thead.brow { display: none; }
+}
