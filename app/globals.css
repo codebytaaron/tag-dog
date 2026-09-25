@@ -442,3 +442,22 @@ blockquote { margin: 16px 0 0; padding: 12px 16px; border-left: 3px solid var(--
   .lane, .track, .row, .rot .ch { animation: none !important; }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* mobile fixes */
+html, body { overflow-x: clip; }
+.tabs button { white-space: nowrap; }
+@media (max-width: 900px) {
+  .links { display: none; }
+  .navin { gap: 10px; }
+  .navin .avatar { display: none; }
+  .brand { margin-right: auto; }
+  .tally { width: 100%; }
+  .tally button { flex: 1; min-width: 0; padding: 10px 12px; }
+  .tally button b { font-size: 26px; }
+  .controls { position: static; }
+  .tabs { width: 100%; overflow-x: auto; }
+  .tabs button { flex: 1; padding: 9px 10px; }
+  .filters { width: 100%; }
+  .searchwrap { flex: 1; min-width: 160px; }
+  .bhead > div:first-child { min-width: 0; }
+}
