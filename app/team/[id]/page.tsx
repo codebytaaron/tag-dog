@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { getSlate } from "@/lib/data";
 import Kickoff from "@/components/Kickoff";
 import Ring from "@/components/Ring";
+import Highlights from "@/components/Highlights";
+import { getRecap } from "@/lib/recap";
 import { FollowButton } from "@/components/SaveButton";
 
 export const revalidate = 60;
@@ -46,6 +48,8 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
   const onSlate = slate.games.find((g) => g.home.id === id || g.away.id === id);
   const slateIds = new Set(slate.games.map((g) => g.id));
   const isFav = onSlate ? onSlate[onSlate.favorite].id === id : false;
+  const last = [...games].reverse().find((g: any) => g.state === "post");
+  const recap = last ? await getRecap(last.id) : null;
 
   return (
     <main>
@@ -77,6 +81,27 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
         </div>
       </section>
 
+      {recap && (
+        <div className="wrap latest">
+          <section className="card">
+            <div className="cardh"><h3>Latest result</h3><Link href={`/game/${recap.id}`} className="mono c-tape small">FULL RECAP →</Link></div>
+            <div className="lrgrid">
+              <div className="lrl">
+                <Link href={`/game/${recap.id}`} className="lrscore">
+                  <span className={recap.away.winner ? "w" : ""}>{recap.away.logo && <img src={recap.away.logo} alt="" />}{recap.away.abbr} <b>{recap.away.score}</b></span>
+                  <span className={recap.home.winner ? "w" : ""}>{recap.home.logo && <img src={recap.home.logo} alt="" />}{recap.home.abbr} <b>{recap.home.score}</b></span>
+                </Link>
+                <div className="mono muted small">FINAL{recap.upset ? " · " : ""}{recap.upset && <em className="upset-tag">UPSET</em>}{recap.ats ? ` · ${recap.ats.toUpperCase()}` : ""}</div>
+                {recap.article && <p className="lrh">{recap.article.headline}</p>}
+                {recap.leaders.filter((l) => recap[l.side].id === id).slice(0, 3).map((l) => (
+                  <div key={l.cat} className="ld"><span className="mono muted">{l.cat.replace(/ yards/i, "").toUpperCase()}</span><b>{l.name}</b><small>{l.value}</small></div>
+                ))}
+              </div>
+              <Highlights videos={recap.videos.slice(0, 5)} fallback={`https://www.youtube.com/results?search_query=${encodeURIComponent(`${recap.away.name} vs ${recap.home.name} highlights`)}`} />
+            </div>
+          </section>
+        </div>
+      )}
       <div className="wrap board">
         <h2 className="gtitle mono">{games.length ? `${new Date().getFullYear()} SCHEDULE` : "SCHEDULE"}</h2>
         <div className="sched">

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import FeatureGrid from "@/components/FeatureGrid";
 
 export const metadata = { title: "How it works | TapeDog" };
 
@@ -17,6 +18,7 @@ const SOURCES = [
   ["ESPN FPI", "Model win probability"],
   ["Open-Meteo", "Kickoff-hour weather at the stadium"],
   ["Bluesky · Google News", "What fans and media are saying"],
+  ["ESPN video", "Game highlights, recaps and play-by-play win odds"],
   ["Gemini", "Writes the AI breakdown"],
 ];
 
@@ -75,6 +77,11 @@ export default function How() {
             </div>
           ))}
         </div>
+      </section>
+
+      <section className="sect0">
+        <div className="eyebrow mono">WHAT'S INSIDE</div>
+        <FeatureGrid />
       </section>
 
       <section className="sect0">

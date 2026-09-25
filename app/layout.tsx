@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <div className="wrap footin">
             <div className="fbrand"><Logo size={22} /><b>TAPEDOG</b><span className="muted">Finds the college football favorites worth fading.</span></div>
             <nav className="flinks">
-              <Link href="/board">Fade Board</Link><Link href="/board?tab=scores">Scores</Link><Link href="/about">How it works</Link><Link href="/dogzone">Dog Zone</Link><Link href="/founder">Founder</Link>
+              <Link href="/board">Fade Board</Link><Link href="/board?tab=scores">Scores</Link><Link href="/replay">Replay</Link><Link href="/profile">Profile</Link><Link href="/about">How it works</Link><Link href="/dogzone">Dog Zone</Link><Link href="/founder">Founder</Link>
             </nav>
             <Link href="/founder" className="builtby">Built by <b>Teddy A.</b> <span>→</span></Link>
           </div>

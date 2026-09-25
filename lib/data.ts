@@ -24,7 +24,7 @@ export type Game = {
   venue: { name: string; city: string; state: string; indoor: boolean };
   home: Team; away: Team; favorite: "home" | "away"; spread: number | null; line: string; total: number | null;
   network: string | null; books: BookLine[]; openFav: number | null; nowFav: number | null; bets: number;
-  bookFavProb: number | null; kalshi: { home: number; away: number; volume: number } | null;
+  bookFavProb: number | null; kalshi: { home: number; away: number; volume: number; tickers?: { home: string; away: string } } | null;
   fpi: { home: number; away: number } | null; weather: Weather;
   favPrev: string | null; favNext: string | null; favRest: number | null; dogRest: number | null;
   factors: Factor[]; score: number; tier: Tier; heat: number; watch: number;
@@ -104,14 +104,14 @@ function matchAN(list: any[], b: any) {
   return near.find((a) => hit(team(a, a.home_team_id), b.home) && hit(team(a, a.away_team_id), b.away)) || null;
 }
 
-type KEvent = { markets: { team: string; price: number; vol: number }[] };
+type KEvent = { markets: { team: string; price: number; vol: number; ticker: string }[] };
 function matchKalshi(evs: KEvent[], b: any) {
   const h = [norm(b.home.location), norm(b.home.short)], a = [norm(b.away.location), norm(b.away.short)];
   for (const e of evs) {
     const mh = e.markets.find((m) => h.includes(m.team)), ma = e.markets.find((m) => a.includes(m.team));
     if (mh && ma && mh.price + ma.price > 0) {
       const s = mh.price + ma.price;
-      return { home: mh.price / s, away: ma.price / s, volume: Math.round(mh.vol + ma.vol) };
+      return { home: mh.price / s, away: ma.price / s, volume: Math.round(mh.vol + ma.vol), tickers: { home: mh.ticker, away: ma.ticker } };
     }
   }
   return null;
@@ -230,7 +230,7 @@ async function buildSlate(): Promise<Slate> {
   ]);
   const kev: KEvent[] = (ks.events || []).map((e: any) => ({
     markets: (e.markets || []).map((m: any) => ({
-      team: norm(m.yes_sub_title), price: parseFloat(m.last_price_dollars || m.yes_bid_dollars || "0") || 0, vol: parseFloat(m.volume_fp || "0") || 0,
+      team: norm(m.yes_sub_title), ticker: m.ticker || "", price: parseFloat(m.last_price_dollars || m.yes_bid_dollars || "0") || 0, vol: parseFloat(m.volume_fp || "0") || 0,
     })),
   }));
   const games = await pool((sb.events || []).map(parseEvent), 12, (b) => enrich(b, an.games || [], kev));
@@ -245,7 +245,32 @@ async function buildSlate(): Promise<Slate> {
   return { season: sb.season?.year ?? null, week: sb.week?.number ?? null, updated: new Date().toISOString(), games };
 }
 
-const cachedSlate = unstable_cache(buildSlate, ["tapedog-slate-v2"], { revalidate: 900 });
+function parseK(ks: any): KEvent[] {
+  return (ks.events || []).map((e: any) => ({
+    markets: (e.markets || []).map((m: any) => ({
+      team: norm(m.yes_sub_title), ticker: m.ticker || "", price: parseFloat(m.last_price_dollars || m.yes_bid_dollars || "0") || 0, vol: parseFloat(m.volume_fp || "0") || 0,
+    })),
+  }));
+}
+
+// Fresh odds for one game (20s cache): every book, consensus, opener and Kalshi.
+export async function getLiveOdds(g: Game) {
+  const [an, ks] = await Promise.all([safe(j(AN_URL, 20, UA), { games: [] }), safe(j(KALSHI_URL, 20), { events: [] })]);
+  const ag = matchAN(an.games || [], g);
+  const books: BookLine[] = [];
+  let openH: number | null = null, consH: number | null = null, total: number | null = g.total, ml: [number | null, number | null] = [null, null];
+  for (const o of ag?.odds || []) {
+    if (o.type && o.type !== "game") continue;
+    const l: BookLine = { book: BOOKS[o.book_id], spreadHome: o.spread_home ?? null, total: o.total ?? null, mlHome: o.ml_home ?? null, mlAway: o.ml_away ?? null };
+    if (o.book_id === 30) openH = l.spreadHome;
+    else if (o.book_id === 15) { consH = l.spreadHome; total = l.total ?? total; ml = [l.mlHome, l.mlAway]; }
+    else if (l.book) books.push(l);
+  }
+  if (consH == null && books.length) { consH = books[0].spreadHome; total = books[0].total ?? total; ml = [books[0].mlHome, books[0].mlAway]; }
+  return { books: books.length ? books : g.books, openH, consH, total, ml, kalshi: matchKalshi(parseK(ks), g) || g.kalshi, bets: ag?.num_bets || g.bets, at: new Date().toISOString() };
+}
+
+const cachedSlate = unstable_cache(buildSlate, ["tapedog-slate-v3"], { revalidate: 900 });
 export async function getSlate(): Promise<Slate> {
   return safe(cachedSlate(), { season: null, week: null, updated: new Date().toISOString(), games: [] });
 }

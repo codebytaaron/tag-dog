@@ -3,6 +3,7 @@ import { getSlate, type Game } from "@/lib/data";
 import Hero from "@/components/Hero";
 import Reveal from "@/components/Reveal";
 import Kickoff from "@/components/Kickoff";
+import FeatureGrid from "@/components/FeatureGrid";
 
 const FLOW: [string, string, string, string[]][] = [
   ["01", "Pull the odds", "Six sportsbooks, the opening line, Kalshi and ESPN's win model.", ["DraftKings", "FanDuel", "BetMGM", "Caesars", "bet365", "BetRivers", "Action Network", "Kalshi", "ESPN FPI"]],
@@ -64,6 +65,11 @@ export default async function Landing() {
           </Reveal>
         </div>
         <div className="center"><Link href="/board" className="btn primary">Open the full board →</Link></div>
+      </section>
+
+      <section className="wrap sect2">
+        <Reveal><div className="eyebrow mono">EVERYTHING IN TAPEDOG</div><h2 className="h2">Your college football HQ.</h2></Reveal>
+        <FeatureGrid />
       </section>
 
       <section className="wrap sect2">
