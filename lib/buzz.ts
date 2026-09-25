@@ -116,7 +116,8 @@ export async function getBuzz(away: Team, home: Team): Promise<Buzz> {
     if (!a) return false;
     const custom = !p.handle.endsWith(".bsky.social");
     const covers = (p.links || []).some((u) => NEWSLINK.test(u));
-    return a.followers >= 10 && (PRO.test(a.bio) || PRO.test(p.name) || covers || (custom && a.followers >= 50));
+    // A shared news link only counts for accounts without a personal fan bio.
+    return a.followers >= 10 && (PRO.test(a.bio) || PRO.test(p.name) || (covers && !a.bio.trim()) || (custom && a.followers >= 50));
   }).map((p) => {
     const a = prof.get(p.handle)!;
     const site = (p.links || []).map((u) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return ""; } }).find((h) => h && NEWSLINK.test(h));
