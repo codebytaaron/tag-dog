@@ -75,8 +75,8 @@ function ScoreCard({ g, lv, mine }: { g: LiteGame; lv?: Live; mine: string[] }) 
   );
 }
 
-export default function Board({ games, week, season, updated, initialTab, initialLive }: {
-  games: LiteGame[]; week: number | null; season: number | null; updated: string; initialTab: string; initialLive: Record<string, Live>;
+export default function Board({ games, week, season, updated, initialTab, initialLive, gameday }: {
+  games: LiteGame[]; week: number | null; season: number | null; updated: string; initialTab: string; initialLive: Record<string, Live>; gameday?: string | null;
 }) {
   const startTab: Tab = initialTab === "scores" ? "scores" : initialTab === "saved" ? "saved" : "board";
   const [tab, setTab] = useState<Tab>(startTab);
@@ -104,10 +104,10 @@ export default function Board({ games, week, season, updated, initialTab, initia
   const base = (l: Lens) => (l === "live" || l === "mine" ? games : open).filter(test[l]);
   const counts = useMemo(() => Object.fromEntries(LENSES.map((l) => [l.id, base(l.id).length])) as Record<Lens, number>, [games, live, mine]); // eslint-disable-line
   const byWatch = lens === "watch" || lens === "prime";
-  const list = useMemo(() => [...base(lens).filter(match)].sort((a, b) => (byWatch ? b.watch - a.watch : b.score - a.score)), [games, live, mine, lens, q]); // eslint-disable-line
+  const list = useMemo(() => [...base(lens).filter(match)].sort((a, b) => (byWatch ? (b.id === gameday ? 1 : 0) - (a.id === gameday ? 1 : 0) || b.watch - a.watch : b.score - a.score)), [games, live, mine, lens, q]); // eslint-disable-line
 
   const upsetPick = useMemo(() => [...open].sort((a, b) => b.score - a.score)[0], [open]);
-  const watchPick = useMemo(() => [...open].sort((a, b) => b.watch - a.watch).find((g) => g.id !== upsetPick?.id), [open, upsetPick]);
+  const watchPick = useMemo(() => open.find((g) => g.id === gameday) || [...open].sort((a, b) => b.watch - a.watch).find((g) => g.id !== upsetPick?.id), [open, upsetPick, gameday]);
   const steamPick = useMemo(() => [...open].filter((g) => g.keys.includes("steam")).sort((a, b) => b.score - a.score).find((g) => g.id !== upsetPick?.id && g.id !== watchPick?.id), [open, upsetPick, watchPick]);
 
   const groups = useMemo(() => {
@@ -144,7 +144,7 @@ export default function Board({ games, week, season, updated, initialTab, initia
           <span className="idx mono">{String(k + 1).padStart(2, "0")}</span>
           <Matchup g={g} lv={live[g.id]} mine={mine} />
           <Status g={g} lv={live[g.id]} />
-          <span className="sig">{g.signals.length ? g.signals.map((s) => <em key={s}>{s}</em>) : <em className="quiet">Clean spot</em>}</span>
+          <span className="sig">{g.id === gameday && <em className="gd">★ GameDay</em>}{g.signals.length ? g.signals.map((s) => <em key={s}>{s}</em>) : <em className="quiet">Clean spot</em>}</span>
           <span className={`score t-${g.tier}`}><b>{g.score}</b><small>{g.tier}</small></span>
           <span className="wcell"><b className="mono">{g.watch}</b><i><u style={{ width: `${g.watch}%` }} /></i></span>
           <SaveButton id={g.id} />
@@ -173,7 +173,7 @@ export default function Board({ games, week, season, updated, initialTab, initia
       {tab === "board" && (<>
         <div className="feats">
           <Feature label="UPSET OF THE WEEK" g={upsetPick} note={upsetPick ? `Tape ${upsetPick.score}: ${upsetPick.signals.slice(0, 2).join(" + ") || "situational spot"}` : ""} />
-          <Feature label="GAME OF THE WEEK" g={watchPick} note={watchPick ? `Watch ${watchPick.watch}${watchPick.spread != null ? ` · ${watchPick.spread}-pt line` : ""}${watchPick.home.rank && watchPick.away.rank ? " · ranked vs ranked" : ""}` : ""} />
+          <Feature label={watchPick && watchPick.id === gameday ? "★ COLLEGE GAMEDAY" : "GAME OF THE WEEK"} g={watchPick} note={watchPick ? `Watch ${watchPick.watch}${watchPick.spread != null ? ` · ${watchPick.spread}-pt line` : ""}${watchPick.home.rank && watchPick.away.rank ? " · ranked vs ranked" : ""}` : ""} />
           <Feature label="SHARP MOVE" g={steamPick} note="The spread is moving toward the underdog" />
         </div>
 

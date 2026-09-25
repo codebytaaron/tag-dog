@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Recap as R } from "@/lib/recap";
 import Highlights from "./Highlights";
 import Kickoff from "./Kickoff";
+import Countdown from "./Countdown";
 
 function WPChart({ r }: { r: R }) {
   const W = 800, H = 200;
@@ -171,9 +172,20 @@ export function StandaloneGame({ r }: { r: R }) {
       <div className="wrap">
         {r.state === "pre" ? (
           <section className="card preview">
-            <h3>Coming up</h3>
-            <p className="muted">The full TapeDog breakdown (Tape Score, odds by sportsbook, fan buzz and AI breakdown) opens during game week.</p>
-            <Link href={`/team/${r.home.id}`} className="btn ghost">{r.home.short} schedule →</Link>
+            <div className="cardh"><h3>Coming up</h3><span className="mono c-tape">KICKOFF IN <Countdown date={r.date} /></span></div>
+            <div className="pvgrid">
+              <div><span className="mono">WHEN</span><b><Kickoff date={r.date} long /></b></div>
+              <div><span className="mono">WHERE</span><b>{r.venue || "TBA"}</b></div>
+              <div><span className="mono">LINE</span><b>{r.line || "Not posted yet"}</b></div>
+            </div>
+            <p className="muted">The full TapeDog breakdown (Tape Score, live odds, fan buzz and AI breakdown) unlocks during game week.</p>
+            <div className="pvteams">
+              {[r.away, r.home].map((t) => (
+                <Link key={t.id} href={`/team/${t.id}`} className="pvt" style={{ ["--c" as any]: t.color }}>
+                  {t.logo && <img src={t.logo} alt="" />}<span><b>{t.short}</b><small className="mono muted">{t.record || "Team hub"}</small></span><i>→</i>
+                </Link>
+              ))}
+            </div>
           </section>
         ) : <Recap r={r} />}
       </div>

@@ -4,6 +4,8 @@ import Hero from "@/components/Hero";
 import Reveal from "@/components/Reveal";
 import Kickoff from "@/components/Kickoff";
 import FeatureGrid from "@/components/FeatureGrid";
+import Countdown from "@/components/Countdown";
+import { getGameDayId } from "@/lib/gameday";
 
 const FLOW: [string, string, string, string[]][] = [
   ["01", "Pull the odds", "Six sportsbooks, the opening line, Kalshi and ESPN's win model.", ["DraftKings", "FanDuel", "BetMGM", "Caesars", "bet365", "BetRivers", "Action Network", "Kalshi", "ESPN FPI"]],
@@ -36,6 +38,10 @@ export default async function Landing() {
     home: { abbr: g.home.abbr, logo: g.home.logo, color: g.home.color },
   }));
   const tick = fades.slice(0, 24);
+  const gd = await getGameDayId(s.games);
+  const gdGame = pool.find((g) => g.id === gd);
+  const watchList = gdGame ? [gdGame, ...watch.filter((g) => g.id !== gd)] : watch;
+  const spot = gdGame || watch[0];
 
   return (
     <main>
@@ -49,6 +55,39 @@ export default async function Landing() {
         </div>
       </div>
 
+      {spot && (
+        <section className="wrap sect2">
+          <Reveal>
+            <Link href={`/game/${spot.id}`} className="spot" style={{ ["--ca" as any]: spot.away.color, ["--ch" as any]: spot.home.color }}>
+              <div className="spottag mono"><i>★</i>{gdGame ? "COLLEGE GAMEDAY IS HERE THIS WEEK" : "GAME OF THE WEEK"}</div>
+              <div className="spotteams">
+                <div className="st">
+                  {spot.away.logo && <img src={spot.away.logo} alt="" />}
+                  <b>{spot.away.rank ? <sup>{spot.away.rank}</sup> : null}{spot.away.short}</b>
+                  <small className="mono">{spot.away.record}</small>
+                </div>
+                <div className="spotmid">
+                  <span className="mono muted">KICKOFF IN</span>
+                  <b><Countdown date={spot.date} /></b>
+                  <span className="mono muted">{spot.network ? `${spot.network} · ` : ""}{spot.venue.city || spot.venue.name}</span>
+                </div>
+                <div className="st">
+                  {spot.home.logo && <img src={spot.home.logo} alt="" />}
+                  <b>{spot.home.rank ? <sup>{spot.home.rank}</sup> : null}{spot.home.short}</b>
+                  <small className="mono">{spot.home.record}</small>
+                </div>
+              </div>
+              <div className="spotfoot">
+                <span className="chip2 strong">{spot.line}{spot.total ? ` · O/U ${spot.total}` : ""}</span>
+                <span className="chip2">WATCH {spot.watch}</span>
+                <span className={`chip2 t-${spot.tier}`}>UPSET {spot.score} · {spot.tier}</span>
+                <span className="btn primary">Open the game →</span>
+              </div>
+            </Link>
+          </Reveal>
+        </section>
+      )}
+
       <section className="wrap sect2">
         <Reveal>
           <div className="eyebrow mono">WEEK {s.week ?? "–"}</div>
@@ -61,7 +100,7 @@ export default async function Landing() {
           </Reveal>
           <Reveal className="listcard" delay={100}>
             <div className="lch"><b>Must-watch</b><span className="muted">Close lines, big names, big buzz</span></div>
-            {watch.slice(0, 5).map((g) => <Mini key={g.id} g={g} right={<span className="tiny wtag">WATCH {g.watch}</span>} />)}
+            {watchList.slice(0, 5).map((g) => <Mini key={g.id} g={g} right={g.id === gd ? <span className="tiny gdtag">★ GAMEDAY</span> : <span className="tiny wtag">WATCH {g.watch}</span>} />)}
           </Reveal>
         </div>
         <div className="center"><Link href="/board" className="btn primary">Open the full board →</Link></div>
@@ -87,7 +126,7 @@ export default async function Landing() {
             </Reveal>
           ))}
         </div>
-        <p className="srcline"><span className="mono">CONNECTED TO</span>{FLOW.flatMap((f) => f[3]).join("  ·  ")}</p>
+        <p className="srcline"><span className="mono">CONNECTED TO</span>{FLOW.flatMap((f) => f[3]).map((x, i, a) => <span key={x}><span className="gsrc" style={{ animationDelay: `${i * 0.45}s` }}>{x}</span>{i < a.length - 1 && <span className="gsep"> · </span>}</span>)}</p>
         <div className="center"><Link href="/about" className="btn ghost">See everything it checks →</Link></div>
       </section>
 

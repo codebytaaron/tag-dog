@@ -934,3 +934,52 @@ button.btn.ghost { background: transparent; }
 .kalrow b { font-size: clamp(30px, 7vw, 44px); }
 .kalh { gap: 10px; }
 .card { min-width: 0; }
+/* ---------- round 11 ---------- */
+/* glowing sources */
+.gsrc { animation: gsrc 7.2s ease-in-out infinite; transition: color .3s; }
+@keyframes gsrc { 0%, 14%, 100% { color: var(--muted); text-shadow: none; } 5% { color: var(--tape); text-shadow: 0 0 14px rgba(245,200,66,.75); } }
+.gsep { color: var(--dim); }
+
+/* gameday */
+.gdtag { color: var(--tape); border-color: var(--tape); background: rgba(245,200,66,.1); }
+.gd { font-style: normal; font-size: 12px; padding: 4px 9px; border-radius: 6px; background: rgba(245,200,66,.14); border: 1px solid rgba(245,200,66,.5); color: var(--tape); }
+.gdchip { color: var(--bg); background: var(--tape); border-color: var(--tape); font-weight: 600; }
+
+/* home spotlight */
+.spot { position: relative; display: grid; gap: 26px; padding: 34px; border-radius: 24px; overflow: hidden; border: 1px solid var(--line2);
+  background: linear-gradient(100deg, color-mix(in srgb, var(--ca) 34%, transparent) 0%, transparent 42%, transparent 58%, color-mix(in srgb, var(--ch) 34%, transparent) 100%), var(--panel); transition: border-color .2s, transform .2s; }
+.spot:hover { border-color: var(--tape); transform: translateY(-3px); }
+.spot::after { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,.06) 50%, transparent 60%); background-size: 250% 100%; animation: shine 6s ease-in-out infinite; pointer-events: none; }
+@keyframes shine { 0% { background-position: 150% 0; } 60%, 100% { background-position: -100% 0; } }
+.spottag { justify-self: center; display: inline-flex; align-items: center; gap: 8px; font-size: 11px; letter-spacing: .18em; color: var(--bg); background: var(--tape); padding: 7px 14px; border-radius: 999px; font-weight: 600; }
+.spottag i { font-style: normal; animation: blink 1.6s steps(2) infinite; }
+.spotteams { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 20px; }
+.st { display: grid; justify-items: center; gap: 8px; text-align: center; }
+.st img { width: 110px; height: 110px; object-fit: contain; filter: drop-shadow(0 14px 30px rgba(0,0,0,.55)); }
+.st b { font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: clamp(28px, 4vw, 44px); line-height: 1; }
+.st sup { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-right: 6px; vertical-align: top; }
+.st small { color: var(--muted); font-size: 12px; }
+.spotmid { display: grid; justify-items: center; gap: 6px; text-align: center; }
+.spotmid b { font-family: var(--display); font-weight: 400; font-size: clamp(30px, 4.5vw, 52px); line-height: 1; color: var(--tape); white-space: nowrap; }
+.spotmid .mono { font-size: 11px; letter-spacing: .12em; }
+.spotfoot { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; }
+.spotfoot .btn { margin-left: 8px; }
+.chip2.t-FADE { color: var(--fade); border-color: var(--fade); } .chip2.t-WATCH { color: var(--watch); border-color: var(--watch); } .chip2.t-HOLD { color: var(--muted); }
+
+/* preview */
+.pvgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+.pvgrid div { background: var(--bg2); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: grid; gap: 4px; }
+.pvgrid span { font-size: 10px; color: var(--muted); letter-spacing: .12em; } .pvgrid b { font-size: 15px; }
+.pvteams { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
+.pvt { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: var(--bg2); border: 1px solid var(--line2); transition: border-color .15s; }
+.pvt:hover { border-color: var(--c); }
+.pvt img { width: 36px; height: 36px; object-fit: contain; } .pvt span { flex: 1; display: grid; } .pvt i { font-style: normal; color: var(--tape); }
+.preview { justify-items: stretch; }
+
+@media (max-width: 900px) {
+  .spot { padding: 24px 18px; }
+  .spotteams { grid-template-columns: 1fr 1fr; } .spotmid { grid-column: 1 / -1; grid-row: 2; }
+  .st img { width: 72px; height: 72px; }
+  .pvgrid, .pvteams { grid-template-columns: 1fr; }
+  .spotfoot .btn { margin-left: 0; width: 100%; justify-content: center; }
+}

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getGameDetail } from "@/lib/data";
+import { getGameDetail, getSlate } from "@/lib/data";
+import { getGameDayId } from "@/lib/gameday";
 import { getLive } from "@/lib/live";
 import { getBuzz } from "@/lib/buzz";
 import { getRecap } from "@/lib/recap";
@@ -30,7 +31,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
   const [d, recap] = await Promise.all([getGameDetail(id), getRecap(id)]);
   if (!d) { if (!recap) notFound(); return <StandaloneGame r={recap} />; }
   const g = d.game;
-  const [liveMap, buzz] = await Promise.all([getLive(), getBuzz(g.away, g.home)]);
+  const [liveMap, buzz, gd] = await Promise.all([getLive(), getBuzz(g.away, g.home), getSlate().then((s) => getGameDayId(s.games))]);
   const live = liveMap[g.id] || null;
   const fav = g[g.favorite], dog = g[g.favorite === "home" ? "away" : "home"];
   const started = !!recap && recap.state !== "pre";
@@ -64,6 +65,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
           </div>
           <LiveBar id={g.id} date={g.date} away={g.away.abbr} home={g.home.abbr} initial={live} />
           <div className="gchips">
+            {gd === g.id && <span className="chip2 gdchip">★ College GameDay</span>}
             <span className="chip2"><Kickoff date={g.date} long /></span>
             {g.network && <span className="chip2">TV · {g.network}</span>}
             <span className="chip2">{g.venue.city ? `${g.venue.city}, ${g.venue.state}` : g.venue.name}</span>
