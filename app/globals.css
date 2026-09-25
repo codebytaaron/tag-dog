@@ -925,3 +925,12 @@ button.btn.ghost { background: transparent; }
   .gchips .save { margin-left: 0; }
 }
 @media (max-width: 560px) { .fgrid { grid-template-columns: 1fr; } }
+
+/* narrow-screen fixes */
+.rcards { grid-template-columns: repeat(auto-fill, minmax(min(290px, 100%), 1fr)); }
+.scoregrid { grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)); }
+.rt b { flex: none; min-width: 28px; text-align: right; }
+.rt .nm { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kalrow b { font-size: clamp(30px, 7vw, 44px); }
+.kalh { gap: 10px; }
+.card { min-width: 0; }
