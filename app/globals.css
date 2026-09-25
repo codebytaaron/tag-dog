@@ -55,17 +55,17 @@ img { display: block; }
 .lane.rev { animation-name: flyr; }
 @keyframes fly { from { transform: translateX(105vw); } to { transform: translateX(-120%); } }
 @keyframes flyr { from { transform: translateX(-120%); } to { transform: translateX(105vw); } }
-.fly { display: inline-flex; align-items: center; gap: 10px; padding: 12px 16px; background: rgba(20,20,18,.85); border: 1px solid var(--line2); border-radius: 12px; font-family: var(--mono); font-size: 13px;
+.fly { box-shadow: 0 12px 40px rgba(0,0,0,.5); display: inline-flex; align-items: center; gap: 10px; padding: 12px 16px; background: rgba(20,20,18,.85); border: 1px solid var(--line2); border-radius: 12px; font-family: var(--mono); font-size: 13px;
   transform: translate(calc(var(--mx) * var(--px, 10px)), calc(var(--my) * var(--px, 10px))); transition: transform .3s ease-out; }
 .fly img { width: 24px; height: 24px; object-fit: contain; }
 .fly i { font-style: normal; color: var(--dim); }
 .fl { color: var(--muted); padding-left: 10px; border-left: 1px solid var(--line2); }
 .ft { font-weight: 600; font-size: 11px; padding: 3px 7px; border-radius: 5px; border: 1px solid; }
 .t-FADE { color: var(--fade); border-color: var(--fade); } .t-WATCH { color: var(--watch); border-color: var(--watch); } .t-HOLD { color: var(--hold); border-color: var(--hold); }
-.d0 { opacity: .22; filter: blur(2px); --px: -12px; } .d0 .fly { scale: .72; }
-.d1 { opacity: .45; filter: blur(.6px); --px: -26px; } .d1 .fly { scale: .88; }
-.d2 { opacity: .7; --px: -46px; }
-.vignette { position: absolute; inset: 0; z-index: 3; pointer-events: none; background: radial-gradient(ellipse 70% 70% at 30% 55%, rgba(10,10,9,.92) 0%, rgba(10,10,9,.6) 45%, transparent 80%), linear-gradient(transparent 70%, var(--bg)); }
+.d0 { opacity: .4; filter: blur(1.5px); --px: -12px; } .d0 .fly { scale: .72; }
+.d1 { opacity: .7; filter: blur(.4px); --px: -26px; } .d1 .fly { scale: .88; }
+.d2 { opacity: 1; --px: -46px; }
+.vignette { position: absolute; inset: 0; z-index: 3; pointer-events: none; background: radial-gradient(ellipse 55% 55% at 28% 55%, rgba(10,10,9,.88) 0%, rgba(10,10,9,.45) 50%, transparent 78%), linear-gradient(transparent 70%, var(--bg)); }
 .herocopy { position: relative; z-index: 4; padding-top: 80px; }
 .rec { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 8px; margin-bottom: 26px; flex-wrap: wrap; }
 .dotrec { width: 8px; height: 8px; border-radius: 50%; background: var(--fade); animation: blink 1.2s steps(2) infinite; }
