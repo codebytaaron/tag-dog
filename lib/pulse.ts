@@ -72,12 +72,15 @@ export async function getStandings(): Promise<Standing[]> {
   try {
     const r = await fetch(`https://site.web.api.espn.com/apis/v2/sports/football/college-football/standings?group=80&season=${new Date().getFullYear()}`, { next: { revalidate: 1800 } });
     const d = await r.json();
+    const NICE: Record<string, string> = { "Southeastern Conference": "SEC", "Big Ten Conference": "Big Ten", "Big 12 Conference": "Big 12", "Atlantic Coast Conference": "ACC", "Mountain West Conference": "Mountain West", "Mid-American Conference": "MAC", "Sun Belt Conference": "Sun Belt", "American Conference": "American", "Conference USA": "C-USA", "Pac-12 Conference": "Pac-12" };
+    const pct = (r: string) => { const [w, l] = r.split("-").map(Number); return w + l ? w / (w + l) : 0; };
+    const wins = (r: string) => Number(r.split("-")[0]) || 0;
     return (d.children || []).map((c: any) => ({
-      conf: c.name, short: c.abbreviation || c.name,
+      conf: c.name, short: NICE[c.name] || c.name.replace(/ Conference$/, ""),
       rows: (c.standings?.entries || []).map((e: any) => {
         const st = (t: string) => { const s = e.stats?.find((x: any) => x.type === t); return s?.displayValue ?? s?.summary ?? ""; };
         return { team: { id: e.team?.id, name: e.team?.location || e.team?.displayName, logo: e.team?.logos?.[0]?.href || "" }, conf: st("vsconf"), overall: st("total"), streak: st("streak"), diff: st("pointdifferential") };
-      }),
+      }).sort((x: any, y: any) => pct(y.conf) - pct(x.conf) || wins(y.conf) - wins(x.conf) || pct(y.overall) - pct(x.overall) || parseInt(y.diff) - parseInt(x.diff)),
     }));
   } catch { return []; }
 }
