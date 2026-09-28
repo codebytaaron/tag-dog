@@ -1067,3 +1067,59 @@ html.shake main { animation: shake .6s cubic-bezier(.36,.07,.19,.97); }
 .tsb b { font-family: var(--display); font-weight: 400; font-size: 30px; line-height: 1; }
 .tdet { font-size: 10px; color: var(--muted); letter-spacing: .1em; }
 @media (prefers-reduced-motion: reduce) { html.shake main { animation: none; } .toast { animation: none; } }
+/* ---------- round 14: rankings & odds ---------- */
+.ptabs { display: flex; gap: 6px; overflow-x: auto; padding: 24px 0 16px; }
+.ptabs button { flex: none; background: var(--panel); border: 1px solid var(--line2); border-radius: 999px; padding: 9px 16px; font-weight: 600; font-size: 14px; color: var(--muted); transition: all .15s; }
+.ptabs button:hover { color: var(--ink); }
+.ptabs button.on { background: var(--tape); color: var(--bg); border-color: var(--tape); }
+.prow { grid-template-columns: 56px minmax(0, 1fr) 80px 90px 60px; gap: 14px; }
+.crow { grid-template-columns: 30px minmax(0, 1fr) 70px 80px 60px 60px; gap: 12px; }
+.prk { font-family: var(--display); font-weight: 400; font-size: 30px; line-height: 1; }
+.pteam { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.pteam img { width: 30px; height: 30px; object-fit: contain; flex: none; }
+.pteam b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pteam small { font-size: 11px; }
+.mv { font-size: 12px; color: var(--muted); } .mv.up { color: var(--ok); } .mv.down { color: var(--fade); } .mv.new { color: var(--tape); }
+.others { padding: 14px 16px; margin: 0; line-height: 1.6; }
+.odds { display: grid; gap: 4px; }
+.onote { margin: 0 0 8px; }
+.orow { display: grid; grid-template-columns: 28px minmax(140px, 220px) 1fr 52px 44px; gap: 12px; align-items: center; padding: 10px 12px; border-radius: 10px; background: var(--panel); border: 1px solid var(--line); }
+.ork { font-size: 12px; color: var(--muted); }
+.oname { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.oname b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.oname img { width: 26px; height: 26px; object-fit: contain; flex: none; }
+a.oname:hover b { color: var(--tape); }
+.oini { width: 26px; height: 26px; border-radius: 50%; background: var(--panel2); border: 1px solid var(--line2); display: grid; place-items: center; font-size: 10px; font-weight: 700; flex: none; }
+.obar { height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.obar i { display: block; height: 100%; border-radius: 99px; background: var(--c); }
+.opct { text-align: right; font-size: 15px; }
+.och { font-size: 11px; color: var(--muted); text-align: right; } .och.up { color: var(--ok); } .och.down { color: var(--fade); }
+.confs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.confgrid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 18px; align-items: start; }
+.confgrid .orow { grid-template-columns: 22px minmax(0, 1fr) 70px 44px 36px; }
+.outlook { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+.outlook div { background: var(--bg2); border: 1px solid var(--line); border-radius: 12px; padding: 12px; display: grid; gap: 4px; }
+.outlook span { font-size: 9px; color: var(--muted); letter-spacing: .12em; }
+.outlook b { font-family: var(--display); font-weight: 400; font-size: 28px; line-height: 1; }
+.outlook small { font-size: 10px; color: var(--muted); }
+.latest h4.gtitle { margin: 20px 0 10px; }
+.race { display: grid; gap: 14px; padding: 20px 22px; border-radius: 18px; background: var(--panel); border: 1px solid var(--line2); transition: border-color .15s; }
+.race:hover { border-color: var(--tape); }
+.raceh { display: flex; justify-content: space-between; font-size: 11px; letter-spacing: .14em; }
+.racerow { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+.rteam { display: grid; justify-items: center; gap: 6px; padding: 14px 8px; border-radius: 12px; background: var(--bg2); border: 1px solid var(--line); position: relative; }
+.rteam > .mono { position: absolute; top: 8px; left: 10px; font-size: 10px; }
+.rteam img { width: 44px; height: 44px; object-fit: contain; }
+.rteam b { font-size: 13px; text-align: center; }
+.rteam em { font-style: normal; font-size: 16px; font-weight: 700; color: var(--c); filter: brightness(1.4); }
+.fgrid { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 900px) {
+  .prow { grid-template-columns: 40px minmax(0, 1fr) 60px 40px; } .prow > :nth-child(4) { display: none; }
+  .prow, .crow { grid-template-areas: none; }
+  .crow { grid-template-columns: 22px minmax(0, 1fr) 50px 60px; } .crow > :nth-child(5), .crow > :nth-child(6) { display: none; }
+  .orow { grid-template-columns: 22px minmax(0, 1fr) 46px 40px; } .orow .obar { display: none; }
+  .confgrid { grid-template-columns: 1fr; }
+  .outlook { grid-template-columns: repeat(2, 1fr); }
+  .racerow { grid-template-columns: repeat(3, 1fr); }
+  .fgrid { grid-template-columns: 1fr 1fr; }
+}

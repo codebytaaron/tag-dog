@@ -6,6 +6,7 @@ import Kickoff from "@/components/Kickoff";
 import FeatureGrid from "@/components/FeatureGrid";
 import Countdown from "@/components/Countdown";
 import { getGameDayId } from "@/lib/gameday";
+import { getFutures } from "@/lib/pulse";
 
 const FLOW: [string, string, string, string[]][] = [
   ["01", "Pull the odds", "Six sportsbooks, the opening line, Kalshi and ESPN's win model.", ["DraftKings", "FanDuel", "BetMGM", "Caesars", "bet365", "BetRivers", "Action Network", "Kalshi", "ESPN FPI"]],
@@ -42,6 +43,8 @@ export default async function Landing() {
   const gdGame = pool.find((g) => g.id === gd);
   const watchList = gdGame ? [gdGame, ...watch.filter((g) => g.id !== gd)] : watch;
   const spot = gdGame || watch[0];
+  const fut = await getFutures().catch(() => null);
+  const race = (fut?.title?.markets || []).slice(0, 6);
 
   return (
     <main>
@@ -82,6 +85,26 @@ export default async function Landing() {
                 <span className="chip2">WATCH {spot.watch}</span>
                 <span className={`chip2 t-${spot.tier}`}>UPSET {spot.score} · {spot.tier}</span>
                 <span className="btn primary">Open the game →</span>
+              </div>
+            </Link>
+          </Reveal>
+        </section>
+      )}
+
+      {race.length > 0 && (
+        <section className="wrap sect2">
+          <Reveal>
+            <Link href="/rankings?tab=title" className="race">
+              <div className="raceh"><span className="mono c-tape">THE TITLE RACE · LIVE FROM KALSHI</span><span className="mono muted">ALL ODDS →</span></div>
+              <div className="racerow">
+                {race.map((m, k) => (
+                  <div key={m.label} className="rteam" style={{ ["--c" as any]: m.team?.color || "var(--tape)" }}>
+                    <span className="mono muted">{k + 1}</span>
+                    {m.team?.logo && <img src={m.team.logo} alt="" />}
+                    <b>{m.label}</b>
+                    <em className="mono">{Math.round(m.p * 100)}%</em>
+                  </div>
+                ))}
               </div>
             </Link>
           </Reveal>

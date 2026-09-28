@@ -4,6 +4,7 @@ const FEATURES: [string, string, string][] = [
   ["Fade Board", "/board", "Every game ranked by upset risk, with one-tap views like Upset watch and Must-watch."],
   ["Live scores", "/board?tab=scores", "Scores, down and distance and a weekly fade report, updating on their own."],
   ["Live odds", "/board", "Six sportsbooks plus Kalshi prices and a price chart on every game, refreshing every 30 seconds."],
+  ["Rankings & odds", "/rankings", "AP and Coaches polls, standings, and live national title, playoff, Heisman and hot-seat odds."],
   ["Replay", "/replay", "Every result by week with highlights, recaps and play-by-play win odds."],
   ["The buzz", "/board", "What fans and media are saying about each game, filtered to football only."],
   ["AI breakdown", "/board", "A short scouting report for any game, written only from TapeDog's data."],

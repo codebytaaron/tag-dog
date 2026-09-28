@@ -5,6 +5,7 @@ import Kickoff from "@/components/Kickoff";
 import Ring from "@/components/Ring";
 import Highlights from "@/components/Highlights";
 import { getRecap } from "@/lib/recap";
+import { getFutures, getPolls, getStandings, teamNews } from "@/lib/pulse";
 import { FollowButton } from "@/components/SaveButton";
 
 export const revalidate = 60;
@@ -50,6 +51,21 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
   const isFav = onSlate ? onSlate[onSlate.favorite].id === id : false;
   const last = [...games].reverse().find((g: any) => g.state === "post");
   const recap = last ? await getRecap(last.id) : null;
+  const [fut, polls, stands, news] = await Promise.all([getFutures(), getPolls(), getStandings(), teamNews(id)]);
+  const pct = (s: any) => { const m = s?.markets?.find((x: any) => x.team?.id === id); return m ? Math.round(m.p * 100) : null; };
+  const apRow = polls[0]?.rows.find((r) => r.team.id === id);
+  let standing: { conf: string; place: number; rec: string; streak: string } | null = null;
+  for (const s of stands) { const i = s.rows.findIndex((r) => r.team.id === id); if (i >= 0) { standing = { conf: s.short, place: i + 1, rec: s.rows[i].conf, streak: s.rows[i].streak }; break; } }
+  const confPct = Object.values(fut.conf).map(pct).find((v) => v != null) ?? null;
+  const ord = (n: number) => `${n}${["th", "st", "nd", "rd"][((n % 100) - 20) % 10] || ["th", "st", "nd", "rd"][n % 100] || "th"}`;
+  const outlook = [
+    { l: "AP POLL", v: apRow ? `#${apRow.rank}` : "Unranked", s: apRow?.prev && apRow.prev !== apRow.rank ? `${apRow.prev > apRow.rank ? "▲" : "▼"} from #${apRow.prev}` : apRow ? "No change" : "" },
+    { l: "NATIONAL TITLE", v: pct(fut.title) != null ? `${pct(fut.title)}%` : "–", s: "Kalshi" },
+    { l: "MAKE THE PLAYOFF", v: pct(fut.playoff) != null ? `${pct(fut.playoff)}%` : "–", s: "Kalshi" },
+    { l: "CONFERENCE TITLE", v: confPct != null ? `${confPct}%` : "–", s: standing?.conf?.toUpperCase() || "" },
+    { l: "CONFERENCE", v: standing ? standing.rec : "–", s: standing ? `${ord(standing.place)} in ${standing.conf.toUpperCase()}` : "" },
+    { l: "STREAK", v: standing?.streak || "–", s: "" },
+  ];
 
   return (
     <main>
@@ -102,6 +118,22 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
           </section>
         </div>
       )}
+      <div className="wrap latest">
+        <section className="card">
+          <div className="cardh"><h3>Season outlook</h3><Link href="/rankings" className="mono c-tape small">ALL RANKINGS & ODDS →</Link></div>
+          <div className="outlook">
+            {outlook.map((o) => <div key={o.l}><span className="mono">{o.l}</span><b>{o.v}</b>{o.s && <small className="mono">{o.s}</small>}</div>)}
+          </div>
+          {news.length > 0 && (
+            <>
+              <h4 className="gtitle mono">LATEST {team.location.toUpperCase()} NEWS</h4>
+              <ul className="heads">
+                {news.map((n: any) => <li key={n.url}><a href={n.url} target="_blank" rel="noreferrer"><b>{n.headline}</b><span className="mono muted">ESPN ↗</span></a></li>)}
+              </ul>
+            </>
+          )}
+        </section>
+      </div>
       <div className="wrap board">
         <h2 className="gtitle mono">{games.length ? `${new Date().getFullYear()} SCHEDULE` : "SCHEDULE"}</h2>
         <div className="sched">
