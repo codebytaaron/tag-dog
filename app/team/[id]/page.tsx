@@ -7,13 +7,14 @@ import Highlights from "@/components/Highlights";
 import { getRecap } from "@/lib/recap";
 import { getFutures, getPolls, getStandings, teamNews } from "@/lib/pulse";
 import { FollowButton } from "@/components/SaveButton";
+import { darkJson, readable } from "@/lib/espn";
 
 export const revalidate = 60;
 export const maxDuration = 60;
 const ESPN = "https://site.api.espn.com/apis/site/v2/sports/football/college-football";
 
 async function load(id: string) {
-  const get = (u: string, rv: number) => fetch(u, { next: { revalidate: rv } }).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+  const get = (u: string, rv: number) => fetch(u, { next: { revalidate: rv } }).then((r) => (r.ok ? darkJson(r) : null)).catch(() => null);
   const [t, s] = await Promise.all([get(`${ESPN}/teams/${id}`, 600), get(`${ESPN}/teams/${id}/schedule`, 60)]);
   if (!t?.team) return null;
   const team = t.team;
@@ -43,7 +44,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
   const [d, slate] = await Promise.all([load(id), getSlate()]);
   if (!d) notFound();
   const { team, games } = d;
-  const color = "#" + (team.color || "444444");
+  const color = readable("#" + (team.color || "444444"), team.alternateColor ? "#" + team.alternateColor : undefined);
   const record = team.record?.items?.[0]?.summary || "0-0";
   const rank = team.rank && team.rank <= 25 ? team.rank : null;
   const onSlate = slate.games.find((g) => g.home.id === id || g.away.id === id);

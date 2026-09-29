@@ -1,3 +1,4 @@
+import { darkJson } from "./espn";
 // Game recap from ESPN's public summary: highlights, story, scoring, win probability, leaders, stats.
 const ESPN = "https://site.api.espn.com/apis/site/v2/sports/football/college-football";
 
@@ -47,7 +48,7 @@ export async function getRecap(id: string): Promise<Recap | null> {
   try {
     const r = await fetch(`${ESPN}/summary?event=${id}`, { next: { revalidate: 60 } });
     if (!r.ok) return null;
-    d = await r.json();
+    d = await darkJson(r);
   } catch { return null; }
   const comp = d.header?.competitions?.[0];
   if (!comp) return null;

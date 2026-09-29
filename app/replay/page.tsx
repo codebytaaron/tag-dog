@@ -1,5 +1,6 @@
 import { getSlate } from "@/lib/data";
 import Replay, { type RGame } from "@/components/Replay";
+import { darkJson, readable } from "@/lib/espn";
 
 export const revalidate = 300;
 export const maxDuration = 60;
@@ -10,14 +11,14 @@ async function week(w: number, live: boolean): Promise<RGame[]> {
   try {
     const r = await fetch(`${ESPN}/scoreboard?groups=80&limit=300&seasontype=2&week=${w}`, { next: { revalidate: live ? 60 : 3600 } });
     if (!r.ok) return [];
-    const d = await r.json();
+    const d = await darkJson(r);
     return (d.events || []).map((e: any) => {
       const c = e.competitions?.[0] || {};
       const side = (x: any) => {
         const rk = x?.curatedRank?.current;
         return {
           id: x?.team?.id, short: x?.team?.shortDisplayName || x?.team?.location || "TBD", abbr: x?.team?.abbreviation || "",
-          logo: x?.team?.logo || "", color: "#" + (x?.team?.color || "444444"), rank: rk && rk <= 25 ? rk : null,
+          logo: x?.team?.logo || "", color: readable("#" + (x?.team?.color || "444444"), x?.team?.alternateColor ? "#" + x.team.alternateColor : undefined), rank: rk && rk <= 25 ? rk : null,
           score: x?.score != null && x.score !== "" ? Number(x.score) : null, winner: !!x?.winner,
         };
       };

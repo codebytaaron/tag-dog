@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export const metadata = { title: "Founder | TapeDog" };
 
-const logo = (id: string) => `https://a.espncdn.com/i/teamlogos/ncaa/500/${id}.png`;
+const logo = (id: string) => `https://a.espncdn.com/i/teamlogos/ncaa/500-dark/${id}.png`;
 
 const GAMES = [
   { tag: "Favorite in-person game", top: true, title: "Texas 24, Ohio State 23", when: "2026 · Week 2 · Austin, TX", note: "The comeback. I was there.", a: "251", b: "194", url: "https://www.youtube.com/watch?v=Jv78FCb9KM8" },

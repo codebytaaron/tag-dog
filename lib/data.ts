@@ -34,7 +34,7 @@ export type Slate = { season: number | null; week: number | null; updated: strin
 async function j(url: string, revalidate = 900, headers?: Record<string, string>) {
   const r = await fetch(url, { next: { revalidate }, headers });
   if (!r.ok) throw new Error(`${r.status} ${url}`);
-  return r.json();
+  return darkJson(r);
 }
 async function safe<T>(p: Promise<T>, fb: T): Promise<T> {
   try { return await p; } catch { return fb; }
@@ -58,7 +58,7 @@ function toTeam(c: any): Team {
   return {
     id: t.id, name: t.displayName || "TBD", short: t.shortDisplayName || t.name || "TBD",
     location: t.location || t.shortDisplayName || "", nick: t.name || "", abbr: t.abbreviation || "",
-    logo: t.logo || t.logos?.[0]?.href || "", color: "#" + (t.color || "3a3a3a"), alt: "#" + (t.alternateColor || "1a1a1a"),
+    logo: t.logo || t.logos?.[0]?.href || "", color: readable("#" + (t.color || "3a3a3a"), t.alternateColor ? "#" + t.alternateColor : undefined), alt: "#" + (t.alternateColor || "1a1a1a"),
     rank: rk && rk <= 25 ? rk : null, record: c?.records?.[0]?.summary || "0-0",
   };
 }

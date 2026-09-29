@@ -1123,3 +1123,15 @@ a.oname:hover b { color: var(--tape); }
   .racerow { grid-template-columns: repeat(3, 1fr); }
   .fgrid { grid-template-columns: 1fr 1fr; }
 }
+
+/* ---------- round 15: logos & colors ---------- */
+/* Logos never squish, and get a soft shadow so they separate from any background. */
+img[src*="teamlogos"] { object-fit: contain; flex-shrink: 0; filter: drop-shadow(0 1px 3px rgba(0,0,0,.55)); }
+.gteam img, .st img, .tid img { filter: drop-shadow(0 10px 26px rgba(0,0,0,.6)); }
+/* Side-by-side logos sit next to each other instead of overlapping. */
+.mlogos, .fglogos { gap: 4px; }
+.mlogos img + img, .fglogos img + img { margin-left: 0; }
+.flogos img, .tfteams img { flex-shrink: 0; }
+/* Team-color accents stay visible even when a school's color is very dark. */
+.card::before, .row::before, .scard::before, .feat, .tf::before { border-color: var(--line2); }
+.kalbar, .loudbar, .tsbar { background: var(--line); }

@@ -1,5 +1,7 @@
 // Season-wide data: AP/Coaches polls and conference standings (ESPN),
 // plus futures markets (Kalshi): national title, playoff, Heisman, conference titles, coach hot seat.
+import { darkJson, readable } from "./espn";
+
 const ESPN = "https://site.api.espn.com/apis/site/v2/sports/football/college-football";
 const K = "https://api.elections.kalshi.com/trade-api/v2";
 
@@ -16,9 +18,9 @@ async function teamIndex() {
   const m = new Map<string, NonNullable<TeamRef>>();
   try {
     const r = await fetch(`${ESPN}/teams?limit=1000`, { next: { revalidate: 86400 } });
-    const d = await r.json();
+    const d = await darkJson(r);
     for (const { team: t } of d.sports?.[0]?.leagues?.[0]?.teams || []) {
-      const ref = { id: t.id, name: t.location || t.displayName, logo: t.logos?.[0]?.href || "", color: "#" + (t.color || "444444") };
+      const ref = { id: t.id, name: t.location || t.displayName, logo: t.logos?.[0]?.href || "", color: readable("#" + (t.color || "444444"), t.alternateColor ? "#" + t.alternateColor : undefined) };
       for (const k of [t.location, t.displayName, t.shortDisplayName]) if (k && !m.has(norm(k))) m.set(norm(k), ref);
     }
   } catch {}
@@ -56,12 +58,12 @@ export type Futures = Awaited<ReturnType<typeof getFutures>>;
 export async function getPolls(): Promise<Poll[]> {
   try {
     const r = await fetch(`${ESPN}/rankings`, { next: { revalidate: 1800 } });
-    const d = await r.json();
+    const d = await darkJson(r);
     return (d.rankings || []).slice(0, 2).map((p: any) => ({
       name: p.name,
       rows: (p.ranks || []).map((x: any) => ({
         rank: x.current, prev: x.previous || null, record: x.recordSummary || "", points: x.points || 0, fpv: x.firstPlaceVotes || 0,
-        team: { id: x.team?.id, name: x.team?.location || x.team?.name || "", logo: x.team?.logo || x.team?.logos?.[0]?.href || "", color: "#" + (x.team?.color || "444444") },
+        team: { id: x.team?.id, name: x.team?.location || x.team?.name || "", logo: x.team?.logo || x.team?.logos?.[0]?.href || "", color: readable("#" + (x.team?.color || "444444"), x.team?.alternateColor ? "#" + x.team.alternateColor : undefined) },
       })),
       others: (p.others || []).slice(0, 12).map((o: any) => `${o.team?.location || o.team?.name} ${o.points}`).join(", "),
     }));
@@ -71,7 +73,7 @@ export async function getPolls(): Promise<Poll[]> {
 export async function getStandings(): Promise<Standing[]> {
   try {
     const r = await fetch(`https://site.web.api.espn.com/apis/v2/sports/football/college-football/standings?group=80&season=${new Date().getFullYear()}`, { next: { revalidate: 1800 } });
-    const d = await r.json();
+    const d = await darkJson(r);
     const NICE: Record<string, string> = { "Southeastern Conference": "SEC", "Big Ten Conference": "Big Ten", "Big 12 Conference": "Big 12", "Atlantic Coast Conference": "ACC", "Mountain West Conference": "Mountain West", "Mid-American Conference": "MAC", "Sun Belt Conference": "Sun Belt", "American Conference": "American", "Conference USA": "C-USA", "Pac-12 Conference": "Pac-12" };
     const pct = (r: string) => { const [w, l] = r.split("-").map(Number); return w + l ? w / (w + l) : 0; };
     const wins = (r: string) => Number(r.split("-")[0]) || 0;
@@ -88,7 +90,7 @@ export async function getStandings(): Promise<Standing[]> {
 export async function teamNews(id: string) {
   try {
     const r = await fetch(`${ESPN}/news?team=${id}&limit=6`, { next: { revalidate: 1800 } });
-    const d = await r.json();
+    const d = await darkJson(r);
     return (d.articles || []).map((a: any) => ({ headline: a.headline as string, url: (a.links?.web?.href || "") as string, at: (a.published || "") as string })).filter((a: any) => a.url).slice(0, 5);
   } catch { return []; }
 }

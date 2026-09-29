@@ -1,3 +1,4 @@
+import { darkJson, readable } from "./espn";
 // Live scores straight from ESPN's scoreboard, cached ~15s.
 const ESPN = "https://site.api.espn.com/apis/site/v2/sports/football/college-football";
 
@@ -10,14 +11,14 @@ export type Live = {
 export type LT = { abbr: string; short: string; logo: string; color: string; rank: number | null };
 const lt = (x: any): LT => {
   const rk = x?.curatedRank?.current;
-  return { abbr: x?.team?.abbreviation || "", short: x?.team?.shortDisplayName || "", logo: x?.team?.logo || "", color: "#" + (x?.team?.color || "444444"), rank: rk && rk <= 25 ? rk : null };
+  return { abbr: x?.team?.abbreviation || "", short: x?.team?.shortDisplayName || "", logo: x?.team?.logo || "", color: readable("#" + (x?.team?.color || "444444"), x?.team?.alternateColor ? "#" + x.team.alternateColor : undefined), rank: rk && rk <= 25 ? rk : null };
 };
 
 export async function getLive(): Promise<Record<string, Live>> {
   try {
     const r = await fetch(`${ESPN}/scoreboard?groups=80&limit=300`, { next: { revalidate: 15 } });
     if (!r.ok) return {};
-    const d = await r.json();
+    const d = await darkJson(r);
     const out: Record<string, Live> = {};
     for (const e of d.events || []) {
       const c = e.competitions?.[0];
