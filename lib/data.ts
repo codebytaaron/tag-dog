@@ -106,11 +106,24 @@ function matchAN(list: any[], b: any) {
   return near.find((a) => hit(team(a, a.home_team_id), b.home) && hit(team(a, a.away_team_id), b.away)) || null;
 }
 
+// Kalshi writes names like "Ohio St.", "Miami (FL)", "San José St."; normalize them to ESPN-style keys.
+const KALIAS: Record<string, string> = { northcarolinastate: "ncstate", mississippi: "olemiss", louisianamonroe: "ulmonroe", appalachianstate: "appstate", jacksonvillestate: "jaxstate", northernillinois: "nillinois" };
+const kn = (s: string) => {
+  const n = (s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .replace(/\((fl|florida)\)/, "").replace(/\bst\.?(?=\s|$)/g, "state").replace(/[^a-z]/g, "");
+  return KALIAS[n] || n;
+};
+
 type KEvent = { markets: { team: string; price: number; vol: number; ticker: string }[] };
 function matchKalshi(evs: KEvent[], b: any) {
-  const h = [norm(b.home.location), norm(b.home.short)], a = [norm(b.away.location), norm(b.away.short)];
+  const names = (t: Team) => [...new Set([kn(t.location), kn(t.short), kn(t.name)].filter(Boolean))];
+  const H = names(b.home), A = names(b.away);
+  const close = (x: string, y: string) => x.length >= 5 && y.length >= 5 && (x.startsWith(y) || y.startsWith(x));
+  const pick = (e: KEvent, ns: string[], not?: any) =>
+    e.markets.find((m) => m !== not && ns.includes(m.team)) || e.markets.find((m) => m !== not && ns.some((n) => close(n, m.team)));
   for (const e of evs) {
-    const mh = e.markets.find((m) => h.includes(m.team)), ma = e.markets.find((m) => a.includes(m.team));
+    const mh = pick(e, H);
+    const ma = mh && pick(e, A, mh);
     if (mh && ma && mh.price + ma.price > 0) {
       const s = mh.price + ma.price;
       return { home: mh.price / s, away: ma.price / s, volume: Math.round(mh.vol + ma.vol), tickers: { home: mh.ticker, away: ma.ticker } };
@@ -249,7 +262,7 @@ async function buildSlate(): Promise<Slate> {
   ]);
   const kev: KEvent[] = (ks.events || []).map((e: any) => ({
     markets: (e.markets || []).map((m: any) => ({
-      team: norm(m.yes_sub_title), ticker: m.ticker || "", price: parseFloat(m.last_price_dollars || m.yes_bid_dollars || "0") || 0, vol: parseFloat(m.volume_fp || "0") || 0,
+      team: kn(m.yes_sub_title), ticker: m.ticker || "", price: parseFloat(m.last_price_dollars || m.yes_bid_dollars || "0") || 0, vol: parseFloat(m.volume_fp || "0") || 0,
     })),
   }));
   const games = await pool((sb.events || []).map(parseEvent), 12, (b) => enrich(b, an.games || [], kev, fpiMap));
@@ -267,7 +280,7 @@ async function buildSlate(): Promise<Slate> {
 function parseK(ks: any): KEvent[] {
   return (ks.events || []).map((e: any) => ({
     markets: (e.markets || []).map((m: any) => ({
-      team: norm(m.yes_sub_title), ticker: m.ticker || "", price: parseFloat(m.last_price_dollars || m.yes_bid_dollars || "0") || 0, vol: parseFloat(m.volume_fp || "0") || 0,
+      team: kn(m.yes_sub_title), ticker: m.ticker || "", price: parseFloat(m.last_price_dollars || m.yes_bid_dollars || "0") || 0, vol: parseFloat(m.volume_fp || "0") || 0,
     })),
   }));
 }
@@ -289,7 +302,7 @@ export async function getLiveOdds(g: Game) {
   return { books: books.length ? books : g.books, openH, consH, total, ml, kalshi: matchKalshi(parseK(ks), g) || g.kalshi, bets: ag?.num_bets || g.bets, at: new Date().toISOString() };
 }
 
-const cachedSlate = unstable_cache(buildSlate, ["tapedog-slate-v5"], { revalidate: 900 });
+const cachedSlate = unstable_cache(buildSlate, ["tapedog-slate-v6"], { revalidate: 900 });
 export async function getSlate(): Promise<Slate> {
   return safe(cachedSlate(), { season: null, week: null, updated: new Date().toISOString(), games: [] });
 }

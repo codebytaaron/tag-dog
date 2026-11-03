@@ -26,8 +26,12 @@ async function teamIndex() {
   } catch {}
   return m;
 }
-const find = (idx: Map<string, NonNullable<TeamRef>>, name: string): TeamRef =>
-  idx.get(norm(name)) || idx.get(norm(name.replace(/\s*\(.*?\)/, ""))) || null;
+// Market names that differ from ESPN team names.
+const ALIAS: Record<string, string> = { northcarolinastate: "ncstate", mississippirebels: "olemissrebels", mississippi: "olemiss" };
+const find = (idx: Map<string, NonNullable<TeamRef>>, name: string): TeamRef => {
+  const n = norm(name), m = norm(name.replace(/\s*\(.*?\)/, ""));
+  return idx.get(n) || idx.get(ALIAS[n] || "") || idx.get(m) || idx.get(ALIAS[m] || "") || null;
+};
 
 async function series(ticker: string, idx: Map<string, NonNullable<TeamRef>>, teams = true): Promise<Series> {
   try {
