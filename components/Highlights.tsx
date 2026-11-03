@@ -13,7 +13,7 @@ export default function Highlights({ videos, fallback }: { videos: Video[]; fall
   return (
     <div className="hl">
       <video key={v.mp4} className="hlv" src={v.mp4} poster={v.thumb} controls playsInline preload="none" />
-      <b className="hlt">{v.title}</b>
+      <div className="hlrow"><b className="hlt">{v.title}</b>{v.url && <a className="mono muted small" href={v.url} target="_blank" rel="noopener noreferrer">VIDEO: ESPN ↗</a>}</div>
       {videos.length > 1 && (
         <div className="hllist">
           {videos.map((x, k) => (

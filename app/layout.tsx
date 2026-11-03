@@ -9,9 +9,17 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata = {
-  title: "TapeDog | Find the favorites worth fading",
-  description: "College football trap-game radar. Every FBS favorite, graded on schedule spots, line movement, markets and weather.",
+  metadataBase: new URL("https://tapedog.vercel.app"),
+  title: { default: "TapeDog | Find the favorites worth fading", template: "%s" },
+  description: "Upset odds for every FBS college football game, built from six sportsbooks, prediction markets, schedule spots and weather. Plus live scores, highlights, polls and playoff odds.",
+  openGraph: {
+    title: "TapeDog | Find the favorites worth fading",
+    description: "Upset odds, live scores, highlights and playoff odds for every FBS game.",
+    url: "https://tapedog.vercel.app", siteName: "TapeDog", type: "website",
+  },
+  twitter: { card: "summary_large_image", title: "TapeDog", description: "Find the college football favorites worth fading." },
 };
+export const viewport = { themeColor: "#0a0a09" };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -29,11 +37,15 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <div className="wrap footin">
             <div className="fbrand"><Logo size={22} /><b>TAPEDOG</b><span className="muted">Finds the college football favorites worth fading.</span></div>
             <nav className="flinks">
-              <Link href="/board">Fade Board</Link><Link href="/board?tab=scores">Scores</Link><Link href="/reels">Reels</Link><Link href="/replay">Replay</Link><Link href="/rankings">Rankings</Link><Link href="/profile">Profile</Link><Link href="/about">How it works</Link><Link href="/dogzone">Dog Zone</Link><Link href="/founder">Founder</Link>
+              <Link href="/board">Fade Board</Link><Link href="/board?tab=scores">Scores</Link><Link href="/reels">Reels</Link><Link href="/replay">Replay</Link><Link href="/rankings">Rankings</Link><Link href="/about">How it works</Link><Link href="/dogzone">Dog Zone</Link><Link href="/profile">Profile</Link>
             </nav>
             <Link href="/founder" className="builtby">Built by <b>Teddy A.</b> <span>→</span></Link>
           </div>
-          <div className="wrap fnote">Data from ESPN, six sportsbooks, Kalshi, Open-Meteo, Bluesky and Google News. AI summaries by Gemini. For entertainment, not betting advice.</div>
+          <div className="wrap fnote">
+            <p>For entertainment and information only. Not betting advice. TapeDog is not affiliated with ESPN, the NCAA, any school or conference, any sportsbook, or Kalshi. Team names and logos belong to their owners and are used only to identify teams. Highlights are ESPN's and play from ESPN.</p>
+            <p>21+ where sports betting is legal. If you or someone you know has a gambling problem, call 1-800-GAMBLER.</p>
+            <p className="legal"><Link href="/terms">Terms</Link> · <Link href="/privacy">Privacy</Link> · © {new Date().getFullYear()} TapeDog</p>
+          </div>
         </footer>
         <Analytics />
         <SpeedInsights />

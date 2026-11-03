@@ -67,6 +67,7 @@ export default function Reels({ reels }: { reels: Reel[] }) {
               <em className="mono">FINAL</em>
             </div>
             <p>{r.title}</p>
+            {r.url && <a className="mono rsrc" href={r.url} target="_blank" rel="noopener noreferrer">VIDEO: ESPN ↗</a>}
             <Link href={`/game/${r.gameId}`} className="btn primary">Full recap →</Link>
           </div>
           <div className="ractions"><SaveButton id={r.gameId} /></div>

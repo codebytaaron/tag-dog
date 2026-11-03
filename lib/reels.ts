@@ -3,7 +3,7 @@ import { darkJson } from "./espn";
 
 const ESPN = "https://site.api.espn.com/apis/site/v2/sports/football/college-football";
 export type ReelTeam = { abbr: string; short: string; logo: string; rank: number | null; score: number | null; winner: boolean };
-export type Reel = { key: string; gameId: string; title: string; mp4: string; thumb: string; duration: number; away: ReelTeam; home: ReelTeam };
+export type Reel = { key: string; gameId: string; title: string; url: string; mp4: string; thumb: string; duration: number; away: ReelTeam; home: ReelTeam };
 
 async function board(q: string) {
   try {
@@ -44,7 +44,7 @@ export async function getReels(): Promise<Reel[]> {
       const c = e.competitions?.[0]?.competitors || [];
       const home = side(c.find((x: any) => x.homeAway === "home")), away = side(c.find((x: any) => x.homeAway === "away"));
       return (d.videos || []).slice(0, 2).map((v: any, k: number) => ({
-        key: `${e.id}-${k}`, gameId: e.id, title: v.headline || "", thumb: v.thumbnail || "",
+        key: `${e.id}-${k}`, gameId: e.id, title: v.headline || "", url: v.links?.web?.href || "", thumb: v.thumbnail || "",
         mp4: v.links?.source?.HD?.href || v.links?.source?.href || "", duration: v.duration || 0, away, home,
       })).filter((x: Reel) => x.mp4);
     } catch { return []; }

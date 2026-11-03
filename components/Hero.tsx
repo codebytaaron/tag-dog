@@ -60,7 +60,7 @@ export default function Hero({ games, count, week }: { games: Fly[]; count: numb
       </div>
       <div className="vignette" aria-hidden />
       <div className="wrap herocopy">
-        <div className="rec mono"><span className="dotrec" /> REC <span ref={tc}>00:00:00:00</span> · WK {week ?? "–"} TAPE · {count} GAMES LOADED</div>
+        <div className="rec mono">WEEK {week ?? "–"} · {count} FBS GAMES</div>
         <h1>
           <span className="l1">Find the favorites</span>
           <span className={`rot ${phase}`} key={i}>

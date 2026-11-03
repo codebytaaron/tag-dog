@@ -1,32 +1,29 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const TAKEN = 150, TOTAL = 500;
+const KEY = "tapedog.dogzone";
 
+// No email collection yet: a launch reminder saved on this device, shown again when Dog Zone opens.
 export default function Waitlist() {
-  const [email, setEmail] = useState("");
-  const [done, setDone] = useState(false);
-  const [err, setErr] = useState("");
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setErr("Enter a valid email."); return; }
-    setErr(""); setDone(true);
+  const [on, setOn] = useState(false);
+  useEffect(() => { try { setOn(localStorage.getItem(KEY) === "1"); } catch {} }, []);
+  const toggle = () => {
+    const next = !on;
+    try { next ? localStorage.setItem(KEY, "1") : localStorage.removeItem(KEY); } catch {}
+    setOn(next);
   };
   return (
     <div className="wl">
-      <div className="wlcount">
-        <div className="mono"><b>{TAKEN}</b> / {TOTAL} <span className="muted">EARLY SPOTS CLAIMED</span></div>
-        <div className="bar"><i style={{ width: `${(TAKEN / TOTAL) * 100}%` }} /></div>
-      </div>
-      {done ? (
-        <div className="wldone"><b>You're on the list.</b><span className="muted">We'll email {email} before early rollout.</span></div>
+      {on ? (
+        <div className="wldone">
+          <b>Reminder set.</b>
+          <span className="muted">When Dog Zone opens, you'll see it first right here on TapeDog.</span>
+          <button className="linkbtn small" onClick={toggle}>Undo</button>
+        </div>
       ) : (
-        <form onSubmit={submit} className="wlform">
-          <input type="email" placeholder="you@email.com" value={email} onChange={(e) => setEmail(e.target.value)} aria-label="Email" />
-          <button className="btn primary" type="submit">Join early rollout</button>
-        </form>
+        <button className="btn primary" onClick={toggle}>Remind me when it launches</button>
       )}
-      {err && <p className="errtxt small">{err}</p>}
+      <p className="muted small wlnote">Saved on this device. We don't collect emails yet.</p>
     </div>
   );
 }

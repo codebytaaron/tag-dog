@@ -36,6 +36,7 @@ export default function Brief({ id }: { id: string }) {
           </div>
           {b.crowd && <div className="crowd"><span className="mono">WHAT PEOPLE ARE SAYING</span><p>{b.crowd}</p></div>}
           <blockquote>“{b.coachSpeak}”</blockquote>
+          <p className="mono muted small ainote">AI-GENERATED FROM TAPEDOG DATA. IT CAN MAKE MISTAKES.</p>
         </div>
       )}
     </section>

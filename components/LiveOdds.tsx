@@ -130,7 +130,7 @@ export default function LiveOdds({ id, fav, away, home, fpi, fallbackBookFav, in
           <div className="sh2 mono"><span>SPORTSBOOK</span><span>{D.abbr} SPREAD</span><span>{D.abbr} ML</span><span>{F.abbr} ML</span><span>TOTAL</span></div>
           {rows.map((r) => (
             <div key={r.book} className="sr2">
-              <a href={BOOK_URL[r.book] || "#"} target="_blank" rel="noopener sponsored" className="booklink">{r.book} <i>↗</i></a>
+              <a href={BOOK_URL[r.book] || "#"} target="_blank" rel="nofollow noopener noreferrer" className="booklink">{r.book} <i>↗</i></a>
               <span className={`mono ${r.dogSpread === bestS ? "best" : ""}`}>{fs(r.dogSpread)}</span>
               <span className={`mono ${r.dogML === bestM ? "best" : ""}`}>{fm(r.dogML)}</span>
               <span className="mono">{fm(r.favML)}</span>

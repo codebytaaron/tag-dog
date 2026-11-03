@@ -44,7 +44,7 @@ export default function How() {
     <main className="wrap about">
       <section className="howhero">
         <div className="eyebrow mono">HOW IT WORKS</div>
-        <h1 className="mega">Spot the<br /><span className="c-tape">bad spot.</span></h1>
+        <h1 className="mega">How TapeDog<br /><span className="c-tape">works.</span></h1>
         <p className="lead2">TapeDog scores every FBS game for upset risk. It checks odds at six sportsbooks, prediction markets, schedule spots, rest and weather, then tells you which favorites to fade and which games are worth watching.</p>
       </section>
 
@@ -58,14 +58,14 @@ export default function How() {
       <section className="sect0">
         <div className="eyebrow mono">WHY IT'S DIFFERENT</div>
         <div className="aboutsteps">
-          {WHY.map(([t, d], k) => <div key={t} className="bcard why"><span className="mono num">0{k + 1}</span><b>{t}</b><p>{d}</p></div>)}
+          {WHY.map(([t, d], k) => <div key={t} className="bcard why"><b>{t}</b><p>{d}</p></div>)}
         </div>
       </section>
 
       <section className="sect0 split2">
         <div>
           <div className="eyebrow mono">THE RED FLAGS</div>
-          <h2 className="big">10 checks.<br />No vibes.</h2>
+          <h2 className="big">The 10 red flags</h2>
           <p className="muted">Points add up to the Tape Score.</p>
           <div className="scale">
             <div><i className="hold" /><span className="mono">0–27 HOLD</span></div>
@@ -84,12 +84,12 @@ export default function How() {
       </section>
 
       <section className="sect0">
-        <div className="eyebrow mono">WHAT'S INSIDE</div>
+        <div className="eyebrow mono">FEATURES</div>
         <FeatureGrid />
       </section>
 
       <section className="sect0">
-        <div className="eyebrow mono">WIRED INTO</div>
+        <div className="eyebrow mono">DATA SOURCES</div>
         <div className="srcgrid">
           {SOURCES.map(([n, d, u]) => <a key={n} href={u} target="_blank" rel="noopener" className="src2"><b>{n} <i className="c-tape">↗</i></b><span className="muted">{d}</span></a>)}
         </div>

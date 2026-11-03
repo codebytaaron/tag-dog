@@ -17,7 +17,6 @@ export default function FeatureGrid() {
     <div className="fgrid">
       {FEATURES.map(([t, href, d], k) => (
         <Link key={t} href={href} className="ftile">
-          <span className="mono ftn">{String(k + 1).padStart(2, "0")}</span>
           <b>{t}</b>
           <p>{d}</p>
           <i>→</i>

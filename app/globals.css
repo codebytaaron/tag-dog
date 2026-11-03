@@ -1179,3 +1179,26 @@ body:has(.reelsmain) .foot { display: none; }
 /* reading hierarchy: lead with the number, quieter supporting text */
 .row .nm { font-size: 15.5px; }
 .lens small, .feat .fnote { line-height: 1.4; }
+/* ---------- round 17: launch polish ---------- */
+/* fewer effects: no scanlines, quieter grain */
+.hero::before { display: none; }
+body::after { opacity: .045; }
+.rec { letter-spacing: .14em; }
+/* legal + footer */
+.fnote { display: grid; gap: 6px; }
+.fnote p { margin: 0; line-height: 1.55; max-width: 900px; }
+.fnote .legal a { color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+.fnote .legal a:hover { color: var(--ink); }
+.legalpg { max-width: 760px; padding-top: 60px; padding-bottom: 60px; }
+.legalpg h2 { font-size: 19px; margin: 30px 0 8px; }
+.legalpg p { color: #cfc8b6; line-height: 1.7; margin: 0; }
+/* honest waitlist */
+.wlnote { margin: 0; }
+.wldone { gap: 6px; } .wldone .linkbtn { justify-self: start; padding: 0; }
+/* attribution */
+.hlrow { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.hlrow a:hover, .rsrc:hover { color: var(--tape); }
+.rsrc { font-size: 10px; color: #cfc8b6; letter-spacing: .1em; }
+.ainote { margin: 12px 0 0; font-size: 10px; letter-spacing: .1em; }
+/* feature tiles without numbering */
+.ftile { min-height: 0; padding-right: 40px; }

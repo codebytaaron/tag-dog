@@ -86,7 +86,7 @@ export default function Pulse({ polls, standings, futures, initialTab }: { polls
       {tab === "title" && <Odds s={futures.title} mine={mine} note="CHANCE TO WIN THE NATIONAL TITLE" />}
       {tab === "playoff" && <Odds s={futures.playoff} mine={mine} limit={30} note="CHANCE TO MAKE THE COLLEGE FOOTBALL PLAYOFF" />}
       {tab === "heisman" && <Odds s={futures.heisman} mine={mine} limit={20} note="CHANCE TO WIN THE HEISMAN TROPHY" />}
-      {tab === "hotseat" && <Odds s={futures.coach} mine={mine} limit={25} note="CHANCE THE COACH IS OUT BEFORE FEBRUARY" />}
+      {tab === "hotseat" && <Odds s={futures.coach} mine={mine} limit={25} note="CHANCE THE COACH IS OUT BEFORE FEBRUARY · MARKET PRICES, NOT REPORTING" />}
 
       {tab === "conf" && (
         <>

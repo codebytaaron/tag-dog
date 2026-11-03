@@ -134,7 +134,7 @@ export default async function Landing() {
       </section>
 
       <section className="wrap sect2">
-        <Reveal><div className="eyebrow mono">EVERYTHING IN TAPEDOG</div><h2 className="h2">Your college football HQ.</h2></Reveal>
+        <Reveal><div className="eyebrow mono">FEATURES</div><h2 className="h2">Everything on TapeDog</h2></Reveal>
         <FeatureGrid />
       </section>
 
