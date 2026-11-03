@@ -16,6 +16,7 @@ function Me() {
 
 const LINKS = [
   { href: "/board", label: "Fade Board" },
+  { href: "/reels", label: "Reels" },
   { href: "/replay", label: "Replay" },
   { href: "/rankings", label: "Rankings" },
   { href: "/about", label: "How it works" },
@@ -53,6 +54,7 @@ export default function Nav() {
         <div className="mnav">
           <Link href="/board" className={path === "/board" && !tab ? "on" : ""}>Fade Board</Link>
           <Link href="/board?tab=scores" className={tab === "scores" ? "on" : ""}>Live scores</Link>
+          <Link href="/reels" className={path === "/reels" ? "on" : ""}>Reels</Link>
           <Link href="/replay" className={path === "/replay" ? "on" : ""}>Replay</Link>
           <Link href="/rankings" className={path === "/rankings" ? "on" : ""}>Rankings & odds</Link>
           <Link href="/board?tab=saved" className={tab === "saved" ? "on" : ""}>Saved games</Link>

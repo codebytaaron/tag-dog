@@ -160,7 +160,7 @@ export default function Board({ games, week, season, updated, initialTab, initia
           <Matchup g={g} lv={live[g.id]} mine={mine} />
           <Status g={g} lv={live[g.id]} />
           <span className="sig">{g.id === gameday && <em className="gd">★ GameDay</em>}{g.signals.length ? g.signals.map((s) => <em key={s}>{s}</em>) : <em className="quiet">Clean spot</em>}</span>
-          <span className={`score t-${g.tier}`}><b>{g.score}</b><small>{g.tier}</small></span>
+          <span className={`score t-${g.tier}`}><b>{g.score}</b><small>{g.tier}</small><em className="upc mono">{g.upsetPct}% upset</em></span>
           <span className="wcell"><b className="mono">{g.watch}</b><i><u style={{ width: `${g.watch}%` }} /></i></span>
           <span className="rowact">
             <SaveButton id={g.id} />
@@ -182,6 +182,7 @@ export default function Board({ games, week, season, updated, initialTab, initia
               )) : <p className="muted">No red flags. Clean spot for {fav.short}.</p>}
             </div>
             <div className="pks">
+              <div><span className="mono">UPSET CHANCE</span><b>{g.upsetPct}%</b></div>
               {g.kalshi && <div><span className="mono">KALSHI</span><b>{fav.abbr} {Math.round(g.kalshi[g.favorite] * 100)}%</b></div>}
               <div><span className="mono">TOTAL</span><b>{g.total ?? "–"}</b></div>
               <div><span className="mono">BETS TRACKED</span><b>{g.bets ? g.bets.toLocaleString() : "–"}</b></div>

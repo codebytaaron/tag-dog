@@ -5,6 +5,8 @@ import Nav from "@/components/Nav";
 import Link from "next/link";
 import Logo from "@/components/Logo";
 import ScoreAlerts from "@/components/ScoreAlerts";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata = {
   title: "TapeDog | Find the favorites worth fading",
@@ -27,12 +29,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <div className="wrap footin">
             <div className="fbrand"><Logo size={22} /><b>TAPEDOG</b><span className="muted">Finds the college football favorites worth fading.</span></div>
             <nav className="flinks">
-              <Link href="/board">Fade Board</Link><Link href="/board?tab=scores">Scores</Link><Link href="/replay">Replay</Link><Link href="/rankings">Rankings</Link><Link href="/profile">Profile</Link><Link href="/about">How it works</Link><Link href="/dogzone">Dog Zone</Link><Link href="/founder">Founder</Link>
+              <Link href="/board">Fade Board</Link><Link href="/board?tab=scores">Scores</Link><Link href="/reels">Reels</Link><Link href="/replay">Replay</Link><Link href="/rankings">Rankings</Link><Link href="/profile">Profile</Link><Link href="/about">How it works</Link><Link href="/dogzone">Dog Zone</Link><Link href="/founder">Founder</Link>
             </nav>
             <Link href="/founder" className="builtby">Built by <b>Teddy A.</b> <span>→</span></Link>
           </div>
           <div className="wrap fnote">Data from ESPN, six sportsbooks, Kalshi, Open-Meteo, Bluesky and Google News. AI summaries by Gemini. For entertainment, not betting advice.</div>
         </footer>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

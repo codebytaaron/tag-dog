@@ -61,6 +61,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
             <div className="gmid">
               <Ring score={g.score} tier={g.tier} size={96} />
               <div className={`stamp t-${g.tier}`}>{g.tier}</div>
+              <div className="mono upc2">{g.upsetPct}% UPSET CHANCE</div>
             </div>
             <Team side="home" />
           </div>

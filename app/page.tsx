@@ -7,6 +7,8 @@ import FeatureGrid from "@/components/FeatureGrid";
 import Countdown from "@/components/Countdown";
 import { getGameDayId } from "@/lib/gameday";
 import { getFutures } from "@/lib/pulse";
+import SinceVisit from "@/components/SinceVisit";
+import { lite } from "@/lib/data";
 
 const FLOW: [string, string, string, string[]][] = [
   ["01", "Pull the odds", "Six sportsbooks, the opening line, Kalshi and ESPN's win model.", ["DraftKings", "FanDuel", "BetMGM", "Caesars", "bet365", "BetRivers", "Action Network", "Kalshi", "ESPN FPI"]],
@@ -90,6 +92,8 @@ export default async function Landing() {
           </Reveal>
         </section>
       )}
+
+      <div className="wrap"><SinceVisit games={s.games.map(lite)} /></div>
 
       {race.length > 0 && (
         <section className="wrap sect2">

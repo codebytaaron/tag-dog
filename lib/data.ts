@@ -28,7 +28,7 @@ export type Game = {
   bookFavProb: number | null; kalshi: { home: number; away: number; volume: number; tickers?: { home: string; away: string } } | null;
   fpi: { home: number; away: number } | null; weather: Weather;
   favPrev: string | null; favNext: string | null; favRest: number | null; dogRest: number | null;
-  factors: Factor[]; score: number; tier: Tier; heat: number; watch: number;
+  factors: Factor[]; score: number; tier: Tier; heat: number; watch: number; upsetPct: number;
 };
 export type Slate = { season: number | null; week: number | null; updated: string; games: Game[] };
 
@@ -209,6 +209,14 @@ async function enrich(b: any, an: any[], ks: KEvent[]): Promise<Game> {
 
   const score = Math.max(0, Math.min(99, f.reduce((s, x) => s + x.points, 5)));
   const tier: Tier = score >= 50 ? "FADE" : score >= 28 ? "WATCH" : "HOLD";
+  // Upset chance: start from the market's view of the underdog (Kalshi, then no-vig books, then FPI,
+  // then a spread curve), then tilt it modestly by the Tape Score. Anchoring to the market keeps it honest.
+  const dogSide = favorite === "home" ? "away" : "home";
+  const dogBase = kalshi ? kalshi[dogSide]
+    : bookFavProb != null ? 1 - bookFavProb
+    : fpi ? (100 - fpi[favorite]) / 100
+    : spread != null ? 1 / (1 + Math.exp(spread / 6.5)) : 0.35;
+  const upsetPct = Math.round(Math.min(0.65, Math.max(0.01, dogBase * (1 + (score - 30) / 250))) * 100);
   const bets = ag?.num_bets || 0;
   const heat = bets / 800 + (kalshi?.volume || 0) / 25000 + (b.home.rank ? 12 : 0) + (b.away.rank ? 12 : 0) +
     (b.home.rank && b.away.rank ? 10 : 0) + (NATIONAL.includes(b.network) ? 8 : 0) + (spread != null && spread < 7 ? 5 : 0);
@@ -219,7 +227,7 @@ async function enrich(b: any, an: any[], ks: KEvent[]): Promise<Game> {
     id: b.id, date: b.date, state: b.state, status: b.status, venue: b.venue, home: b.home, away: b.away,
     favorite, spread, line, total, network: b.network, books, openFav, nowFav, bets, bookFavProb, kalshi, fpi,
     weather: wx, favPrev: tag(prev), favNext: tag(next), favRest, dogRest,
-    factors: f.sort((a, c) => c.points - a.points), score, tier, heat, watch: 0,
+    factors: f.sort((a, c) => c.points - a.points), score, tier, heat, watch: 0, upsetPct,
   };
 }
 
@@ -271,7 +279,7 @@ export async function getLiveOdds(g: Game) {
   return { books: books.length ? books : g.books, openH, consH, total, ml, kalshi: matchKalshi(parseK(ks), g) || g.kalshi, bets: ag?.num_bets || g.bets, at: new Date().toISOString() };
 }
 
-const cachedSlate = unstable_cache(buildSlate, ["tapedog-slate-v3"], { revalidate: 900 });
+const cachedSlate = unstable_cache(buildSlate, ["tapedog-slate-v4"], { revalidate: 900 });
 export async function getSlate(): Promise<Slate> {
   return safe(cachedSlate(), { season: null, week: null, updated: new Date().toISOString(), games: [] });
 }
@@ -289,9 +297,9 @@ export async function getGameDetail(id: string) {
 }
 
 // Slim shape for list views so pages stay light.
-export type LiteGame = Pick<Game, "id" | "date" | "state" | "status" | "home" | "away" | "favorite" | "line" | "spread" | "total" | "network" | "score" | "tier" | "heat" | "bets" | "kalshi" | "watch" | "factors"> & { signals: string[]; keys: string[] };
+export type LiteGame = Pick<Game, "id" | "date" | "state" | "status" | "home" | "away" | "favorite" | "line" | "spread" | "total" | "network" | "score" | "tier" | "heat" | "bets" | "kalshi" | "watch" | "factors" | "upsetPct"> & { signals: string[]; keys: string[] };
 export const lite = (g: Game): LiteGame => ({
   id: g.id, date: g.date, state: g.state, status: g.status, home: g.home, away: g.away, favorite: g.favorite,
   line: g.line, spread: g.spread, total: g.total, network: g.network, score: g.score, tier: g.tier, heat: g.heat,
-  bets: g.bets, kalshi: g.kalshi, watch: g.watch, factors: g.factors, keys: g.factors.filter((x) => x.points > 0).map((x) => x.key), signals: g.factors.filter((x) => x.points > 0).slice(0, 3).map((x) => x.label),
+  bets: g.bets, kalshi: g.kalshi, watch: g.watch, upsetPct: g.upsetPct, factors: g.factors, keys: g.factors.filter((x) => x.points > 0).map((x) => x.key), signals: g.factors.filter((x) => x.points > 0).slice(0, 3).map((x) => x.label),
 });
