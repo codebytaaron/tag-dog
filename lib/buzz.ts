@@ -86,9 +86,11 @@ export async function getBuzz(away: Team, home: Team): Promise<Buzz> {
     const key = text.slice(0, 80).toLowerCase();
     const at = p.record?.createdAt || p.indexedAt;
     const age = (now - Date.parse(at)) / 3600000;
-    if (!text || seen.has(key) || age > 24 * 5 || age < -1 || text.length < 30 || OTHER.test(text) || JUNK.test(text)) continue;
+    if (!text || seen.has(key) || age > 24 * 4 || age < -1 || text.length < 30 || OTHER.test(text) || JUNK.test(text)) continue;
     if ([...text.matchAll(otherYear)].some((m) => Number(m[1]) !== year)) continue;
     if ((text.match(/#/g) || []).length > 5) continue;
+    // Skip schedules, ballots and lists: they name lots of games but are not about this one.
+    if ((text.match(/\b(vs\.?|at)\s+[A-Z]/g) || []).length > 3 || (text.match(/(^|\s)\d{1,2}[.)]\s/g) || []).length >= 4) continue;
     const low = text.toLowerCase();
     const a = hits(low, A), h = hits(low, H);
     const both = a && h;

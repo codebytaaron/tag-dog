@@ -32,7 +32,8 @@ export default function Nav() {
   const LINKS = [
     { href: "/board", label: "Board", on: (path === "/board" && tab !== "scores") || path.startsWith("/game") },
     { href: "/board?tab=scores", label: "Scores", on: scores },
-    { href: "/reels", label: "Highlights", on: path === "/reels" },
+    { href: "/reels", label: "Reels", on: path === "/reels" },
+    { href: "/tracker", label: "Tracker", on: path === "/tracker" },
     { href: "/rankings", label: "Rankings", on: path === "/rankings" || path.startsWith("/team") },
   ];
 

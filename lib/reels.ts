@@ -1,6 +1,6 @@
-// Highlight reels. Ranks this week's and last week's finished games by how much they matter
-// (Top 25 teams, upsets, one-score finishes, overtime, recency), then picks each game's best clips
-// (full-game highlights first) and spaces them out so the feed keeps changing games.
+// Reel clips per week. Each finished game is rated by how much it mattered (Top 25 teams, upsets,
+// one-score finishes, overtime) and its best clips are picked (full-game highlights first; studio
+// talk, interviews and previews are skipped). Ordering, variety and personalization happen on the client.
 import { darkJson } from "./espn";
 
 const ESPN = "https://site.api.espn.com/apis/site/v2/sports/football/college-football";
@@ -9,6 +9,8 @@ export type Reel = {
   key: string; gameId: string; title: string; url: string; mp4: string; thumb: string; duration: number;
   away: ReelTeam; home: ReelTeam; week: number; tags: string[]; score: number;
 };
+
+const TALK = /\?|what's next|reacts?|explains?|breaks? down|discuss|press conference|interview|podcast|preview|analysis|debate|takeaways|predict/i;
 
 async function board(q: string) {
   try {
@@ -41,41 +43,30 @@ function rate(e: any) {
   return { home, away, tags, base };
 }
 
-export async function getReels(): Promise<Reel[]> {
-  const cur = await board("");
-  const wk = cur?.week?.number || 1;
-  const prev = wk > 1 ? await board(`&seasontype=2&week=${wk - 1}`) : null;
-  const final = (e: any) => e.status?.type?.state === "post";
-  const games = [
-    ...(cur?.events || []).filter(final).map((e: any) => ({ e, wk, recency: 1 })),
-    ...(prev?.events || []).filter(final).map((e: any) => ({ e, wk: wk - 1, recency: 0.6 })),
-  ].map((x) => { const r = rate(x.e); return { ...x, ...r, score: r.base * x.recency }; })
-    .sort((a, b) => b.score - a.score).slice(0, 24);
-
-  const lists = await Promise.all(games.map(async (x) => {
+export async function getReelsForWeek(week: number | null): Promise<{ week: number; clips: Reel[] }> {
+  const sb = await board(week ? `&seasontype=2&week=${week}` : "");
+  const wk = week ?? sb?.week?.number ?? 1;
+  const games = (sb?.events || []).filter((e: any) => e.status?.type?.state === "post")
+    .map((e: any) => ({ e, ...rate(e) })).sort((a: any, b: any) => b.base - a.base).slice(0, 26);
+  const lists = await Promise.all(games.map(async (x: any) => {
     try {
       const r = await fetch(`${ESPN}/summary?event=${x.e.id}`, { next: { revalidate: 3600 } });
       if (!r.ok) return [];
       const d = await darkJson(r);
-      // Game action only: skip studio talk, interviews and previews.
-      const TALK = /\?|what's next|reacts?|explains?|breaks? down|discuss|press conference|interview|podcast|preview|analysis|debate|takeaways|predict/i;
       const vids = (d.videos || []).filter((v: any) => (v.links?.source?.href || v.links?.source?.HD?.href) && !TALK.test(v.headline || ""));
       const ordered = [...vids.filter((v: any) => /highlights/i.test(v.headline || "")), ...vids.filter((v: any) => !/highlights/i.test(v.headline || ""))];
-      return ordered.slice(0, 3).map((v: any, k: number): Reel => ({
-        key: `${x.e.id}-${k}`, gameId: x.e.id, title: v.headline || "", url: v.links?.web?.href || "",
+      return ordered.slice(0, 4).map((v: any, k: number): Reel => ({
+        key: `${x.e.id}-${v.id || k}`, gameId: x.e.id, title: v.headline || "", url: v.links?.web?.href || "",
         mp4: v.links?.source?.HD?.href || v.links?.source?.href, thumb: v.thumbnail || "", duration: v.duration || 0,
-        away: x.away, home: x.home, week: x.wk, tags: x.tags,
-        score: x.score * (k === 0 ? 1 : 0.72 - k * 0.12),
+        away: x.away, home: x.home, week: wk, tags: x.tags, score: x.base * (k === 0 ? 1 : 0.75 - k * 0.1),
       }));
     } catch { return []; }
   }));
+  return { week: wk, clips: lists.flat() };
+}
 
-  // Best clips first, but never the same game within three clips.
-  const pool = lists.flat().sort((a, b) => b.score - a.score);
-  const out: Reel[] = [];
-  while (pool.length) {
-    const i = pool.findIndex((c) => !out.slice(-3).some((o) => o.gameId === c.gameId));
-    out.push(pool.splice(i < 0 ? 0 : i, 1)[0]);
-  }
-  return out;
+export async function getReels() {
+  const cur = await getReelsForWeek(null);
+  const prev = cur.week > 1 ? await getReelsForWeek(cur.week - 1) : { week: 0, clips: [] as Reel[] };
+  return { week: cur.week, clips: [...cur.clips, ...prev.clips.map((c) => ({ ...c, score: c.score * 0.6 }))] };
 }

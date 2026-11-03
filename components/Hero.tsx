@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
-type Fly = { id: string; away: { abbr: string; logo: string; color: string }; home: { abbr: string; logo: string; color: string }; line: string; score: number; tier: string };
+type Fly = { id: string; away: { abbr: string; logo: string; color: string }; home: { abbr: string; logo: string; color: string }; line: string; score: number; tier: string; up: number };
 const WORDS = ["worth fading.", "looking ahead.", "on upset alert.", "sleepwalking.", "in a sandwich.", "priced too high."];
 
 export default function Hero({ games, count, week }: { games: Fly[]; count: number; week: number | null }) {
@@ -50,9 +50,8 @@ export default function Hero({ games, count, week }: { games: Fly[]; count: numb
             <div key={g.id + k} className={`lane d${depth} ${lane % 2 ? "rev" : ""}`}
               style={{ top: `${6 + lane * 15}%`, animationDuration: `${dur}s`, animationDelay: `${-((k * 7.3) % dur)}s` }}>
               <div className="fly">
-                <img src={g.away.logo} alt="" /><b>{g.away.abbr}</b><i>@</i><b>{g.home.abbr}</b><img src={g.home.logo} alt="" />
-                <span className="fl">{g.line}</span>
-                <span className={`ft t-${g.tier}`}>{g.tier} {g.score}</span>
+                <img src={g.away.logo} alt="" /><b>{g.away.abbr}</b><i>at</i><b>{g.home.abbr}</b><img src={g.home.logo} alt="" />
+                <span className="fl">{g.up}% upset chance</span>
               </div>
             </div>
           );
@@ -67,7 +66,7 @@ export default function Hero({ games, count, week }: { games: Fly[]; count: numb
             {WORDS[i].split("").map((ch, k) => <span key={k} className="ch" style={{ animationDelay: `${k * 26}ms` }}>{ch === " " ? " " : ch}</span>)}
           </span>
         </h1>
-        <p className="lede">TapeDog scores every FBS game for upset risk. It checks odds at six sportsbooks, prediction markets, schedule spots, rest and weather, then tells you which favorites to fade and which games are worth watching.</p>
+        <p className="lede">Upset odds for every college football game, plus live scores, highlights and rankings.</p>
         <div className="ctas">
           <Link href="/board" className="btn primary">Open the Fade Board <span>→</span></Link>
           <Link href="/about" className="btn ghost">How it works</Link>

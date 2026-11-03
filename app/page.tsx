@@ -65,7 +65,7 @@ export default async function Landing() {
   const fades = [...pool].sort((a, b) => b.score - a.score);
   const watch = [...pool].sort((a, b) => b.watch - a.watch);
   const fly = fades.slice(0, 18).map((g) => ({
-    id: g.id, line: g.line, score: g.score, tier: g.tier,
+    id: g.id, line: g.line, score: g.score, tier: g.tier, up: g.upsetPct,
     away: { abbr: g.away.abbr, logo: g.away.logo, color: g.away.color },
     home: { abbr: g.home.abbr, logo: g.home.logo, color: g.home.color },
   }));
@@ -89,7 +89,7 @@ export default async function Landing() {
       <div className="ticker" aria-hidden>
         <div className="track mono">
           {[...tick, ...tick].map((g, k) => (
-            <span key={k}><b>{g.away.abbr} @ {g.home.abbr}</b> {g.line} <em className={`c-${g.tier.toLowerCase()}`}>{g.tier} {g.score}</em></span>
+            <span key={k}><b>{g.away.abbr} at {g.home.abbr}</b> <em className={`c-${g.tier.toLowerCase()}`}>{g.upsetPct}% upset</em></span>
           ))}
         </div>
       </div>
