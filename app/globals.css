@@ -2,7 +2,7 @@
   --bg: #0a0a09; --bg2: #0f0f0d; --panel: #141412; --panel2: #1b1a17; --line: #26251f; --line2: #35342c;
   --ink: #f2ede1; --muted: #a39e8f; --dim: #6f6b60;
   --tape: #f5c842; --ink2: #d6d0c1; --bgrgb: 10,10,9; --ontape: #14120a; --fade: #ff5533; --watch: #f5c842; --hold: #6f6b60; --ok: #7bd88f;
-  --display: "Anton", Impact, sans-serif; --body: "Inter Tight", system-ui, sans-serif; --mono: "JetBrains Mono", ui-monospace, monospace;
+  --display: var(--font-display), "Anton", Impact, sans-serif; --body: var(--font-body), "Inter Tight", system-ui, sans-serif; --mono: var(--font-mono), "JetBrains Mono", ui-monospace, monospace;
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -1564,3 +1564,9 @@ body::after { opacity: .045; }
   .rl-next { display: none; }
   .rl-vol input { display: none; }
 }
+/* ---------- round 25: legal pages ---------- */
+.legalpg ul { margin: 10px 0 0; padding-left: 20px; color: var(--ink2); line-height: 1.7; }
+.legalpg p + p { margin-top: 10px; }
+.legalpg a { color: var(--tape); text-decoration: underline; text-underline-offset: 3px; }
+.erasebox { margin-top: 12px; }
+.erased { color: var(--ok); font-weight: 600; }

@@ -7,6 +7,12 @@ import Logo from "@/components/Logo";
 import ScoreAlerts from "@/components/ScoreAlerts";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Anton, Inter_Tight, JetBrains_Mono } from "next/font/google";
+
+// Fonts are downloaded at build time and served from our own domain, so visitors never contact Google.
+const display = Anton({ weight: "400", subsets: ["latin"], variable: "--font-display", display: "swap" });
+const body = Inter_Tight({ weight: ["400", "500", "600", "700"], subsets: ["latin"], variable: "--font-body", display: "swap" });
+const mono = JetBrains_Mono({ weight: ["400", "600"], subsets: ["latin"], variable: "--font-mono", display: "swap" });
 
 export const metadata = {
   metadataBase: new URL("https://tapedog.vercel.app"),
@@ -23,12 +29,9 @@ export const viewport = { themeColor: "#0a0a09" };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={`${display.variable} ${body.variable} ${mono.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: "(function(){try{var t=localStorage.getItem('tapedog.theme');if(!t)t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme='dark'}})()" }} />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
       </head>
       <body>
         <Suspense fallback={<div className="nav" style={{ height: 64 }} />}><Nav /></Suspense>
@@ -44,7 +47,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           </div>
           <div className="wrap fnote">
             <p>For entertainment and information only. Not betting advice. TapeDog is not affiliated with ESPN, the NCAA, any school or conference, any sportsbook, or Kalshi. Team names and logos belong to their owners and are used only to identify teams. Highlights are ESPN's and play from ESPN.</p>
-            <p>21+ where sports betting is legal. If you or someone you know has a gambling problem, call 1-800-GAMBLER.</p>
+            <p>21+ where sports betting is legal. Sportsbooks and prediction markets are not available in every state. If you or someone you know has a gambling problem, call 1-800-GAMBLER.</p>
             <p className="legal"><Link href="/terms">Terms</Link> · <Link href="/privacy">Privacy</Link> · © {new Date().getFullYear()} TapeDog</p>
           </div>
         </footer>
