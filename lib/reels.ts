@@ -57,7 +57,9 @@ export async function getReels(): Promise<Reel[]> {
       const r = await fetch(`${ESPN}/summary?event=${x.e.id}`, { next: { revalidate: 3600 } });
       if (!r.ok) return [];
       const d = await darkJson(r);
-      const vids = (d.videos || []).filter((v: any) => v.links?.source?.href || v.links?.source?.HD?.href);
+      // Game action only: skip studio talk, interviews and previews.
+      const TALK = /\?|what's next|reacts?|explains?|breaks? down|discuss|press conference|interview|podcast|preview|analysis|debate|takeaways|predict/i;
+      const vids = (d.videos || []).filter((v: any) => (v.links?.source?.href || v.links?.source?.HD?.href) && !TALK.test(v.headline || ""));
       const ordered = [...vids.filter((v: any) => /highlights/i.test(v.headline || "")), ...vids.filter((v: any) => !/highlights/i.test(v.headline || ""))];
       return ordered.slice(0, 3).map((v: any, k: number): Reel => ({
         key: `${x.e.id}-${k}`, gameId: x.e.id, title: v.headline || "", url: v.links?.web?.href || "",
