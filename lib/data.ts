@@ -3,6 +3,7 @@
 // Kalshi (prediction-market prices), Open-Meteo (geocoding + kickoff forecast).
 import { unstable_cache } from "next/cache";
 import { darkJson, readable } from "./espn";
+import { getFPI, type FPI } from "./fpi";
 
 const ESPN = "https://site.api.espn.com/apis/site/v2/sports/football/college-football";
 const AN_URL = "https://api.actionnetwork.com/web/v1/scoreboard/ncaaf?period=game&division=FBS&bookIds=15,30,68,69,71,75,79,123";
@@ -28,7 +29,7 @@ export type Game = {
   bookFavProb: number | null; kalshi: { home: number; away: number; volume: number; tickers?: { home: string; away: string } } | null;
   fpi: { home: number; away: number } | null; weather: Weather;
   favPrev: string | null; favNext: string | null; favRest: number | null; dogRest: number | null;
-  factors: Factor[]; score: number; tier: Tier; heat: number; watch: number; upsetPct: number;
+  factors: Factor[]; score: number; tier: Tier; heat: number; watch: number; upsetPct: number; ratingMargin: number | null;
 };
 export type Slate = { season: number | null; week: number | null; updated: string; games: Game[] };
 
@@ -130,7 +131,7 @@ function parseEvent(e: any) {
   };
 }
 
-async function enrich(b: any, an: any[], ks: KEvent[]): Promise<Game> {
+async function enrich(b: any, an: any[], ks: KEvent[], fp: Record<string, FPI>): Promise<Game> {
   const ag = matchAN(an, b);
   const books: BookLine[] = [];
   let openH: number | null = null, consH: number | null = null, total: number | null = b.espnTotal, ml: [number | null, number | null] = [null, null];
@@ -201,6 +202,14 @@ async function enrich(b: any, an: any[], ks: KEvent[]): Promise<Game> {
     if (ff < 50) add("fpi", "Model dissent", 16, `ESPN FPI actually likes ${dog.short} (${Math.round(100 - ff)}%)`);
     else if (ff < 62 && (spread ?? 0) >= 7) add("fpi", "Model says closer", 7, `FPI only ${Math.round(ff)}% on ${fav.short} despite a ${spread}-pt line`);
   }
+  // Power-rating gap: ESPN FPI margin (with ~2.5 pts home field) versus the betting line.
+  const fpF = fp[fav.id], fpD = fp[dog.id];
+  let ratingMargin: number | null = null;
+  if (fpF && fpD) {
+    ratingMargin = Math.round((fpF.fpi - fpD.fpi + (favorite === "home" ? 2.5 : -2.5)) * 10) / 10;
+    if (ratingMargin < 0) add("ratings", "Ratings favor the dog", 12, `ESPN power ratings make ${dog.short} better by ${Math.abs(ratingMargin)}`);
+    else if (spread != null && spread - ratingMargin >= 6) add("ratings", "Line bigger than ratings", 8, `Ratings say ${fav.short} by ${ratingMargin}, the line is ${spread}`);
+  }
   if (spread != null) {
     if (spread >= 3 && spread <= 14) add("spread", "Live number", 8, `${spread} points is within one bad quarter`);
     else if (spread >= 24) add("spread", "Big cushion", -12, `${spread} points is a lot of room`);
@@ -227,22 +236,23 @@ async function enrich(b: any, an: any[], ks: KEvent[]): Promise<Game> {
     id: b.id, date: b.date, state: b.state, status: b.status, venue: b.venue, home: b.home, away: b.away,
     favorite, spread, line, total, network: b.network, books, openFav, nowFav, bets, bookFavProb, kalshi, fpi,
     weather: wx, favPrev: tag(prev), favNext: tag(next), favRest, dogRest,
-    factors: f.sort((a, c) => c.points - a.points), score, tier, heat, watch: 0, upsetPct,
+    factors: f.sort((a, c) => c.points - a.points), score, tier, heat, watch: 0, upsetPct, ratingMargin,
   };
 }
 
 async function buildSlate(): Promise<Slate> {
-  const [sb, an, ks] = await Promise.all([
+  const [sb, an, ks, fpiMap] = await Promise.all([
     j(`${ESPN}/scoreboard?groups=80&limit=300`, 600),
     safe(j(AN_URL, 600, UA), { games: [] }),
     safe(j(KALSHI_URL, 600), { events: [] }),
+    getFPI(),
   ]);
   const kev: KEvent[] = (ks.events || []).map((e: any) => ({
     markets: (e.markets || []).map((m: any) => ({
       team: norm(m.yes_sub_title), ticker: m.ticker || "", price: parseFloat(m.last_price_dollars || m.yes_bid_dollars || "0") || 0, vol: parseFloat(m.volume_fp || "0") || 0,
     })),
   }));
-  const games = await pool((sb.events || []).map(parseEvent), 12, (b) => enrich(b, an.games || [], kev));
+  const games = await pool((sb.events || []).map(parseEvent), 12, (b) => enrich(b, an.games || [], kev, fpiMap));
   const max = Math.max(1, ...games.map((g) => g.heat));
   games.forEach((g) => { g.heat = Math.round((g.heat / max) * 100); });
   // Watchability: close line + big names + buzz + upset potential.
@@ -279,7 +289,7 @@ export async function getLiveOdds(g: Game) {
   return { books: books.length ? books : g.books, openH, consH, total, ml, kalshi: matchKalshi(parseK(ks), g) || g.kalshi, bets: ag?.num_bets || g.bets, at: new Date().toISOString() };
 }
 
-const cachedSlate = unstable_cache(buildSlate, ["tapedog-slate-v4"], { revalidate: 900 });
+const cachedSlate = unstable_cache(buildSlate, ["tapedog-slate-v5"], { revalidate: 900 });
 export async function getSlate(): Promise<Slate> {
   return safe(cachedSlate(), { season: null, week: null, updated: new Date().toISOString(), games: [] });
 }

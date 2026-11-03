@@ -5,6 +5,7 @@ import { getGameDayId } from "@/lib/gameday";
 import { getLive } from "@/lib/live";
 import { getBuzz } from "@/lib/buzz";
 import { getRecap } from "@/lib/recap";
+import { getFPI } from "@/lib/fpi";
 import Ring from "@/components/Ring";
 import SaveButton from "@/components/SaveButton";
 import Kickoff from "@/components/Kickoff";
@@ -32,7 +33,8 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
   const [d, recap] = await Promise.all([getGameDetail(id), getRecap(id)]);
   if (!d) { if (!recap) notFound(); return <StandaloneGame r={recap} />; }
   const g = d.game;
-  const [liveMap, buzz, gd] = await Promise.all([getLive(), getBuzz(g.away, g.home), getSlate().then((s) => getGameDayId(s.games))]);
+  const [liveMap, buzz, gd, fpiAll] = await Promise.all([getLive(), getBuzz(g.away, g.home), getSlate().then((s) => getGameDayId(s.games)), getFPI()]);
+  const fa = fpiAll[g.away.id], fh = fpiAll[g.home.id];
   const live = liveMap[g.id] || null;
   const fav = g[g.favorite], dog = g[g.favorite === "home" ? "away" : "home"];
   const started = !!recap && recap.state !== "pre";
@@ -123,6 +125,28 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
           </div>
         </div>
       </div>
+
+      {fa && fh && (
+        <div className="wrap gsec">
+          <section className="card numbers">
+            <div className="cardh"><h3>By the numbers</h3><span className="mono muted">ESPN POWER INDEX</span></div>
+            <div className="nrow nhead"><span>{g.away.short}</span><span /><span>{g.home.short}</span></div>
+            {[
+              ["Power rating", `${fa.fpi} (#${fa.rank})`, `${fh.fpi} (#${fh.rank})`, fa.fpi > fh.fpi ? "away" : "home"],
+              ["Offense", fa.offRank, fh.offRank, parseInt(fa.offRank) < parseInt(fh.offRank) ? "away" : "home"],
+              ["Defense", fa.defRank, fh.defRank, parseInt(fa.defRank) < parseInt(fh.defRank) ? "away" : "home"],
+              ["Special teams", fa.stRank, fh.stRank, parseInt(fa.stRank) < parseInt(fh.stRank) ? "away" : "home"],
+              ["Projected record", `${fa.projW.toFixed(1)}-${fa.projL.toFixed(1)}`, `${fh.projW.toFixed(1)}-${fh.projL.toFixed(1)}`, fa.projW > fh.projW ? "away" : "home"],
+              ["Chance to win out", fa.winOut || "–", fh.winOut || "–", parseFloat(fa.winOut) > parseFloat(fh.winOut) ? "away" : "home"],
+            ].map(([l, a, h, best]) => (
+              <div key={l} className="nrow"><b className={best === "away" ? "hi" : ""}>{a}</b><span>{l}</span><b className={best === "home" ? "hi" : ""}>{h}</b></div>
+            ))}
+            {g.ratingMargin != null && (
+              <p className="nsum">Ratings make it <b>{g.ratingMargin >= 0 ? fav.short : dog.short} by {Math.abs(g.ratingMargin)}</b>. The line is <b>{g.line}</b>.{g.spread != null && g.ratingMargin >= 0 && g.spread - g.ratingMargin >= 6 ? " The market may be overrating the favorite." : g.ratingMargin < 0 ? " The ratings like the underdog." : ""}</p>
+            )}
+          </section>
+        </div>
+      )}
 
       <div className="wrap gsec" id="odds">
         <LiveOdds id={g.id} fav={g.favorite} fpi={g.fpi} fallbackBookFav={g.bookFavProb}

@@ -17,22 +17,24 @@ function Move({ rank, prev }: { rank: number; prev: number | null }) {
   return <span className={`mv mono ${d > 0 ? "up" : "down"}`}>{d > 0 ? "▲" : "▼"}{Math.abs(d)}</span>;
 }
 
-function Odds({ s, mine, limit = 25, note }: { s: Series; mine: Set<string>; limit?: number; note: string }) {
+function Odds({ s, mine, limit = 25, note, alt }: { s: Series; mine: Set<string>; limit?: number; note: string; alt?: Record<string, number> }) {
+  const hasAlt = !!alt && Object.keys(alt).length > 0;
   if (!s || !s.markets.length) return <p className="muted empty">This market isn't open right now.</p>;
   const top = s.markets[0].p;
   return (
     <div className="odds">
-      <p className="mono muted small onote">{note} · LIVE FROM KALSHI · 24H CHANGE</p>
+      <p className="mono muted small onote">{note} · {hasAlt ? "KALSHI, THEN POLYMARKET" : "LIVE FROM KALSHI"} · 24H CHANGE</p>
       {s.markets.slice(0, limit).map((m: Mkt, k) => {
         const ch = m.prev != null ? Math.round((m.p - m.prev) * 100) : 0;
         const Name = m.team ? <Link href={`/team/${m.team.id}`} className="oname">{m.team.logo && <img src={m.team.logo} alt="" />}<b>{m.label}</b>{mine.has(m.team.id) && <em className="star"> ★</em>}</Link>
           : <span className="oname"><span className="oini">{m.label.split(" ").map((w) => w[0]).join("").slice(0, 2)}</span><b>{m.label}</b></span>;
         return (
-          <div key={m.label} className="orow" style={{ ["--c" as any]: m.team?.color || "var(--tape)" }}>
+          <div key={m.label} className={`orow ${hasAlt ? "withalt" : ""}`} style={{ ["--c" as any]: m.team?.color || "var(--tape)" }}>
             <span className="mono ork">{k + 1}</span>
             {Name}
             <div className="obar"><i style={{ width: `${(m.p / top) * 100}%` }} /></div>
             <b className="mono opct">{Math.round(m.p * 100)}%</b>
+            {hasAlt && <span className="mono opct alt">{m.team && alt![m.team.id] != null ? `${Math.round(alt![m.team.id] * 100)}%` : "–"}</span>}
             <span className={`mono och ${ch > 0 ? "up" : ch < 0 ? "down" : ""}`}>{ch > 0 ? `▲${ch}` : ch < 0 ? `▼${-ch}` : "–"}</span>
           </div>
         );
@@ -83,7 +85,7 @@ export default function Pulse({ polls, standings, futures, initialTab }: { polls
         </div>
       ) : <p className="muted empty">Poll not available right now.</p>)}
 
-      {tab === "title" && <Odds s={futures.title} mine={mine} note="CHANCE TO WIN THE NATIONAL TITLE" />}
+      {tab === "title" && <Odds s={futures.title} alt={futures.polyTitle} mine={mine} note="CHANCE TO WIN THE NATIONAL TITLE" />}
       {tab === "playoff" && <Odds s={futures.playoff} mine={mine} limit={30} note="CHANCE TO MAKE THE COLLEGE FOOTBALL PLAYOFF" />}
       {tab === "heisman" && <Odds s={futures.heisman} mine={mine} limit={20} note="CHANCE TO WIN THE HEISMAN TROPHY" />}
       {tab === "hotseat" && <Odds s={futures.coach} mine={mine} limit={25} note="CHANCE THE COACH IS OUT BEFORE FEBRUARY · MARKET PRICES, NOT REPORTING" />}

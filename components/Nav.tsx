@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import Logo from "./Logo";
 import Search from "./Search";
+import ThemeToggle from "./ThemeToggle";
 import { useProfile } from "./SaveButton";
 
 function Me() {
@@ -43,6 +44,7 @@ export default function Nav() {
           {LINKS.map((l) => <Link key={l.href} href={l.href} className={l.on ? "on" : ""}>{l.label}</Link>)}
           <Link href="/dogzone" className={`dz ${path === "/dogzone" ? "on" : ""}`}>Dog Zone</Link>
         </nav>
+        <ThemeToggle />
         <Search />
         <Me />
         <button className="burger" onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open}>

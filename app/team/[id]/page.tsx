@@ -6,6 +6,7 @@ import Ring from "@/components/Ring";
 import Highlights from "@/components/Highlights";
 import { getRecap } from "@/lib/recap";
 import { getFutures, getPolls, getStandings, teamNews } from "@/lib/pulse";
+import { getFPI } from "@/lib/fpi";
 import { FollowButton } from "@/components/SaveButton";
 import { darkJson, readable } from "@/lib/espn";
 
@@ -52,7 +53,8 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
   const isFav = onSlate ? onSlate[onSlate.favorite].id === id : false;
   const last = [...games].reverse().find((g: any) => g.state === "post");
   const recap = last ? await getRecap(last.id) : null;
-  const [fut, polls, stands, news] = await Promise.all([getFutures(), getPolls(), getStandings(), teamNews(id)]);
+  const [fut, polls, stands, news, fpiAll] = await Promise.all([getFutures(), getPolls(), getStandings(), teamNews(id), getFPI()]);
+  const fp = fpiAll[id];
   const pct = (s: any) => { const m = s?.markets?.find((x: any) => x.team?.id === id); return m ? Math.round(m.p * 100) : null; };
   const apRow = polls[0]?.rows.find((r) => r.team.id === id);
   let standing: { conf: string; place: number; rec: string; streak: string } | null = null;
@@ -65,7 +67,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
     { l: "MAKE THE PLAYOFF", v: pct(fut.playoff) != null ? `${pct(fut.playoff)}%` : "–", s: "Kalshi" },
     { l: "CONFERENCE TITLE", v: confPct != null ? `${confPct}%` : "–", s: standing?.conf?.toUpperCase() || "" },
     { l: "CONFERENCE", v: standing ? standing.rec : "–", s: standing ? `${ord(standing.place)} in ${standing.conf.toUpperCase()}` : "" },
-    { l: "STREAK", v: standing?.streak || "–", s: "" },
+    { l: "POWER RATING", v: fp ? `#${fp.rank}` : "–", s: fp ? `FPI ${fp.fpi} · proj ${fp.projW.toFixed(1)}-${fp.projL.toFixed(1)}` : "" },
   ];
 
   return (

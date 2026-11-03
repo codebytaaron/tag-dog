@@ -44,6 +44,25 @@ async function series(ticker: string, idx: Map<string, NonNullable<TeamRef>>, te
   } catch { return null; }
 }
 
+// Polymarket: a second prediction market for the national title (free, no key).
+async function polymarketTitle(idx: Map<string, NonNullable<TeamRef>>): Promise<Record<string, number>> {
+  try {
+    const s = await fetch("https://gamma-api.polymarket.com/public-search?q=NCAA%20Football%20National%20Champion&limit_per_type=10&events_status=active", { next: { revalidate: 3600 } });
+    const ev = ((await s.json()).events || []).find((e: any) => /national champion$/i.test(e.title || "") && !e.closed);
+    if (!ev) return {};
+    const r = await fetch(`https://gamma-api.polymarket.com/events?slug=${ev.slug}`, { next: { revalidate: 900 } });
+    const e = (await r.json())?.[0];
+    const out: Record<string, number> = {};
+    for (const m of e?.markets || []) {
+      if (m.closed) continue;
+      const t = find(idx, m.groupItemTitle || "");
+      const p = parseFloat(JSON.parse(m.outcomePrices || "[]")[0]);
+      if (t && p > 0) out[t.id] = p;
+    }
+    return out;
+  } catch { return {}; }
+}
+
 export async function getFutures() {
   const idx = await teamIndex();
   const [title, playoff, heisman, sec, b10, b12, acc, coach] = await Promise.all([
@@ -51,7 +70,8 @@ export async function getFutures() {
     series("KXNCAAFSEC", idx), series("KXNCAAFB10", idx), series("KXNCAAFB12", idx), series("KXNCAAFACC", idx),
     series("KXNCAAFCOACHOUT", idx, false),
   ]);
-  return { title, playoff, heisman, conf: { SEC: sec, "Big Ten": b10, "Big 12": b12, ACC: acc } as Record<string, Series>, coach };
+  const polyTitle = await polymarketTitle(idx);
+  return { polyTitle, title, playoff, heisman, conf: { SEC: sec, "Big Ten": b10, "Big 12": b12, ACC: acc } as Record<string, Series>, coach };
 }
 export type Futures = Awaited<ReturnType<typeof getFutures>>;
 

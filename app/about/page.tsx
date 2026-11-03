@@ -19,6 +19,8 @@ const SOURCES: [string, string, string][] = [
   ["BetRivers", "Spreads, totals, moneylines", "https://www.betrivers.com/?page=sportsbook#sports-hub/american_football/ncaaf"],
   ["Action Network", "Opening line and bets tracked", "https://www.actionnetwork.com/ncaaf/odds"],
   ["Kalshi", "Prediction-market win odds", "https://kalshi.com/markets/kxncaafgame"],
+  ["Polymarket", "Second prediction market for title odds", "https://polymarket.com/"],
+  ["ESPN FPI", "Team power ratings, efficiency and projections", "https://www.espn.com/college-football/fpi"],
   ["Open-Meteo", "Kickoff-hour weather at the stadium", "https://open-meteo.com/"],
   ["Bluesky", "Posts from reporters and analysts", "https://bsky.app/"],
   ["Google News", "Game headlines", "https://news.google.com/"],
@@ -29,6 +31,7 @@ const SOURCES: [string, string, string][] = [
 const PLAYBOOK = [
   ["Look-ahead", "+20", "Ranked opponent next week"],
   ["Model dissent", "+16", "ESPN FPI disagrees with the books"],
+  ["Ratings gap", "+8 to +12", "Power ratings say the game is closer than the line"],
   ["Letdown", "+14", "Coming off a ranked opponent"],
   ["Line sliding", "+12", "Spread moved toward the underdog"],
   ["Road favorite", "+10", "Favored on the road"],
@@ -49,7 +52,7 @@ export default function How() {
       </section>
 
       <section className="pipe" aria-label="How a game gets scored">
-        {[["13", "data sources"], ["10", "red-flag checks"], ["0–99", "Tape Score"], ["FADE", "or WATCH or HOLD"]].map(([b, s], k) => (
+        {[["13", "data sources"], ["11", "red-flag checks"], ["0–99", "Tape Score"], ["FADE", "or WATCH or HOLD"]].map(([b, s], k) => (
           <div key={s} className="pnode" style={{ animationDelay: `${k * 0.15}s` }}><b className={k === 3 ? "c-fade" : ""}>{b}</b><span className="mono">{s}</span></div>
         ))}
         <i className="pflow" />
@@ -65,7 +68,7 @@ export default function How() {
       <section className="sect0 split2">
         <div>
           <div className="eyebrow mono">THE RED FLAGS</div>
-          <h2 className="big">The 10 red flags</h2>
+          <h2 className="big">The 11 red flags</h2>
           <p className="muted">Points add up to the Tape Score.</p>
           <div className="scale">
             <div><i className="hold" /><span className="mono">0–27 HOLD</span></div>
