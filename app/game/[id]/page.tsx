@@ -67,7 +67,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
           </div>
           <LiveBar id={g.id} date={g.date} away={g.away.abbr} home={g.home.abbr} initial={live} />
           <div className="gchips">
-            {gd === g.id && <span className="chip2 gdchip">★ College GameDay</span>}
+            {gd === g.id && <span className="chip2 gdchip">College GameDay</span>}
             <span className="chip2"><Kickoff date={g.date} long /></span>
             {g.network && <span className="chip2">TV · {g.network}</span>}
             <span className="chip2">{g.venue.city ? `${g.venue.city}, ${g.venue.state}` : g.venue.name}</span>

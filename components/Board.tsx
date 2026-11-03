@@ -159,7 +159,7 @@ export default function Board({ games, week, season, updated, initialTab, initia
           <span className="idx mono">{String(k + 1).padStart(2, "0")}</span>
           <Matchup g={g} lv={live[g.id]} mine={mine} />
           <Status g={g} lv={live[g.id]} />
-          <span className="sig">{g.id === gameday && <em className="gd">★ GameDay</em>}{g.signals.length ? g.signals.map((s) => <em key={s}>{s}</em>) : <em className="quiet">Clean spot</em>}</span>
+          <span className="sig">{g.id === gameday && <em className="gd">GameDay</em>}{g.signals.length ? g.signals.map((s) => <em key={s}>{s}</em>) : <em className="quiet">Clean spot</em>}</span>
           <span className={`score t-${g.tier}`}><b>{g.score}</b><small>{g.tier}</small><em className="upc mono">{g.upsetPct}% upset</em></span>
           <span className="wcell"><b className="mono">{g.watch}</b><i><u style={{ width: `${g.watch}%` }} /></i></span>
           <span className="rowact">
@@ -237,7 +237,7 @@ export default function Board({ games, week, season, updated, initialTab, initia
       {tab === "board" && (<>
         <div className="feats">
           <Feature label="UPSET OF THE WEEK" g={upsetPick} note={upsetPick ? `Tape ${upsetPick.score}: ${upsetPick.signals.slice(0, 2).join(" + ") || "situational spot"}` : ""} />
-          <Feature label={watchPick && watchPick.id === gameday ? "★ COLLEGE GAMEDAY" : "GAME OF THE WEEK"} g={watchPick} note={watchPick ? `Watch ${watchPick.watch}${watchPick.spread != null ? ` · ${watchPick.spread}-pt line` : ""}${watchPick.home.rank && watchPick.away.rank ? " · ranked vs ranked" : ""}` : ""} />
+          <Feature label={watchPick && watchPick.id === gameday ? "COLLEGE GAMEDAY" : "GAME OF THE WEEK"} g={watchPick} note={watchPick ? `Watch ${watchPick.watch}${watchPick.spread != null ? ` · ${watchPick.spread}-pt line` : ""}${watchPick.home.rank && watchPick.away.rank ? " · ranked vs ranked" : ""}` : ""} />
           <Feature label="SHARP MOVE" g={steamPick} note="The spread is moving toward the underdog" />
         </div>
 
@@ -280,7 +280,7 @@ export default function Board({ games, week, season, updated, initialTab, initia
 
       {tab === "scores" && (
         <div className="scores">
-          <div className="controls2"><span /><div className="searchwrap"><input className="search" placeholder="Filter by team" value={q} onChange={(e) => setQ(e.target.value)} /></div></div>
+          <div className="controls2"><Link href="/replay" className="textlink">Past weeks and highlights</Link><div className="searchwrap"><input className="search" placeholder="Filter by team" value={q} onChange={(e) => setQ(e.target.value)} /></div></div>
           {report && (
             <div className="report">
               <div className="rhead"><b>Fade report</b><span className="muted">How this week's finished games went</span></div>

@@ -1,30 +1,59 @@
 import Link from "next/link";
-import { getSlate, type Game } from "@/lib/data";
+import { getSlate, lite, type Game } from "@/lib/data";
 import Hero from "@/components/Hero";
 import Reveal from "@/components/Reveal";
 import Kickoff from "@/components/Kickoff";
-import FeatureGrid from "@/components/FeatureGrid";
-import Countdown from "@/components/Countdown";
+import SinceVisit from "@/components/SinceVisit";
 import { getGameDayId } from "@/lib/gameday";
 import { getFutures } from "@/lib/pulse";
-import SinceVisit from "@/components/SinceVisit";
-import { lite } from "@/lib/data";
-
-const FLOW: [string, string, string, string[]][] = [
-  ["01", "Pull the odds", "Six sportsbooks, the opening line, Kalshi and ESPN's win model.", ["DraftKings", "FanDuel", "BetMGM", "Caesars", "bet365", "BetRivers", "Action Network", "Kalshi", "ESPN FPI"]],
-  ["02", "Check the spot", "Last week, next week, travel, rest, weather and fan buzz.", ["ESPN", "Open-Meteo", "Bluesky", "Google News"]],
-  ["03", "Score it", "Red flags add up to a 0 to 99 Tape Score. 50 or higher is a fade.", ["TapeDog model", "Gemini AI", "Live scores"]],
-];
 
 export const revalidate = 900;
 export const maxDuration = 60;
 
 function Mini({ g, right }: { g: Game; right: React.ReactNode }) {
   return (
-    <Link href={`/game/${g.id}`} className="mini" style={{ ["--c" as any]: g[g.favorite].color }}>
+    <Link href={`/game/${g.id}`} className="mini">
       <span className="mlogos">{g.away.logo && <img src={g.away.logo} alt="" />}{g.home.logo && <img src={g.home.logo} alt="" />}</span>
-      <span className="mtxt"><b>{g.away.short} @ {g.home.short}</b><small className="mono muted">{g.line} · <Kickoff date={g.date} /></small></span>
+      <span className="mtxt"><b>{g.away.short} at {g.home.short}</b><small className="muted">{g.line} · <Kickoff date={g.date} /></small></span>
       {right}
+    </Link>
+  );
+}
+
+function MatchupCard({ g, gameday }: { g: Game; gameday: boolean }) {
+  const dog = g[g.favorite === "home" ? "away" : "home"];
+  const flag = g.factors.find((f) => f.points > 0);
+  const Side = ({ side }: { side: "home" | "away" }) => {
+    const t = g[side];
+    return (
+      <div className={`mu-team ${side === "home" ? "r" : ""}`}>
+        {t.logo && <img src={t.logo} alt="" />}
+        <div>
+          <span className="mu-name">{t.rank ? <em>{t.rank}</em> : null}{t.short}</span>
+          <span className="mu-rec">{t.record}</span>
+        </div>
+      </div>
+    );
+  };
+  return (
+    <Link href={`/game/${g.id}`} className="mu" style={{ ["--ca" as any]: g.away.color, ["--ch" as any]: g.home.color }}>
+      <div className="mu-top">
+        <span className="mu-label">{gameday ? "College GameDay" : "Game of the week"}</span>
+        <span className="mu-when"><Kickoff date={g.date} long />{g.network ? ` · ${g.network}` : ""}</span>
+      </div>
+      <div className="mu-body">
+        <Side side="away" />
+        <div className="mu-mid">
+          <span className="mu-at">at</span>
+          <span className="mu-line">{g.line}</span>
+          {g.total ? <span className="mu-total">O/U {g.total}</span> : null}
+        </div>
+        <Side side="home" />
+      </div>
+      <div className="mu-foot">
+        <p>Upset chance for <b>{dog.short}</b>: <b className="mu-pct">{g.upsetPct}%</b>{flag ? <span className="muted"> · Top flag: {flag.label.toLowerCase()}</span> : null}</p>
+        <span className="textlink">Preview the game</span>
+      </div>
     </Link>
   );
 }
@@ -48,6 +77,11 @@ export default async function Landing() {
   const fut = await getFutures().catch(() => null);
   const race = (fut?.title?.markets || []).slice(0, 6);
 
+  // Worked example for "How the Tape Score works": this week's top fade.
+  const ex = fades[0];
+  const exFlags = ex ? ex.factors.filter((f) => f.points > 0).slice(0, 4) : [];
+  const exRest = ex ? ex.score - exFlags.reduce((n, f) => n + f.points, 0) : 0;
+
   return (
     <main>
       <Hero games={fly} count={s.games.length} week={s.week} />
@@ -62,108 +96,84 @@ export default async function Landing() {
 
       {spot && (
         <section className="wrap sect2">
-          <Reveal>
-            <Link href={`/game/${spot.id}`} className="spot" style={{ ["--ca" as any]: spot.away.color, ["--ch" as any]: spot.home.color }}>
-              <div className="spottag mono"><i>★</i>{gdGame ? "COLLEGE GAMEDAY IS HERE THIS WEEK" : "GAME OF THE WEEK"}</div>
-              <div className="spotteams">
-                <div className="st">
-                  {spot.away.logo && <img src={spot.away.logo} alt="" />}
-                  <b>{spot.away.rank ? <sup>{spot.away.rank}</sup> : null}{spot.away.short}</b>
-                  <small className="mono">{spot.away.record}</small>
-                </div>
-                <div className="spotmid">
-                  <span className="mono muted">KICKOFF IN</span>
-                  <b><Countdown date={spot.date} /></b>
-                  <span className="mono muted">{spot.network ? `${spot.network} · ` : ""}{spot.venue.city || spot.venue.name}</span>
-                </div>
-                <div className="st">
-                  {spot.home.logo && <img src={spot.home.logo} alt="" />}
-                  <b>{spot.home.rank ? <sup>{spot.home.rank}</sup> : null}{spot.home.short}</b>
-                  <small className="mono">{spot.home.record}</small>
-                </div>
-              </div>
-              <div className="spotfoot">
-                <span className="chip2 strong">{spot.line}{spot.total ? ` · O/U ${spot.total}` : ""}</span>
-                <span className="chip2">WATCH {spot.watch}</span>
-                <span className={`chip2 t-${spot.tier}`}>UPSET {spot.score} · {spot.tier}</span>
-                <span className="btn primary">Open the game →</span>
-              </div>
-            </Link>
-          </Reveal>
+          <Reveal><MatchupCard g={spot} gameday={!!gdGame} /></Reveal>
         </section>
       )}
 
       <div className="wrap"><SinceVisit games={s.games.map(lite)} /></div>
 
+      <section className="wrap sect2">
+        <Reveal>
+          <div className="secthead">
+            <h2 className="h2">This week</h2>
+            <Link href="/board" className="textlink">Full board</Link>
+          </div>
+        </Reveal>
+        <div className="twocol">
+          <Reveal className="listcard">
+            <div className="lch"><b>Upset watch</b><span className="muted">Favorites most likely to slip</span></div>
+            {fades.slice(0, 5).map((g) => <Mini key={g.id} g={g} right={<span className="pctag">{g.upsetPct}%</span>} />)}
+          </Reveal>
+          <Reveal className="listcard" delay={100}>
+            <div className="lch"><b>Must-watch</b><span className="muted">Close lines and big names</span></div>
+            {watchList.slice(0, 5).map((g) => <Mini key={g.id} g={g} right={g.id === gd ? <span className="gdtag2">GameDay</span> : <span className="pctag muted">{g.watch}</span>} />)}
+          </Reveal>
+        </div>
+      </section>
+
       {race.length > 0 && (
         <section className="wrap sect2">
           <Reveal>
-            <Link href="/rankings?tab=title" className="race">
-              <div className="raceh"><span className="mono c-tape">THE TITLE RACE · LIVE FROM KALSHI</span><span className="mono muted">ALL ODDS →</span></div>
-              <div className="racerow">
-                {race.map((m, k) => (
-                  <div key={m.label} className="rteam" style={{ ["--c" as any]: m.team?.color || "var(--tape)" }}>
-                    <span className="mono muted">{k + 1}</span>
-                    {m.team?.logo && <img src={m.team.logo} alt="" />}
-                    <b>{m.label}</b>
-                    <em className="mono">{Math.round(m.p * 100)}%</em>
-                  </div>
-                ))}
+            <div className="secthead">
+              <h2 className="h2">Title race</h2>
+              <Link href="/rankings?tab=title" className="textlink">All odds</Link>
+            </div>
+            <div className="race2">
+              {race.map((m, k) => (
+                <Link key={m.label} href={m.team ? `/team/${m.team.id}` : "/rankings?tab=title"} className="r2">
+                  <span className="r2k">{k + 1}</span>
+                  {m.team?.logo && <img src={m.team.logo} alt="" />}
+                  <b>{m.label}</b>
+                  <span className="r2p">{Math.round(m.p * 100)}%</span>
+                </Link>
+              ))}
+            </div>
+            <p className="muted small srcnote">National title odds from Kalshi, updated through the day.</p>
+          </Reveal>
+        </section>
+      )}
+
+      {ex && (
+        <section className="wrap sect2">
+          <Reveal>
+            <div className="howx">
+              <div className="howx-copy">
+                <h2 className="h2">How the Tape Score works</h2>
+                <p>Every favorite starts near zero. We add points for the spots that get favorites beat: a big game next week, a letdown after a big one, a long road trip, a line drifting toward the underdog, bad weather. At 50 or more, we call it a fade.</p>
+                <p className="muted small">Data from ESPN, six sportsbooks, Kalshi, Open-Meteo, Bluesky and Google News.</p>
+                <Link href="/about" className="textlink">Read the full method</Link>
               </div>
-            </Link>
+              <Link href={`/game/${ex.id}`} className="howx-card">
+                <div className="hx-head">
+                  <span className="hx-teams">{ex.away.logo && <img src={ex.away.logo} alt="" />}{ex.home.logo && <img src={ex.home.logo} alt="" />}</span>
+                  <span><b>{ex[ex.favorite].short}</b><small className="muted">this week's top fade</small></span>
+                </div>
+                {exFlags.map((f) => (
+                  <div key={f.key} className="hx-row"><span>{f.label}</span><span className="hx-pts">+{f.points}</span></div>
+                ))}
+                {exRest > 0 && <div className="hx-row muted"><span>Everything else</span><span className="hx-pts">+{exRest}</span></div>}
+                <div className="hx-total"><span>Tape Score</span><b className={`c-${ex.tier.toLowerCase()}`}>{ex.score} · {ex.tier}</b></div>
+              </Link>
+            </div>
           </Reveal>
         </section>
       )}
 
       <section className="wrap sect2">
-        <Reveal>
-          <div className="eyebrow mono">WEEK {s.week ?? "–"}</div>
-          <h2 className="h2">This week's tape</h2>
-        </Reveal>
-        <div className="twocol">
-          <Reveal className="listcard">
-            <div className="lch"><b>Upset watch</b><span className="muted">Favorites most likely to slip</span></div>
-            {fades.slice(0, 5).map((g) => <Mini key={g.id} g={g} right={<span className={`tiny t-${g.tier}`}>{g.tier} {g.score}</span>} />)}
-          </Reveal>
-          <Reveal className="listcard" delay={100}>
-            <div className="lch"><b>Must-watch</b><span className="muted">Close lines, big names, big buzz</span></div>
-            {watchList.slice(0, 5).map((g) => <Mini key={g.id} g={g} right={g.id === gd ? <span className="tiny gdtag">★ GAMEDAY</span> : <span className="tiny wtag">WATCH {g.watch}</span>} />)}
-          </Reveal>
-        </div>
-        <div className="center"><Link href="/board" className="btn primary">Open the full board →</Link></div>
-      </section>
-
-      <section className="wrap sect2">
-        <Reveal><div className="eyebrow mono">FEATURES</div><h2 className="h2">Everything on TapeDog</h2></Reveal>
-        <FeatureGrid />
-      </section>
-
-      <section className="wrap sect2">
-        <Reveal>
-          <div className="eyebrow mono">HOW IT WORKS</div>
-          <h2 className="h2">Three steps, every game.</h2>
-        </Reveal>
-        <div className="how3">
-          {FLOW.map(([n, t, d, tools], k) => (
-            <Reveal key={n} delay={k * 100} className="hcard">
-              <span className="hnum mono">{n}</span>
-              <h3>{t}</h3>
-              <p>{d}</p>
-              <span className="hsrc mono">{tools.length} SOURCES</span>
-            </Reveal>
-          ))}
-        </div>
-        <p className="srcline"><span className="mono">CONNECTED TO</span>{FLOW.flatMap((f) => f[3]).map((x, i, a) => <span key={x}><span className="gsrc" style={{ animationDelay: `${i * 0.45}s` }}>{x}</span>{i < a.length - 1 && <span className="gsep"> · </span>}</span>)}</p>
-        <div className="center"><Link href="/about" className="btn ghost">See everything it checks →</Link></div>
-      </section>
-
-      <section className="wrap sect2">
-        <Reveal>
-          <Link href="/dogzone" className="dzmini">
-            <div><span className="mono c-tape">DOG ZONE · COMING 2027</span><b>Alerts, a season tracker and every AI breakdown. $15/mo.</b></div>
-            <span className="btn primary">Join the list →</span>
-          </Link>
-        </Reveal>
+        <Link href="/dogzone" className="dzrow">
+          <span><b>Dog Zone</b> <span className="muted">Fade alerts, a season tracker and every AI breakdown. Coming 2027.</span></span>
+          <span className="textlink">Learn more</span>
+        </Link>
       </section>
     </main>
   );

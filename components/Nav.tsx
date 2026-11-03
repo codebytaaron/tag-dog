@@ -14,14 +14,6 @@ function Me() {
   );
 }
 
-const LINKS = [
-  { href: "/board", label: "Fade Board" },
-  { href: "/reels", label: "Reels" },
-  { href: "/replay", label: "Replay" },
-  { href: "/rankings", label: "Rankings" },
-  { href: "/about", label: "How it works" },
-];
-
 export default function Nav() {
   const path = usePathname();
   const tab = useSearchParams().get("tab");
@@ -34,15 +26,22 @@ export default function Nav() {
     return () => window.removeEventListener("scroll", f);
   }, []);
   useEffect(() => setOpen(false), [path, tab]);
-  const on = (href: string) => path === href || (href === "/board" && (path.startsWith("/game") || path.startsWith("/team")));
+
+  const scores = (path === "/board" && tab === "scores") || path === "/replay";
+  const LINKS = [
+    { href: "/board", label: "Board", on: (path === "/board" && tab !== "scores") || path.startsWith("/game") },
+    { href: "/board?tab=scores", label: "Scores", on: scores },
+    { href: "/reels", label: "Highlights", on: path === "/reels" },
+    { href: "/rankings", label: "Rankings", on: path === "/rankings" || path.startsWith("/team") },
+  ];
 
   return (
     <header className={`nav ${path === "/" ? "nav-fixed" : ""} ${path === "/" && !open && !scrolled ? "nav-float" : ""}`}>
       <div className="wrap navin">
         <Link href="/" className="brand"><Logo /> <span>TAPEDOG</span></Link>
         <nav className="links">
-          {LINKS.map((l) => <Link key={l.href} href={l.href} className={on(l.href) ? "on" : ""}>{l.label}</Link>)}
-          <Link href="/dogzone" className={`dz ${path === "/dogzone" ? "on" : ""}`}>Dog Zone <em>PLUS</em></Link>
+          {LINKS.map((l) => <Link key={l.href} href={l.href} className={l.on ? "on" : ""}>{l.label}</Link>)}
+          <Link href="/dogzone" className={`dz ${path === "/dogzone" ? "on" : ""}`}>Dog Zone</Link>
         </nav>
         <Search />
         <Me />
@@ -52,15 +51,11 @@ export default function Nav() {
       </div>
       {open && (
         <div className="mnav">
-          <Link href="/board" className={path === "/board" && !tab ? "on" : ""}>Fade Board</Link>
-          <Link href="/board?tab=scores" className={tab === "scores" ? "on" : ""}>Live scores</Link>
-          <Link href="/reels" className={path === "/reels" ? "on" : ""}>Reels</Link>
-          <Link href="/replay" className={path === "/replay" ? "on" : ""}>Replay</Link>
-          <Link href="/rankings" className={path === "/rankings" ? "on" : ""}>Rankings & odds</Link>
-          <Link href="/board?tab=saved" className={tab === "saved" ? "on" : ""}>Saved games</Link>
+          {LINKS.map((l) => <Link key={l.href} href={l.href} className={l.on ? "on" : ""}>{l.label}</Link>)}
+          <Link href="/replay" className={path === "/replay" ? "on" : ""}>Past results</Link>
+          <Link href="/board?tab=saved" className={tab === "saved" ? "on" : ""}>Saved</Link>
+          <Link href="/dogzone" className={path === "/dogzone" ? "on" : ""}>Dog Zone</Link>
           <Link href="/about" className={path === "/about" ? "on" : ""}>How it works</Link>
-          <Link href="/dogzone" className={path === "/dogzone" ? "on" : ""}>Dog Zone <em className="plus">PLUS</em></Link>
-          <Link href="/founder" className={path === "/founder" ? "on" : ""}>Founder</Link>
           <Link href="/profile" className={path === "/profile" ? "on" : ""}>Your profile</Link>
         </div>
       )}
