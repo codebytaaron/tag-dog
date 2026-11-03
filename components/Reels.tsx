@@ -138,6 +138,8 @@ export default function Reels({ initial, nextWeek, first }: { initial: Reel[]; n
           if (active.current?.key === v.dataset.k) continue;
           settle(vids);
           active.current = { i, key: v.dataset.k || "", start: Date.now() };
+          // Count it as seen the moment it starts, so a refresh brings new clips.
+          if (v.dataset.k) { const seen = load<Record<string, number>>(SEEN, {}); seen[v.dataset.k] = Date.now(); save(SEEN, seen); }
           setIdx(i); setProg(0); setPaused(false);
           v.volume = vol; v.preload = "auto";
           v.play().catch(() => setPaused(true));
