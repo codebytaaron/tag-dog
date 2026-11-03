@@ -4,7 +4,7 @@ export const metadata = { title: "Meet the team | TapeDog" };
 
 const TEAM = [
   { slug: "teddy", name: "Teddy A.", role: "Founder & CEO", line: "Built TapeDog from the ground up. Has loved college football since he was a kid.", initials: "TA" },
-  { slug: "parker", name: "Parker Tichio", role: "Head of Strategy & Growth", line: "Leads business strategy and growth. Joined TapeDog in November 2026.", initials: "PT" },
+  { slug: "parker", name: "Parker Tichio", role: "Head of Business Development", line: "Leads partnerships and business development. Joined TapeDog in November 2026.", initials: "PT" },
 ];
 
 export default function OurTeam() {

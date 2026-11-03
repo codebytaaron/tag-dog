@@ -14,9 +14,9 @@ export default function Parker() {
       <section className="fhero">
         <div className="ghostTA" aria-hidden>PT</div>
         <Link href="/our-team" className="back mono">← MEET THE TEAM</Link>
-        <div className="eyebrow mono">HEAD OF STRATEGY & GROWTH</div>
+        <div className="eyebrow mono">HEAD OF BUSINESS DEVELOPMENT</div>
         <h1 className="mega">Parker Tichio</h1>
-        <p className="lead2">Parker leads strategy and growth at TapeDog. He studies economics at Dartmouth College (Class of 2030) and is focused on finance, valuation and how businesses scale.</p>
+        <p className="lead2">Parker leads business development at TapeDog, from partnerships to growth. He studies economics at Dartmouth College (Class of 2030) and is focused on finance, valuation and how businesses scale.</p>
         <p className="lead2 muted">He joined TapeDog in November 2026.</p>
       </section>
 
