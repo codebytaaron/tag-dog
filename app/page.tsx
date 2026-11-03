@@ -4,6 +4,7 @@ import Hero from "@/components/Hero";
 import Reveal from "@/components/Reveal";
 import Kickoff from "@/components/Kickoff";
 import SinceVisit from "@/components/SinceVisit";
+import ForYou from "@/components/ForYou";
 import { getGameDayId } from "@/lib/gameday";
 import { getFutures } from "@/lib/pulse";
 
@@ -101,6 +102,7 @@ export default async function Landing() {
       )}
 
       <div className="wrap"><SinceVisit games={s.games.map(lite)} /></div>
+      <div className="wrap"><ForYou games={s.games.filter((g) => g.state !== "post").map(lite)} /></div>
 
       <section className="wrap sect2">
         <Reveal>

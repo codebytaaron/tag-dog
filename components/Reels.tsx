@@ -27,6 +27,12 @@ function learn(r: Reel, watched: number, seconds: number, liked = false) {
   save(AFF, a);
 }
 
+function signal(r: Reel, d: number) {
+  const a = load<Record<string, number>>(AFF, {});
+  for (const k of keysOf(r)) a[k] = Math.max(-4, Math.min(8, (a[k] || 0) + d));
+  save(AFF, a);
+}
+
 // Ranking: importance x randomness x your taste x novelty, hook-first, with wildcard slots for discovery.
 function order(clips: Reel[], mine: Set<string>, opening: boolean): Reel[] {
   const a = load<Record<string, number>>(AFF, {});
@@ -55,6 +61,7 @@ const Icon = {
   link: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7" /></svg>,
   save: (on: boolean) => <svg width="22" height="22" viewBox="0 0 24 24" fill={on ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2"><path d="M6 3h12v18l-6-4-6 4z" /></svg>,
   recap: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 6h16M4 12h16M4 18h10" /></svg>,
+  less: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="9" /><path d="M8 12h8" /></svg>,
 };
 
 export default function Reels({ initial, nextWeek, first }: { initial: Reel[]; nextWeek: number; first: string | null }) {
@@ -83,6 +90,7 @@ export default function Reels({ initial, nextWeek, first }: { initial: Reel[]; n
   const { ids: saved, toggle: toggleSave } = useSaved();
   const mineKey = [...ids, profile?.teamId || ""].join(",");
   const mine = () => new Set(mineKey.split(",").filter(Boolean));
+  const affSnap = useMemo(() => load<Record<string, number>>(AFF, {}), [items]); // eslint-disable-line
 
   useEffect(() => {
     let list = order(initial, mine(), true);
@@ -190,13 +198,21 @@ export default function Reels({ initial, nextWeek, first }: { initial: Reel[]; n
     setLikes(next); save(LIKES, next);
     if (!has) { learn(r, 1, 99, true); setBurst(r.key); setTimeout(() => setBurst(null), 700); }
   };
+  // "Less like this": strong negative signal, and drop the rest of that game from the queue.
+  const notInterested = (r: Reel, i: number) => {
+    signal(r, -2.5);
+    setItems((cur) => { const at = cur.indexOf(r); return cur.filter((c, k) => c.gameId !== r.gameId || k <= at); });
+    flash("Got it. Fewer clips like this.");
+    setTimeout(() => go(i + 1), 300);
+  };
   const onTap = (r: Reel) => {
     if (tapTimer.current) { clearTimeout(tapTimer.current); tapTimer.current = null; toggleLike(r, "tap"); return; }
     tapTimer.current = setTimeout(() => { tapTimer.current = null; togglePlay(); }, 260);
   };
   const link = (r: Reel) => `${location.origin}/reels?clip=${encodeURIComponent(r.key)}`;
-  const copy = async (r: Reel) => { try { await navigator.clipboard.writeText(link(r)); flash("Link copied"); } catch { flash("Couldn't copy"); } };
+  const copy = async (r: Reel) => { signal(r, 1.5); try { await navigator.clipboard.writeText(link(r)); flash("Link copied"); } catch { flash("Couldn't copy"); } };
   const share = async (r: Reel) => {
+    signal(r, 1.5);
     try { if (navigator.share) { await navigator.share({ title: r.title, url: link(r) }); return; } await navigator.clipboard.writeText(link(r)); flash("Link copied"); } catch {}
   };
 
@@ -262,7 +278,7 @@ export default function Reels({ initial, nextWeek, first }: { initial: Reel[]; n
                     <video data-i={i} data-k={r.key} src={r.mp4} poster={r.thumb} muted={muted} playsInline preload={i < 2 ? "auto" : "none"}
                       onClick={() => onTap(r)}
                       onTimeUpdate={(e) => { if (i === idx) { const v = e.currentTarget; setProg(v.duration ? v.currentTime / v.duration : 0); } }}
-                      onEnded={(e) => { if (auto && i < view.length - 1) go(i + 1); else { e.currentTarget.currentTime = 0; e.currentTarget.play().catch(() => {}); } }} />
+                      onEnded={(e) => { if (auto && i < view.length - 1) go(i + 1); else { signal(r, 0.5); e.currentTarget.currentTime = 0; e.currentTarget.play().catch(() => {}); } }} />
                     {i === idx && paused && <button className="rl-play" onClick={togglePlay} aria-label="Play"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg></button>}
                     {i === idx && muted && !paused && <button className="rl-unmute" onClick={() => setSound(true)}>Tap for sound</button>}
                     {burst === r.key && <span className="rl-heart" aria-hidden>♥</span>}
@@ -281,6 +297,7 @@ export default function Reels({ initial, nextWeek, first }: { initial: Reel[]; n
                     </div>
                     <h2>{r.title}</h2>
                     <div className="rl-sub">
+                      {(() => { const m = mine(); const t = [r.home, r.away].find((x) => m.has(x.id)) || [r.home, r.away].find((x) => (affSnap[`team:${x.id}`] || 0) >= 2); return t ? <span className="why">{m.has(t.id) ? `Because you follow ${t.short}` : `Because you watch ${t.short}`}</span> : null; })()}
                       {r.tags.map((t) => <span key={t} className={t === "Upset" ? "up" : ""}>{t}</span>)}
                       <span className="plain">Week {r.week} · {mmss(r.duration)}</span>
                       {r.url && <a href={r.url} target="_blank" rel="noopener noreferrer" className="plain">Video: ESPN ↗</a>}
@@ -297,8 +314,9 @@ export default function Reels({ initial, nextWeek, first }: { initial: Reel[]; n
                   <button className={liked ? "on like" : ""} onClick={() => toggleLike(r, "button")} aria-label={liked ? "Unlike" : "Like"}>{Icon.heart(liked)}<span>{liked ? "Liked" : "Like"}</span></button>
                   <button onClick={() => share(r)} aria-label="Share">{Icon.share}<span>Share</span></button>
                   <button onClick={() => copy(r)} aria-label="Copy link">{Icon.link}<span>Link</span></button>
-                  <button className={isSaved ? "on" : ""} onClick={() => { toggleSave(r.gameId); flash(isSaved ? "Removed from saved" : "Game saved"); }} aria-label="Save game">{Icon.save(isSaved)}<span>{isSaved ? "Saved" : "Save"}</span></button>
+                  <button className={isSaved ? "on" : ""} onClick={() => { if (!isSaved) signal(r, 1.5); toggleSave(r.gameId); flash(isSaved ? "Removed from saved" : "Game saved"); }} aria-label="Save game">{Icon.save(isSaved)}<span>{isSaved ? "Saved" : "Save"}</span></button>
                   <Link href={`/game/${r.gameId}`} aria-label="Full recap">{Icon.recap}<span>Recap</span></Link>
+                  <button onClick={() => notInterested(r, i)} aria-label="Show less like this">{Icon.less}<span>Less</span></button>
                   <button onClick={nextSpeed} aria-label="Playback speed"><b className="rl-speed">{speed}×</b><span>Speed</span></button>
                   <button className={auto ? "on" : ""} onClick={toggleAuto} aria-label="Autoplay next"><b className="rl-speed">{auto ? "On" : "Off"}</b><span>Autoplay</span></button>
                 </div>

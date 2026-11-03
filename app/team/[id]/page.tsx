@@ -7,6 +7,7 @@ import Highlights from "@/components/Highlights";
 import { getRecap } from "@/lib/recap";
 import { getFutures, getPolls, getStandings, teamNews } from "@/lib/pulse";
 import { getFPI } from "@/lib/fpi";
+import ViewTracker from "@/components/ViewTracker";
 import { FollowButton } from "@/components/SaveButton";
 import { darkJson, readable } from "@/lib/espn";
 
@@ -72,6 +73,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
 
   return (
     <main>
+      <ViewTracker id={null} teams={[id]} />
       <section className="teamhero" style={{ ["--c" as any]: color }}>
         <div className="wrap teamhead">
           <div className="tid">

@@ -1570,3 +1570,22 @@ body::after { opacity: .045; }
 .legalpg a { color: var(--tape); text-decoration: underline; text-underline-offset: 3px; }
 .erasebox { margin-top: 12px; }
 .erased { color: var(--ok); font-weight: 600; }
+/* ---------- round 26: personalization ---------- */
+.rl-sub .why { color: #8fd3ff; }
+.foryou { margin-top: 40px; display: grid; gap: 16px; }
+.fy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr)); gap: 10px; }
+.fy-card { display: grid; gap: 8px; padding: 16px; border-radius: 14px; background: var(--panel); border: 1px solid var(--line); transition: border-color .15s, transform .15s; }
+.fy-card:hover { border-color: var(--tape); transform: translateY(-2px); }
+.fy-why { font-size: 12px; font-weight: 700; color: var(--tape); }
+.fy-teams { display: flex; align-items: center; gap: 8px; } .fy-teams img { width: 26px; height: 26px; } .fy-teams b { flex: 1; font-size: 15px; }
+.fy-recent { display: flex; align-items: center; gap: 8px; overflow-x: auto; padding-bottom: 2px; }
+.fy-chip { flex: none; display: inline-flex; align-items: center; gap: 4px; padding: 6px 10px; border-radius: 999px; background: var(--panel); border: 1px solid var(--line); font-size: 13px; font-weight: 600; }
+.fy-chip img { width: 18px; height: 18px; } .fy-chip span { margin-left: 4px; }
+.fy-chip:hover { border-color: var(--tape); }
+.related { padding: 10px 0 60px; }
+.rel-row { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(220px, 1fr); gap: 10px; overflow-x: auto; padding-bottom: 6px; }
+.rel-card { display: grid; gap: 6px; padding: 14px; border-radius: 14px; background: var(--panel); border: 1px solid var(--line); transition: border-color .15s; }
+.rel-card:hover { border-color: var(--tape); }
+.rel-logos { display: flex; gap: 4px; } .rel-logos img { width: 30px; height: 30px; }
+.rel-card b { font-size: 15px; }
+.rel-up { font-size: 13px; font-weight: 700; }

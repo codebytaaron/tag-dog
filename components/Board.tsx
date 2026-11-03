@@ -6,13 +6,15 @@ import type { Live } from "@/lib/live";
 import SaveButton, { useSaved, useFollow } from "./SaveButton";
 import Kickoff from "./Kickoff";
 import { useLive } from "./useLive";
+import { interest } from "@/lib/taste";
 
 type Tab = "board" | "scores" | "saved";
-type Lens = "upset" | "watch" | "live" | "mine" | "ranked" | "steam" | "weather" | "prime" | "all";
+type Lens = "foryou" | "upset" | "watch" | "live" | "mine" | "ranked" | "steam" | "weather" | "prime" | "all";
 const NATIONAL = ["ABC", "CBS", "FOX", "NBC", "ESPN"];
 const etHour = (d: string) => (new Date(d).getUTCHours() + 20) % 24;
 
 const LENSES: { id: Lens; label: string; hint: string }[] = [
+  { id: "foryou", label: "For you", hint: "Your teams and what you watch" },
   { id: "upset", label: "Upset watch", hint: "Favorites most likely to slip" },
   { id: "watch", label: "Must-watch", hint: "Close lines, big names, big buzz" },
   { id: "live", label: "Live now", hint: "Games in progress" },
@@ -94,6 +96,7 @@ export default function Board({ games, week, season, updated, initialTab, initia
   const match = (g: LiteGame) => !q || `${g.home.name} ${g.away.name} ${g.home.abbr} ${g.away.abbr}`.toLowerCase().includes(q.toLowerCase());
   const open = useMemo(() => games.filter((g) => stateOf(g) !== "post"), [games, live]); // eslint-disable-line
   const test: Record<Lens, (g: LiteGame) => boolean> = {
+    foryou: () => true,
     all: () => true,
     upset: (g) => g.tier !== "HOLD",
     watch: () => true,
@@ -107,8 +110,11 @@ export default function Board({ games, week, season, updated, initialTab, initia
   const base = (l: Lens) => (l === "live" || l === "mine" ? games : open).filter(test[l]);
   const counts = useMemo(() => Object.fromEntries(LENSES.map((l) => [l.id, base(l.id).length])) as Record<Lens, number>, [games, live, mine]); // eslint-disable-line
   const byWatch = lens === "watch" || lens === "prime";
+  // Personal score: teams you follow, teams you keep opening or watching, then watchability.
+  const personal = (g: LiteGame) => (mine.includes(g.home.id) || mine.includes(g.away.id) ? 6 : 0) + interest([g.home.id, g.away.id]) + g.watch / 40;
   const list = useMemo(() => [...base(lens).filter(match)].sort((a, b) =>
-    sort === "watch" ? (b.id === gameday ? 1 : 0) - (a.id === gameday ? 1 : 0) || b.watch - a.watch
+    lens === "foryou" ? personal(b) - personal(a) || b.watch - a.watch
+    : sort === "watch" ? (b.id === gameday ? 1 : 0) - (a.id === gameday ? 1 : 0) || b.watch - a.watch
     : sort === "time" ? Date.parse(a.date) - Date.parse(b.date)
     : sort === "close" ? (a.spread ?? 99) - (b.spread ?? 99)
     : b.score - a.score), [games, live, mine, lens, q, sort, gameday]); // eslint-disable-line
