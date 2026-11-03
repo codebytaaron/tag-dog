@@ -112,7 +112,7 @@ export default async function Landing() {
         <div className="twocol">
           <Reveal className="listcard">
             <div className="lch"><b>Upset watch</b><span className="muted">Favorites most likely to slip</span></div>
-            {fades.slice(0, 5).map((g) => <Mini key={g.id} g={g} right={<span className="pctag">{g.upsetPct}%</span>} />)}
+            {[...pool].sort((a, b) => b.upsetPct - a.upsetPct).slice(0, 5).map((g) => <Mini key={g.id} g={g} right={<span className="pctag">{g.upsetPct}%</span>} />)}
           </Reveal>
           <Reveal className="listcard" delay={100}>
             <div className="lch"><b>Must-watch</b><span className="muted">Close lines and big names</span></div>
