@@ -75,9 +75,9 @@ export default function Reels({ initial, nextWeek, first }: { initial: Reel[]; n
     let list = order(initial, mine(), true);
     if (first) { const c = list.find((x) => x.key === first); if (c) list = [c, ...list.filter((x) => x !== c)]; }
     setItems(list);
-    setMuted(load("tapedog.reelsound", "off") !== "on");
-    setVol(load("tapedog.reelvol", 0.8));
-    setLikes(load(LIKES, []));
+    setMuted(load<string>("tapedog.reelsound", "off") !== "on");
+    setVol(load<number>("tapedog.reelvol", 0.8));
+    setLikes(load<string[]>(LIKES, []));
     const d = load<{ day: string; n: number }>(DAY, { day: "", n: 0 });
     setToday(d.day === new Date().toDateString() ? d.n : 0);
     // Forget clips seen more than a week ago.
