@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import type { Live } from "@/lib/live";
+import { fetchLiveDirect } from "@/lib/liveParse";
 
 // Polls live scores every 20s while the tab is visible.
 export function useLive(initial?: Record<string, Live>) {
@@ -9,8 +10,8 @@ export function useLive(initial?: Record<string, Live>) {
     const load = async () => {
       if (document.hidden) return;
       try {
-        const r = await fetch("/api/live", { cache: "no-store" });
-        if (r.ok) setLive(await r.json());
+        const m = await fetchLiveDirect();
+        if (m) setLive(m);
       } catch {}
     };
     const t = setInterval(load, 20000);

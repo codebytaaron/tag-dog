@@ -38,9 +38,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <div className="wrap footin">
             <div className="fbrand"><Logo size={22} /><b>TAPEDOG</b><span className="muted">Finds the college football favorites worth fading.</span></div>
             <nav className="flinks">
-              <Link href="/board">Board</Link><Link href="/board?tab=scores">Scores</Link><Link href="/replay">Past results</Link><Link href="/reels">Reels</Link><Link href="/tracker">Tracker</Link><Link href="/rankings">Rankings</Link><Link href="/about">How it works</Link><Link href="/dogzone">Dog Zone</Link><Link href="/profile">Profile</Link>
+              <Link href="/board">Board</Link><Link href="/board?tab=scores">Scores</Link><Link href="/replay">Past results</Link><Link href="/reels">Reels</Link><Link href="/tracker">Tracker</Link><Link href="/rankings">Rankings</Link><Link href="/about">How it works</Link><Link href="/dogzone">Dog Zone</Link><Link href="/profile">Profile</Link><Link href="/our-team">Our team</Link>
             </nav>
-            <Link href="/founder" className="builtby">Built by <b>Teddy A.</b> <span>→</span></Link>
+            <Link href="/our-team" className="builtby">Meet the <b>team</b> <span>→</span></Link>
           </div>
           <div className="wrap fnote">
             <p>For entertainment and information only. Not betting advice. TapeDog is not affiliated with ESPN, the NCAA, any school or conference, any sportsbook, or Kalshi. Team names and logos belong to their owners and are used only to identify teams. Highlights are ESPN's and play from ESPN.</p>

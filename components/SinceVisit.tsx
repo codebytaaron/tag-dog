@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { LiteGame } from "@/lib/data";
 import type { Live } from "@/lib/live";
+import { fetchLiveDirect } from "@/lib/liveParse";
 import { useFollow, usePicks, useProfile } from "./SaveButton";
 
 const KEY = "tapedog.lastVisit";
@@ -19,7 +20,7 @@ export default function SinceVisit({ games }: { games: LiteGame[] }) {
     let prev: number | null = null;
     try { prev = Number(localStorage.getItem(KEY)) || null; localStorage.setItem(KEY, String(Date.now())); } catch {}
     setLast(prev);
-    fetch("/api/live").then((r) => r.json()).then(setLive).catch(() => {});
+    fetchLiveDirect().then((m) => { if (m) setLive(m); });
   }, []);
 
   if (!last || !Object.keys(live).length) return null;

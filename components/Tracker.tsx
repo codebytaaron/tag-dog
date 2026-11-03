@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { LiteGame } from "@/lib/data";
 import type { Live } from "@/lib/live";
+import { fetchLiveDirect } from "@/lib/liveParse";
 import { useFollow, useProfile } from "./SaveButton";
 import Kickoff from "./Kickoff";
 
@@ -20,6 +21,7 @@ export default function Tracker({ games, initial }: { games: LiteGame[]; initial
   const [now, setNow] = useState(Date.now());
   const [tick, setTick] = useState(0);
   const [awake, setAwake] = useState(false);
+  const [lastOk, setLastOk] = useState(Date.now());
   const [flash, setFlash] = useState<Record<string, { side: "home" | "away"; pts: number; until: number }>>({});
   const snaps = useRef<Snap[]>([{ t: Date.now(), m: initial }]);
   const seen = useRef<Record<string, [number, number]>>({});
@@ -41,16 +43,19 @@ export default function Tracker({ games, initial }: { games: LiteGame[]; initial
   useEffect(() => {
     const load = async () => {
       try {
-        const r = await fetch("/api/live", { cache: "no-store" });
-        if (!r.ok) return;
-        snaps.current.push({ t: Date.now(), m: await r.json() });
+        const m = await fetchLiveDirect();
+        if (!m) return; // keep showing the last good scores
+        setLastOk(Date.now());
+        snaps.current.push({ t: Date.now(), m });
         snaps.current = snaps.current.filter((s) => Date.now() - s.t < 6 * 60000);
         setTick((x) => x + 1);
       } catch {}
     };
-    const p = setInterval(load, 10000), c = setInterval(() => setNow(Date.now()), 1000);
-    load();
-    return () => { clearInterval(p); clearInterval(c); };
+    // Small random offset so thousands of open trackers do not all ask at the same instant.
+    let p: any;
+    const start = setTimeout(() => { load(); p = setInterval(load, 10000); }, Math.random() * 3000);
+    const c = setInterval(() => setNow(Date.now()), 1000);
+    return () => { clearTimeout(start); clearInterval(p); clearInterval(c); };
   }, []);
 
   const shown = useMemo(() => {
@@ -102,7 +107,9 @@ export default function Tracker({ games, initial }: { games: LiteGame[]; initial
           <p className="muted">Pick your games and keep this open next to the TV. Scores update by themselves.</p>
         </div>
         <div className="tv-ctl">
-          <span className="tv-upd"><i />{delay ? `Showing scores from ${delay}s ago` : `Updated ${ago < 3 ? "now" : `${ago}s ago`}`}</span>
+          {now - lastOk > 45000
+            ? <span className="tv-upd bad"><i />Reconnecting… showing last scores</span>
+            : <span className="tv-upd"><i />{delay ? `Showing scores from ${delay}s ago` : `Updated ${ago < 3 ? "now" : `${ago}s ago`}`}</span>}
           <label className="sortsel">Delay
             <select value={delay} onChange={(e) => setDelay(Number(e.target.value))}>
               <option value={0}>Off</option><option value={15}>15 sec</option><option value={30}>30 sec</option><option value={60}>1 min</option><option value={120}>2 min</option>

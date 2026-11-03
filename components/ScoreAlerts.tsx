@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import type { Live } from "@/lib/live";
+import { fetchLiveDirect } from "@/lib/liveParse";
 
 // Watches live scores; when a game with a Top 25 team scores, shakes the page and pops a mini scoreboard.
 type Toast = { key: string; id: string; lv: Live; side: "home" | "away"; pts: number };
@@ -26,9 +27,8 @@ export default function ScoreAlerts() {
     const load = async () => {
       if (document.hidden && !(first && demo)) return;
       try {
-        const r = await fetch("/api/live", { cache: "no-store" });
-        if (!r.ok) return;
-        const m: Record<string, Live> = await r.json();
+        const m = await fetchLiveDirect();
+        if (!m) return;
         const fresh: Toast[] = [];
         for (const [id, lv] of Object.entries(m)) {
           if (lv.state === "pre" || lv.home == null || lv.away == null) continue;

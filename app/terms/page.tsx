@@ -12,7 +12,7 @@ export default function Terms() {
       <h2>AI breakdowns</h2>
       <p>AI breakdowns are generated automatically from the data shown on each game page and can contain mistakes. Treat them as commentary, not fact.</p>
       <h2>Third-party content</h2>
-      <p>Team names, logos and highlight videos belong to their owners and are used to identify teams and point to the original source. Posts shown in The Buzz belong to their authors and link back to them. TapeDog is not affiliated with ESPN, the NCAA, any school, conference, sportsbook, Kalshi, Bluesky or Google. If you own content shown here and want it removed, contact us through the founder page and we will act promptly.</p>
+      <p>Team names, logos and highlight videos belong to their owners and are used to identify teams and point to the original source. Posts shown in The Buzz belong to their authors and link back to them. TapeDog is not affiliated with ESPN, the NCAA, any school, conference, sportsbook, Kalshi, Bluesky or Google. If you own content shown here and want it removed, contact us through the team page and we will act promptly.</p>
       <h2>Your picks and profile</h2>
       <p>Profiles, picks, saved games and followed teams are stored only in your browser. Clearing your browser data removes them. Picks are for fun and have no cash value.</p>
       <h2>No warranty</h2>
