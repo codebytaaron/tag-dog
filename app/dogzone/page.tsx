@@ -33,7 +33,7 @@ export default function DogZone() {
         <div className="perks2">
           {PERKS.map(([t, d], k) => (
             <div key={t} className="perk2" style={{ animationDelay: `${k * 0.08}s` }}>
-              <span className="mono num">{String(k + 1).padStart(2, "0")}</span>
+              
               <div><b>{t}</b><p>{d}</p></div>
             </div>
           ))}

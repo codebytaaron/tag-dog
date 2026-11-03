@@ -1202,3 +1202,8 @@ body::after { opacity: .045; }
 .ainote { margin: 12px 0 0; font-size: 10px; letter-spacing: .1em; }
 /* feature tiles without numbering */
 .ftile { min-height: 0; padding-right: 40px; }
+
+.price .wl { width: 100%; }
+.price .wl .btn { width: 100%; justify-content: center; }
+.wlnote { text-align: left; }
+.perk2 { padding: 18px 20px; }
