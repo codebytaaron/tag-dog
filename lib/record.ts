@@ -30,6 +30,21 @@ async function poll(year: number, w: number) {
 }
 const lines = (date: string, rv: number) =>
   j(`https://api.actionnetwork.com/web/v1/scoreboard/ncaaf?period=game&division=FBS&bookIds=15,30&date=${date}`, rv, UA).then((d) => d.games || []).catch(() => []);
+// ESPN keeps the closing and opening line for finished games (Action Network only serves the current week).
+async function espnOdds(id: string, rv: number) {
+  try {
+    const d = await j(`https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/${id}/competitions/${id}/odds`, rv);
+    const o = (d.items || [])[0];
+    if (!o) return null;
+    const h = o.homeTeamOdds || {};
+    const spread = typeof o.spread === "number" ? o.spread : null;
+    const openRaw = parseFloat(h.open?.pointSpread?.american ?? "");
+    return {
+      spread_home: spread, ml_home: h.moneyLine ?? null, ml_away: o.awayTeamOdds?.moneyLine ?? null,
+      open_home: Number.isFinite(openRaw) ? openRaw : null,
+    };
+  } catch { return null; }
+}
 const etDate = (iso: string) => new Date(Date.parse(iso) - 5 * 3600000).toISOString().slice(0, 10).replace(/-/g, "");
 const team = (c: any): RT => ({ id: c.team?.id, name: c.team?.displayName || "", short: c.team?.shortDisplayName || "", abbr: c.team?.abbreviation || "", logo: c.team?.logo || "" });
 
@@ -51,14 +66,23 @@ async function gradeWeek(year: number, w: number, live: boolean): Promise<Call[]
   // An empty week means ESPN didn't answer. Throw so the empty result is never cached.
   if (!finals.length) { if (live) return []; throw new Error(`week ${w}: no finals`); }
   const an = (await Promise.all([...new Set(finals.map((e: any) => etDate(e.date)))].map((d) => lines(d as string, rv)))).flat();
-  if (!an.length) throw new Error(`week ${w}: no lines`);
+  // Lines for past weeks come from ESPN, eight games at a time.
+  const espn = new Map<string, Awaited<ReturnType<typeof espnOdds>>>();
+  for (let i = 0; i < finals.length; i += 8) {
+    const part = finals.slice(i, i + 8);
+    const got = await Promise.all(part.map((e: any) => espnOdds(e.id, rv)));
+    part.forEach((e: any, k: number) => espn.set(e.id, got[k]));
+  }
+  if (!an.length && ![...espn.values()].some(Boolean)) throw new Error(`week ${w}: no lines`);
   const hit = (t: any, x: any) => !!t && (norm(t.full_name) === norm(x.team?.displayName) || norm(t.location) === norm(x.team?.location) || t.abbr === x.team?.abbreviation);
   const out: Call[] = [];
   for (const e of finals) {
     const cs = e.competitions[0].competitors;
     const h = cs.find((x: any) => x.homeAway === "home"), a = cs.find((x: any) => x.homeAway === "away");
     const g = an.find((x: any) => hit(x.teams?.find((t: any) => t.id === x.home_team_id), h) && hit(x.teams?.find((t: any) => t.id === x.away_team_id), a));
-    const cons = g?.odds?.find((o: any) => o.book_id === 15), open = g?.odds?.find((o: any) => o.book_id === 30);
+    const eo = espn.get(e.id);
+    const cons = g?.odds?.find((o: any) => o.book_id === 15) ?? (eo ? { spread_home: eo.spread_home, ml_home: eo.ml_home, ml_away: eo.ml_away } : undefined);
+    const open = g?.odds?.find((o: any) => o.book_id === 30) ?? (eo?.open_home != null ? { spread_home: eo.open_home } : undefined);
     const consH: number | null = cons?.spread_home ?? null;
     if (consH == null && cons?.ml_home == null) continue;
     const favHome = consH != null && consH !== 0 ? consH < 0 : (cons.ml_home ?? 0) <= (cons.ml_away ?? 0);
@@ -103,9 +127,9 @@ async function build() {
   const all = Array.from({ length: week }, (_, i) => i + 1);
   for (let i = 0; i < all.length; i += 3) {
     weeks.push(...await Promise.all(all.slice(i, i + 3).map((w) =>
-      unstable_cache(() => gradeWeek(year, w, w >= week - 1), ["tapedog-record-week-v2", String(year), String(w)], { revalidate: w >= week - 1 ? 1800 : 604800 })()
+      unstable_cache(() => gradeWeek(year, w, w >= week - 1), ["tapedog-record-week-v3", String(year), String(w)], { revalidate: w >= week - 1 ? 1800 : 604800 })()
         .catch(() => [] as Call[]))));
   }
   return { year, week, calls: weeks.flat() };
 }
-export const getRecord = unstable_cache(build, ["tapedog-record-v2"], { revalidate: 1800 });
+export const getRecord = unstable_cache(build, ["tapedog-record-v3"], { revalidate: 1800 });
