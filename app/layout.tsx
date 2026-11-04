@@ -5,6 +5,7 @@ import Nav from "@/components/Nav";
 import Link from "next/link";
 import Logo from "@/components/Logo";
 import ScoreAlerts from "@/components/ScoreAlerts";
+import AppBanner from "@/components/AppBanner";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Anton, Inter_Tight, JetBrains_Mono } from "next/font/google";
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body>
         <Suspense fallback={<div className="nav" style={{ height: 64 }} />}><Nav /></Suspense>
+        <AppBanner />
         <ScoreAlerts />
         {children}
         <footer className="foot">
@@ -45,7 +47,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             </div>
             <div className="fcol"><b>Games</b><Link href="/board">Fade Board</Link><Link href="/board?tab=scores">Live scores</Link><Link href="/tracker">Score Tracker</Link><Link href="/reels">Reels</Link></div>
             <div className="fcol"><b>Season</b><Link href="/rankings">Rankings & odds</Link><Link href="/playoff">Playoff bracket</Link><Link href="/record">Track record</Link><Link href="/replay">Past results</Link></div>
-            <div className="fcol"><b>TapeDog</b><Link href="/about">How it works</Link><Link href="/our-team">Our team</Link><Link href="/dogzone">Dog Zone</Link><Link href="/profile">Your profile</Link></div>
+            <div className="fcol"><b>TapeDog</b><Link href="/about">How it works</Link><Link href="/our-team">Our team</Link><Link href="/app">iPhone app</Link><Link href="/dogzone">Dog Zone</Link><Link href="/profile">Your profile</Link></div>
           </div>
           <div className="wrap fnote">
             <p>For entertainment and information only. Not betting advice. Not affiliated with ESPN, the NCAA, any school, conference, sportsbook or Kalshi. Team names and logos belong to their owners. Highlights play from ESPN.</p>
