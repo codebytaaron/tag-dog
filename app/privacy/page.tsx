@@ -40,6 +40,11 @@ export default function Privacy() {
       <h2>AI breakdowns</h2>
       <p>When an AI breakdown is generated, game data (never anything about you) is sent to Google's Gemini API to write it.</p>
 
+      <h2>The TapeDog iPhone app</h2>
+      <p>The app works like the site: no account, no email, no password. Your profile (a name and color you choose), the teams you follow and hate-follow, your picks, saved games, badges and settings are stored only on your phone. Uninstalling the app or tapping "Sign out and erase data" deletes them.</p>
+      <p>The app talks directly to the same public sources as the site (ESPN, Kalshi through tapedog.vercel.app, Google News and Bluesky) to load scores, odds, news and clips. Those requests don't include anything about you.</p>
+      <p><b>Notifications</b> are scheduled and sent by your phone, only if you turn them on. <b>Live Activities</b> (Lock Screen, Dynamic Island, CarPlay and Apple Watch scoreboards) run on your device. <b>The Tape Room</b> daily brief is written on your phone by Apple Intelligence when it's available; nothing is sent to us or to an AI company. The app has no ads, no tracking and no third-party analytics, so its App Store privacy label is "Data Not Collected." Invite codes are made on your phone and only shared when you choose to send one.</p>
+
       <h2>Your rights</h2>
       <p>Because we don't hold personal information on our servers, there is nothing for us to access, correct or delete about you: your data lives in your browser and the button above erases it. We do not sell or share personal information, as defined by California and other state privacy laws. Questions or requests: {contact}.</p>
 

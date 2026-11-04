@@ -44,6 +44,7 @@ export default function Nav() {
         <nav className="links">
           {LINKS.map((l) => <Link key={l.href} href={l.href} className={l.on ? "on" : ""}>{l.label}</Link>)}
           <Link href="/dogzone" className={`dz ${path === "/dogzone" ? "on" : ""}`}>Dog Zone</Link>
+          <Link href="/app" className={`navapp ${path === "/app" ? "on" : ""}`}>Get the app</Link>
         </nav>
         <ThemeToggle />
         <Search />
@@ -54,6 +55,7 @@ export default function Nav() {
       </div>
       {open && (
         <div className="mnav">
+          <Link href="/app" className="mapp">TapeDog for iPhone <em>New</em></Link>
           <span className="mgroup">Games</span>
           {LINKS.map((l) => <Link key={l.href} href={l.href} className={l.on ? "on" : ""}>{l.label}</Link>)}
           <span className="mgroup">Season</span>

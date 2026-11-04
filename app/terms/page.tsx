@@ -35,6 +35,9 @@ export default function Terms() {
       <h2>Your data and picks</h2>
       <p>Profiles, picks, saved games, followed teams and Reels history are stored only in your browser. Clearing your browser data, or using the erase button on the Privacy page, removes them. Picks are for fun and have no cash value.</p>
 
+      <h2>The iPhone app</h2>
+      <p>These terms cover the TapeDog iPhone app too. The app is free, is for entertainment and information only, and is rated 17+ because it shows betting lines and prediction-market prices. Picks, streaks and badges are just for fun: there is no money, prize or wager involved, and nothing in the app can be used to place a bet. Alerts and Lock Screen scores can be delayed or wrong; don't rely on them for anything important. Your use of the app is also subject to Apple's App Store terms.</p>
+
       <h2>Acceptable use</h2>
       <p>Don't overload, scrape at scale, attack or try to break the site, or use it for anything unlawful.</p>
 

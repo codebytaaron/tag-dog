@@ -7,6 +7,9 @@ import SinceVisit from "@/components/SinceVisit";
 import ForYou from "@/components/ForYou";
 import { getGameDayId } from "@/lib/gameday";
 import { getFutures } from "@/lib/pulse";
+import { getEdge } from "@/lib/edge";
+import EdgeStat from "@/components/EdgeStat";
+import AppNotify from "@/components/AppNotify";
 
 export const revalidate = 900;
 export const maxDuration = 60;
@@ -77,6 +80,7 @@ export default async function Landing() {
   const spot = gdGame || watch[0];
   const fut = await getFutures().catch(() => null);
   const race = (fut?.title?.markets || []).slice(0, 6);
+  const edge = await getEdge();
 
   // Worked example for "How the Tape Score works": this week's top fade.
   const ex = fades[0];
@@ -94,6 +98,24 @@ export default async function Landing() {
           ))}
         </div>
       </div>
+
+      {edge && <section className="wrap sect2"><Reveal><EdgeStat e={edge} /></Reveal></section>}
+
+      <section className="wrap sect2">
+        <Reveal>
+          <div className="apptease">
+            <div className="at-copy">
+              <div className="eyebrow mono">NEW · TAPEDOG FOR IPHONE</div>
+              <h2 className="h2">Upsets, live on your Lock Screen.</h2>
+              <p className="muted">Instant alerts when a ranked favorite is in trouble, your game in the Dynamic Island, and a 60-second brief every morning.</p>
+              <div className="ap-ctas"><AppNotify /><Link href="/app" className="textlink">See the app</Link></div>
+            </div>
+            <div className="at-phones" aria-hidden>
+              <img src="/app/home.jpg" alt="" /><img src="/app/board.jpg" alt="" />
+            </div>
+          </div>
+        </Reveal>
+      </section>
 
       {spot && (
         <section className="wrap sect2">
