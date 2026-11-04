@@ -4,9 +4,9 @@ import RootsFor from "@/components/RootsFor";
 export const metadata = { title: "Meet the team | TapeDog" };
 
 const TEAM = [
-  { slug: "teddy", name: "Teddy Aaron", role: "Founder & CEO", initials: "TA", note: "Building TapeDog since 2026", teams: ["251", "87", "349"],
+  { slug: "teddy", name: "Teddy A.", role: "Founder & CEO", initials: "TA", note: "Building TapeDog since 2026", teams: ["251", "87", "349"],
     bio: "Builder and lifelong college football fan. Has built products used by thousands of people while still in high school." },
-  { slug: "parker", name: "Parker Tichio", role: "Head of Business Development", initials: "PT", note: "Dartmouth College ’30", teams: ["201"],
+  { slug: "parker", name: "Parker T.", role: "Head of Business Development", initials: "PT", note: "Dartmouth College ’30", teams: ["201"],
     bio: "Leads partnerships and business development. Joined TapeDog in November 2026." },
 ];
 

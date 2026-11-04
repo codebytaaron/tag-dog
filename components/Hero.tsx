@@ -66,7 +66,7 @@ export default function Hero({ games, count, week }: { games: Fly[]; count: numb
             {WORDS[i].split("").map((ch, k) => <span key={k} className="ch" style={{ animationDelay: `${k * 26}ms` }}>{ch === " " ? " " : ch}</span>)}
           </span>
         </h1>
-        <p className="lede">Upset odds for every college football game, plus live scores, highlights and rankings.</p>
+        <p className="lede">See which college football favorites are most likely to lose this week, and follow every game with live scores, highlights and rankings.</p>
         <div className="ctas">
           <Link href="/board" className="btn primary">Open the Fade Board <span>→</span></Link>
           <Link href="/about" className="btn ghost">How it works</Link>

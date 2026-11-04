@@ -54,14 +54,17 @@ export default function Nav() {
       </div>
       {open && (
         <div className="mnav">
+          <span className="mgroup">Games</span>
           {LINKS.map((l) => <Link key={l.href} href={l.href} className={l.on ? "on" : ""}>{l.label}</Link>)}
-          <Link href="/replay" className={path === "/replay" ? "on" : ""}>Past results</Link>
+          <span className="mgroup">Season</span>
           <Link href="/playoff" className={path === "/playoff" ? "on" : ""}>Playoff bracket</Link>
           <Link href="/record" className={path === "/record" ? "on" : ""}>Track record</Link>
+          <Link href="/replay" className={path === "/replay" ? "on" : ""}>Past results</Link>
+          <span className="mgroup">You</span>
           <Link href="/board?tab=saved" className={tab === "saved" ? "on" : ""}>Saved</Link>
+          <Link href="/profile" className={path === "/profile" ? "on" : ""}>Your profile</Link>
           <Link href="/dogzone" className={path === "/dogzone" ? "on" : ""}>Dog Zone</Link>
           <Link href="/about" className={path === "/about" ? "on" : ""}>How it works</Link>
-          <Link href="/profile" className={path === "/profile" ? "on" : ""}>Your profile</Link>
         </div>
       )}
     </header>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import RootsFor from "@/components/RootsFor";
 
-export const metadata = { title: "Teddy Aaron | TapeDog" };
+export const metadata = { title: "Teddy A. | TapeDog" };
 
 const logo = (id: string) => `https://a.espncdn.com/i/teamlogos/ncaa/500-dark/${id}.png`;
 
@@ -20,7 +20,7 @@ export default function Founder() {
         <div className="ghostTA" aria-hidden>TA</div>
         <Link href="/our-team" className="back mono">← MEET THE TEAM</Link>
         <div className="eyebrow mono">FOUNDER & CEO</div>
-        <h1 className="mega">Teddy Aaron</h1>
+        <h1 className="mega">Teddy A.</h1>
         <p className="lead2">Builder and lifelong college football fan who has built products used by thousands of people while still in high school. I've loved college football since I was a little kid. I've always cared more about the spot than the matchup: who's looking ahead, who just got punched in the mouth, who's traveling across the country for a noon kick.</p>
         <p className="lead2 muted">So I built TapeDog: the tool I wanted every Saturday.</p>
         <RootsFor ids={["251", "87", "349"]} />

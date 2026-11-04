@@ -1713,3 +1713,15 @@ a.pbt-row:hover { background: var(--panel2); }
   .rec-call { grid-template-columns: auto 1fr auto; } .rec-wkk, .rec-score { display: none; }
   .pbt-row { grid-template-columns: minmax(120px, 1.4fr) repeat(3, 1fr); } .pbt-row > :nth-child(3), .pbt-row > :nth-child(4) { display: none; }
 }
+/* ---------- footer and menu cleanup ---------- */
+.fcols { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 28px; }
+.fbrand2 { display: grid; gap: 10px; align-content: start; }
+.fb-logo { display: inline-flex; align-items: center; gap: 10px; font-family: var(--display); font-size: 20px; letter-spacing: .06em; }
+.fbrand2 p { margin: 0; font-size: 14px; line-height: 1.5; max-width: 300px; }
+.fcol { display: grid; gap: 8px; align-content: start; font-size: 14px; }
+.fcol b { font-size: 12px; color: var(--ink); letter-spacing: .04em; margin-bottom: 2px; }
+.fcol a { color: var(--muted); } .fcol a:hover { color: var(--ink); }
+.foot .fnote { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--line); }
+.mgroup { font-size: 11px; font-weight: 700; letter-spacing: .12em; color: var(--dim); text-transform: uppercase; padding: 14px 4px 2px; }
+.mnav a { padding: 11px 4px; font-size: 16px; }
+@media (max-width: 800px) { .fcols { grid-template-columns: 1fr 1fr; } .fbrand2 { grid-column: 1 / -1; } }

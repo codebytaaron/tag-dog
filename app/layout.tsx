@@ -17,7 +17,7 @@ const mono = JetBrains_Mono({ weight: ["400", "600"], subsets: ["latin"], variab
 export const metadata = {
   metadataBase: new URL("https://tapedog.vercel.app"),
   title: { default: "TapeDog | Find the favorites worth fading", template: "%s" },
-  description: "Upset odds for every FBS college football game, built from six sportsbooks, prediction markets, schedule spots and weather. Plus live scores, highlights, polls and playoff odds.",
+  description: "See which college football favorites are most likely to lose this week, with live scores, highlights, rankings and playoff odds.",
   openGraph: {
     title: "TapeDog | Find the favorites worth fading",
     description: "Upset odds, live scores, highlights and playoff odds for every FBS game.",
@@ -38,16 +38,18 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ScoreAlerts />
         {children}
         <footer className="foot">
-          <div className="wrap footin">
-            <div className="fbrand"><Logo size={22} /><b>TAPEDOG</b><span className="muted">Finds the college football favorites worth fading.</span></div>
-            <nav className="flinks">
-              <Link href="/board">Board</Link><Link href="/board?tab=scores">Scores</Link><Link href="/replay">Past results</Link><Link href="/reels">Reels</Link><Link href="/tracker">Tracker</Link><Link href="/rankings">Rankings</Link><Link href="/playoff">Playoff</Link><Link href="/record">Track record</Link><Link href="/about">How it works</Link><Link href="/dogzone">Dog Zone</Link><Link href="/profile">Profile</Link><Link href="/our-team">Our team</Link>
-            </nav>
-            <Link href="/our-team" className="builtby">Meet the <b>team</b> <span>→</span></Link>
+          <div className="wrap fcols">
+            <div className="fbrand2">
+              <span className="fb-logo"><Logo size={24} /><b>TAPEDOG</b></span>
+              <p className="muted">See which college football favorites are most likely to lose, and follow every game live.</p>
+            </div>
+            <div className="fcol"><b>Games</b><Link href="/board">Fade Board</Link><Link href="/board?tab=scores">Live scores</Link><Link href="/tracker">Score Tracker</Link><Link href="/reels">Reels</Link></div>
+            <div className="fcol"><b>Season</b><Link href="/rankings">Rankings & odds</Link><Link href="/playoff">Playoff bracket</Link><Link href="/record">Track record</Link><Link href="/replay">Past results</Link></div>
+            <div className="fcol"><b>TapeDog</b><Link href="/about">How it works</Link><Link href="/our-team">Our team</Link><Link href="/dogzone">Dog Zone</Link><Link href="/profile">Your profile</Link></div>
           </div>
           <div className="wrap fnote">
-            <p>For entertainment and information only. Not betting advice. TapeDog is not affiliated with ESPN, the NCAA, any school or conference, any sportsbook, or Kalshi. Team names and logos belong to their owners and are used only to identify teams. Highlights are ESPN's and play from ESPN.</p>
-            <p>21+ where sports betting is legal. Sportsbooks and prediction markets are not available in every state. If you or someone you know has a gambling problem, call 1-800-GAMBLER.</p>
+            <p>For entertainment and information only. Not betting advice. Not affiliated with ESPN, the NCAA, any school, conference, sportsbook or Kalshi. Team names and logos belong to their owners. Highlights play from ESPN.</p>
+            <p>21+ where sports betting is legal, and not available in every state. Gambling problem? Call 1-800-GAMBLER.</p>
             <p className="legal"><Link href="/terms">Terms</Link> · <Link href="/privacy">Privacy</Link> · © {new Date().getFullYear()} TapeDog</p>
           </div>
         </footer>
