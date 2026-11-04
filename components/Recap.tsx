@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Recap as R } from "@/lib/recap";
 import Highlights from "./Highlights";
+import PlayByPlay from "./PlayByPlay";
 import Kickoff from "./Kickoff";
 import Countdown from "./Countdown";
 
@@ -187,7 +188,7 @@ export function StandaloneGame({ r }: { r: R }) {
               ))}
             </div>
           </section>
-        ) : <Recap r={r} />}
+        ) : <><Recap r={r} /><PlayByPlay id={r.id} live={r.state === "in"} /><p className="h2hlink"><Link href={`/rivalry/${r.away.id}/${r.home.id}`} className="textlink">{r.away.short} vs {r.home.short}: head-to-head history</Link></p></>}
       </div>
     </main>
   );

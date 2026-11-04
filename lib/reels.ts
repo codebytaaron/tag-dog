@@ -2,6 +2,7 @@
 // one-score finishes, overtime) and its best clips are picked (full-game highlights first; studio
 // talk, interviews and previews are skipped). Ordering, variety and personalization happen on the client.
 import { darkJson } from "./espn";
+import { getSocialReels } from "./socialreels";
 import { getRanks } from "./ranks";
 
 let RANKS: Record<string, number> = {};
@@ -11,6 +12,7 @@ export type ReelTeam = { id: string; abbr: string; short: string; logo: string; 
 export type Reel = {
   key: string; gameId: string; title: string; url: string; mp4: string; thumb: string; duration: number;
   away: ReelTeam; home: ReelTeam; week: number; tags: string[]; score: number;
+  source?: "espn" | "bluesky"; handle?: string;
 };
 
 const TALK = /\?|what's next|reacts?|explains?|breaks? down|discuss|press conference|interview|podcast|preview|analysis|debate|takeaways|predict/i;
@@ -72,5 +74,6 @@ export async function getReelsForWeek(week: number | null): Promise<{ week: numb
 export async function getReels() {
   const cur = await getReelsForWeek(null);
   const prev = cur.week > 1 ? await getReelsForWeek(cur.week - 1) : { week: 0, clips: [] as Reel[] };
-  return { week: cur.week, clips: [...cur.clips, ...prev.clips.map((c) => ({ ...c, score: c.score * 0.6 }))] };
+  const social = await getSocialReels(cur.week);
+  return { week: cur.week, clips: [...cur.clips, ...prev.clips.map((c) => ({ ...c, score: c.score * 0.6 })), ...social] };
 }

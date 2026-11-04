@@ -18,6 +18,7 @@ import BuzzPanel from "@/components/BuzzPanel";
 import PickBar from "@/components/PickBar";
 import LiveOdds from "@/components/LiveOdds";
 import GameTabs from "@/components/GameTabs";
+import PlayByPlay from "@/components/PlayByPlay";
 import Recap, { StandaloneGame } from "@/components/Recap";
 
 export const revalidate = 300;
@@ -108,6 +109,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
 
   const tabs = [
     ...(started ? [{ id: "recap", label: recap!.state === "post" ? "Recap" : "Live", node: <Recap r={recap!} /> }] : []),
+    ...(started ? [{ id: "plays", label: "Play-by-play", node: <PlayByPlay id={g.id} live={recap!.state === "in"} /> }] : []),
     { id: "overview", label: "Overview", node: overview },
     { id: "odds", label: "Odds", node: (
       <LiveOdds id={g.id} fav={g.favorite} fpi={g.fpi} fallbackBookFav={g.bookFavProb}
@@ -138,6 +140,7 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
             {g.network && <span className="chip2">TV · {g.network}</span>}
             <span className="chip2">{g.venue.city ? `${g.venue.city}, ${g.venue.state}` : g.venue.name}</span>
             <span className="chip2 strong">{g.line}{g.total ? ` · O/U ${g.total}` : ""}</span>
+            <Link href={`/rivalry/${g.away.id}/${g.home.id}`} className="chip2 h2hchip">Head-to-head history</Link>
             <span className="gact"><ShareButton title={`${g.away.short} at ${g.home.short} on TapeDog`} /><SaveButton id={g.id} big /></span>
           </div>
         </div>
