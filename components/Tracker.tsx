@@ -131,7 +131,7 @@ export default function Tracker({ games, initial }: { games: LiteGame[]; initial
           return (
             <Link key={s} href={`/game/${g.id}`} className={`tv-row ${sc != null && other != null && sc > other ? "lead" : ""}`}>
               {t.logo && <img src={t.logo} alt="" />}
-              <span className="tv-name">{t.rank ? <em>{t.rank}</em> : null}{t.short}{st === "in" && l?.poss === t.id && <i className="tv-poss" title="Has the ball" />}</span>
+              <span className="tv-name">{t.rank ? <em>{t.rank}</em> : null}<span className="nfull">{t.short}</span><span className="nab">{t.abbr}</span>{st === "in" && l?.poss === t.id && <i className="tv-poss" title="Has the ball" />}</span>
               <b className="tv-score">{sc ?? ""}</b>
             </Link>
           );

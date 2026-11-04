@@ -1634,3 +1634,8 @@ body::after { opacity: .045; }
 .tvfull .tv-head { font-size: clamp(12px, min(1.9vh, 1.1vw), 22px); }
 .tvfull .tv-foot { font-size: clamp(12px, min(2vh, 1.2vw), 24px); }
 .tv-name { overflow: hidden; text-overflow: ellipsis; }
+
+/* Narrow tiles switch to team abbreviations instead of cutting names off */
+.tv-tile { container-type: inline-size; }
+.nab { display: none; }
+@container (max-width: 240px) { .nfull { display: none; } .nab { display: inline; } }
