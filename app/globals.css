@@ -1650,3 +1650,10 @@ body::after { opacity: .045; }
 .tm-bio { margin: 0; color: var(--ink2); font-size: 15.5px; line-height: 1.6; flex: 1; }
 .tm-foot { display: flex; justify-content: space-between; align-items: center; padding-top: 14px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
 .tm-more { color: var(--tape); font-weight: 600; font-size: 14px; }
+
+/* roots for */
+.roots { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-size: 13px; color: var(--muted); }
+.fhero .roots { margin-top: 18px; font-size: 14px; }
+.root { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 6px; border-radius: 999px; background: var(--panel2); border: 1px solid var(--line); color: var(--ink); font-weight: 600; }
+a.root:hover { border-color: var(--tape); }
+.root img { width: 20px; height: 20px; }

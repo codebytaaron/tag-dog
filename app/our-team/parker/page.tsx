@@ -1,4 +1,5 @@
 import Link from "next/link";
+import RootsFor from "@/components/RootsFor";
 
 export const metadata = { title: "Parker Tichio | TapeDog" };
 
@@ -18,6 +19,7 @@ export default function Parker() {
         <h1 className="mega">Parker Tichio</h1>
         <p className="lead2">Parker leads business development at TapeDog, from partnerships to growth. He studies economics at Dartmouth College (Class of 2030) and is focused on finance, valuation and how businesses scale.</p>
         <p className="lead2 muted">He joined TapeDog in November 2026.</p>
+        <RootsFor ids={["201"]} />
       </section>
 
       <section className="sect0">

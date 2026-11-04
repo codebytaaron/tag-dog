@@ -1,11 +1,12 @@
 import Link from "next/link";
+import RootsFor from "@/components/RootsFor";
 
 export const metadata = { title: "Meet the team | TapeDog" };
 
 const TEAM = [
-  { slug: "teddy", name: "Teddy Aaron", role: "Founder & CEO", initials: "TA", note: "Building TapeDog since 2026",
+  { slug: "teddy", name: "Teddy Aaron", role: "Founder & CEO", initials: "TA", note: "Building TapeDog since 2026", teams: ["251", "87", "349"],
     bio: "Builder and lifelong college football fan. Has built products used by thousands of people while still in high school." },
-  { slug: "parker", name: "Parker Tichio", role: "Head of Business Development", initials: "PT", note: "Dartmouth College ’30",
+  { slug: "parker", name: "Parker Tichio", role: "Head of Business Development", initials: "PT", note: "Dartmouth College ’30", teams: ["201"],
     bio: "Leads partnerships and business development. Joined TapeDog in November 2026." },
 ];
 
@@ -23,7 +24,7 @@ export default function OurTeam() {
               <div><div className="tm-name">{p.name}</div><div className="tm-role">{p.role}</div></div>
             </div>
             <p className="tm-bio">{p.bio}</p>
-            <div className="tm-foot"><span>{p.note}</span><span className="tm-more">Learn more ›</span></div>
+            <div className="tm-foot"><RootsFor ids={p.teams} link={false} /><span className="tm-more">Learn more ›</span></div>
           </Link>
         ))}
       </div>
