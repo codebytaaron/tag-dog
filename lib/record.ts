@@ -48,7 +48,10 @@ async function gradeWeek(year: number, w: number, live: boolean): Promise<Call[]
   };
   const P = opp(prev), N = opp(next);
   const finals = (cur.events || []).filter((e: any) => e.status?.type?.state === "post");
+  // An empty week means ESPN didn't answer. Throw so the empty result is never cached.
+  if (!finals.length) { if (live) return []; throw new Error(`week ${w}: no finals`); }
   const an = (await Promise.all([...new Set(finals.map((e: any) => etDate(e.date)))].map((d) => lines(d as string, rv)))).flat();
+  if (!an.length) throw new Error(`week ${w}: no lines`);
   const hit = (t: any, x: any) => !!t && (norm(t.full_name) === norm(x.team?.displayName) || norm(t.location) === norm(x.team?.location) || t.abbr === x.team?.abbreviation);
   const out: Call[] = [];
   for (const e of finals) {
@@ -94,8 +97,15 @@ async function gradeWeek(year: number, w: number, live: boolean): Promise<Call[]
 async function build() {
   const cur = await j(`${ESPN}/scoreboard?groups=80&limit=300`, 1800);
   const week: number = cur.week?.number || 1, year: number = cur.season?.year || new Date().getFullYear();
-  const weeks = await Promise.all(Array.from({ length: week }, (_, i) => i + 1).map((w) =>
-    unstable_cache(() => gradeWeek(year, w, w >= week - 1), ["tapedog-record-week", String(year), String(w)], { revalidate: w >= week - 1 ? 1800 : 604800 })()));
+  // A few weeks at a time so ESPN and Action Network don't rate-limit us. A failed week is skipped this time
+  // (and not cached), so it fills in on the next refresh instead of staying empty for a week.
+  const weeks: Call[][] = [];
+  const all = Array.from({ length: week }, (_, i) => i + 1);
+  for (let i = 0; i < all.length; i += 3) {
+    weeks.push(...await Promise.all(all.slice(i, i + 3).map((w) =>
+      unstable_cache(() => gradeWeek(year, w, w >= week - 1), ["tapedog-record-week-v2", String(year), String(w)], { revalidate: w >= week - 1 ? 1800 : 604800 })()
+        .catch(() => [] as Call[]))));
+  }
   return { year, week, calls: weeks.flat() };
 }
-export const getRecord = unstable_cache(build, ["tapedog-record-v1"], { revalidate: 1800 });
+export const getRecord = unstable_cache(build, ["tapedog-record-v2"], { revalidate: 1800 });
