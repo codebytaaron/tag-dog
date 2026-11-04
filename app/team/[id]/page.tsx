@@ -8,6 +8,8 @@ import { getRecap } from "@/lib/recap";
 import { getFutures, getPolls, getStandings, teamNews } from "@/lib/pulse";
 import { getFPI } from "@/lib/fpi";
 import ViewTracker from "@/components/ViewTracker";
+import Roster from "@/components/Roster";
+import { getRoster } from "@/lib/roster";
 import { FollowButton } from "@/components/SaveButton";
 import { darkJson, readable } from "@/lib/espn";
 
@@ -54,7 +56,8 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
   const isFav = onSlate ? onSlate[onSlate.favorite].id === id : false;
   const last = [...games].reverse().find((g: any) => g.state === "post");
   const recap = last ? await getRecap(last.id) : null;
-  const [fut, polls, stands, news, fpiAll] = await Promise.all([getFutures(), getPolls(), getStandings(), teamNews(id), getFPI()]);
+  const [fut, polls, stands, news, fpiAll, roster] = await Promise.all([getFutures(), getPolls(), getStandings(), teamNews(id), getFPI(), getRoster(id)]);
+  const injuryNews = news.filter((n: any) => /injur|out for|questionable|doubtful|surgery|season-ending|sidelined|day-to-day|status/i.test(n.headline));
   const fp = fpiAll[id];
   const pct = (s: any) => { const m = s?.markets?.find((x: any) => x.team?.id === id); return m ? Math.round(m.p * 100) : null; };
   const apRow = polls[0]?.rows.find((r) => r.team.id === id);
@@ -164,6 +167,30 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
           {games.length === 0 && <div className="empty">No schedule posted yet.</div>}
         </div>
       </div>
+      {roster && (roster.out.length > 0 || injuryNews.length > 0) && (
+        <div className="wrap latest">
+          <section className="card">
+            <div className="cardh"><h3>Injury report</h3></div>
+            {roster.out.length > 0 && (
+              <div className="inj">
+                {roster.out.map((p) => <div key={p.id} className="inj-p"><b>{p.name}</b><span className="muted">{[p.pos, p.cls].filter(Boolean).join(" · ")}</span><em>{p.status}</em></div>)}
+              </div>
+            )}
+            {injuryNews.length > 0 && (
+              <ul className="heads">{injuryNews.map((n: any) => <li key={n.url}><a href={n.url} target="_blank" rel="noreferrer"><b>{n.headline}</b><span className="mono muted">ESPN ↗</span></a></li>)}</ul>
+            )}
+            <p className="muted small srcnote">From ESPN's roster and news. Status can change quickly.</p>
+          </section>
+        </div>
+      )}
+      {roster && roster.groups.length > 0 && (
+        <div className="wrap latest" style={{ paddingBottom: 60 }}>
+          <section className="card">
+            <div className="cardh"><h3>Roster</h3>{roster.coach && <span className="ros-coach">Head coach: {roster.coach}</span>}</div>
+            <Roster data={roster} />
+          </section>
+        </div>
+      )}
     </main>
   );
 }

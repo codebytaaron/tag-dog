@@ -69,13 +69,14 @@ async function polymarketTitle(idx: Map<string, NonNullable<TeamRef>>): Promise<
 
 export async function getFutures() {
   const idx = await teamIndex();
-  const [title, playoff, heisman, sec, b10, b12, acc, coach] = await Promise.all([
+  const [title, playoff, heisman, sec, b10, b12, acc, coach, qf, sf, final] = await Promise.all([
     series("KXNCAAF", idx), series("KXNCAAFPLAYOFF", idx), series("KXHEISMAN", idx, false),
     series("KXNCAAFSEC", idx), series("KXNCAAFB10", idx), series("KXNCAAFB12", idx), series("KXNCAAFACC", idx),
     series("KXNCAAFCOACHOUT", idx, false),
+    series("KXNCAAFQF", idx), series("KXNCAAFSF", idx), series("KXNCAAFFINALIST", idx),
   ]);
   const polyTitle = await polymarketTitle(idx);
-  return { polyTitle, title, playoff, heisman, conf: { SEC: sec, "Big Ten": b10, "Big 12": b12, ACC: acc } as Record<string, Series>, coach };
+  return { polyTitle, title, playoff, qf, sf, final, heisman, conf: { SEC: sec, "Big Ten": b10, "Big 12": b12, ACC: acc } as Record<string, Series>, coach };
 }
 export type Futures = Awaited<ReturnType<typeof getFutures>>;
 

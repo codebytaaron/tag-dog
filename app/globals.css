@@ -1657,3 +1657,59 @@ body::after { opacity: .045; }
 .root { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 6px; border-radius: 999px; background: var(--panel2); border: 1px solid var(--line); color: var(--ink); font-weight: 600; }
 a.root:hover { border-color: var(--tape); }
 .root img { width: 20px; height: 20px; }
+/* ---------- launch features: record, playoff, roster ---------- */
+.links2 { display: inline-flex; gap: 16px; flex-wrap: wrap; }
+.ptab-link { flex: none; align-self: center; padding: 9px 12px; font-size: 14px; font-weight: 600; color: var(--tape); }
+.rec-lead { max-width: 640px; }
+.rec-hero { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 24px 0 18px; }
+.rec-hero div { display: grid; gap: 4px; padding: 20px; border-radius: 16px; background: var(--panel); border: 1px solid var(--line); }
+.rec-hero b { font-family: var(--display); font-weight: 400; font-size: 48px; line-height: 1; }
+.rec-hero span { font-weight: 600; } .rec-hero small { color: var(--muted); font-size: 13px; }
+.rec-tiers { margin-bottom: 18px; }
+.rec-row { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr; gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+.rec-head { border-top: 0; font-size: 12px; color: var(--muted); }
+.rec-note { margin: 14px 0 0; line-height: 1.55; }
+.rec-weeks { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 8px; }
+.rec-wk { flex: none; display: grid; gap: 2px; padding: 12px 14px; border-radius: 12px; background: var(--panel); border: 1px solid var(--line); min-width: 104px; }
+.rec-wk span { font-size: 12px; color: var(--muted); } .rec-wk b { font-size: 20px; } .rec-wk small { font-size: 11px; color: var(--muted); }
+.rec-list { display: grid; gap: 6px; }
+.rec-call { display: grid; grid-template-columns: 52px auto 1fr auto 84px; gap: 12px; align-items: center; padding: 12px 14px; border-radius: 12px; background: var(--panel); border: 1px solid var(--line); }
+.rec-call:hover { border-color: var(--line2); }
+.rec-wkk { font-size: 12px; color: var(--muted); }
+.rec-logos { display: flex; gap: 2px; } .rec-logos img { width: 26px; height: 26px; }
+.rec-txt { display: grid; min-width: 0; } .rec-txt small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rec-score { font-variant-numeric: tabular-nums; font-weight: 600; }
+.rec-res { text-align: center; font-size: 12px; font-weight: 700; padding: 5px 8px; border-radius: 8px; background: var(--panel2); color: var(--muted); }
+.rec-res.win { background: rgba(123,216,143,.15); color: var(--ok); } .rec-res.half { background: rgba(245,200,66,.14); color: var(--tape); }
+.pb { display: grid; grid-template-columns: repeat(4, minmax(200px, 1fr)); gap: 14px; margin: 24px 0 8px; overflow-x: auto; padding-bottom: 6px; }
+.pb-col { display: flex; flex-direction: column; justify-content: space-around; gap: 12px; }
+.pb-col h3 { font-size: 13px; color: var(--muted); margin: 0 0 4px; font-weight: 600; }
+.pb-game { display: grid; gap: 2px; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); }
+.pb-slot { display: grid; grid-template-columns: 22px 24px 1fr auto; gap: 8px; align-items: center; padding: 9px 10px; background: var(--panel); color: var(--muted); font-size: 14px; }
+.pb-slot.w { color: var(--ink); font-weight: 600; background: var(--panel2); }
+.pb-slot em { font-style: normal; font-size: 11px; color: var(--dim); text-align: right; }
+.pb-slot img { width: 22px; height: 22px; } .pb-slot span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .pb-slot b { font-variant-numeric: tabular-nums; font-size: 13px; }
+.pb-champ { display: grid; justify-items: center; gap: 6px; padding: 18px; border-radius: 14px; border: 1px solid var(--tape); background: var(--panel); text-align: center; }
+.pb-champ span { font-size: 12px; color: var(--tape); font-weight: 700; } .pb-champ img { width: 52px; height: 52px; } .pb-champ b { font-size: 18px; } .pb-champ small { color: var(--muted); }
+.pb-table { margin-top: 18px; }
+.pbt-row { display: grid; grid-template-columns: minmax(150px, 1.6fr) repeat(5, 1fr); gap: 8px; padding: 10px 0; border-top: 1px solid var(--line); align-items: center; font-variant-numeric: tabular-nums; font-size: 14px; }
+.pbt-head { border-top: 0; font-size: 12px; color: var(--muted); }
+.pbt-team { display: flex; align-items: center; gap: 8px; font-weight: 600; } .pbt-team img { width: 22px; height: 22px; }
+a.pbt-row:hover { background: var(--panel2); }
+.inj { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); gap: 8px; margin-bottom: 12px; }
+.inj-p { display: grid; gap: 2px; padding: 10px 12px; border-radius: 10px; background: var(--bg2); border: 1px solid var(--line); }
+.inj-p span { font-size: 12px; } .inj-p em { font-style: normal; font-size: 12px; font-weight: 700; color: var(--fade); }
+.ros-coach { font-size: 13px; color: var(--muted); }
+.ros-ctl { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.ros-tabs { display: flex; gap: 4px; }
+.ros-tabs button { background: none; border: 1px solid var(--line2); border-radius: 999px; padding: 7px 12px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.ros-tabs button.on { color: var(--ink); border-color: var(--ink); } .ros-tabs span { opacity: .6; font-size: 11px; }
+.ros-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr)); gap: 6px; max-height: 560px; overflow-y: auto; }
+.ros-p { display: flex; align-items: center; gap: 10px; padding: 8px; border-radius: 10px; border: 1px solid var(--line); }
+.ros-p img, .ros-ph { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: var(--panel2); flex: none; }
+.ros-p div { display: grid; min-width: 0; } .ros-p b { font-size: 14px; } .ros-p small { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 800px) {
+  .rec-hero { grid-template-columns: 1fr; }
+  .rec-call { grid-template-columns: auto 1fr auto; } .rec-wkk, .rec-score { display: none; }
+  .pbt-row { grid-template-columns: minmax(120px, 1.4fr) repeat(3, 1fr); } .pbt-row > :nth-child(3), .pbt-row > :nth-child(4) { display: none; }
+}
