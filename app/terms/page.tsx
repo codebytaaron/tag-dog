@@ -8,7 +8,7 @@ export default function Terms() {
   return (
     <main className="wrap legalpg">
       <div className="eyebrow mono">LAST UPDATED NOVEMBER 2026</div>
-      <h1 className="big">Terms of use</h1>
+      <h1 className="btitle">Terms of use</h1>
       <p>By using TapeDog you agree to these terms. If you don't agree, please don't use the site.</p>
 
       <h2>What TapeDog is</h2>

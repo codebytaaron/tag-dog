@@ -14,7 +14,7 @@ export default function OurTeam() {
   return (
     <main className="wrap teampg">
       <div className="eyebrow mono">OUR TEAM</div>
-      <h1 className="big">Meet the team</h1>
+      <h1 className="btitle">Meet the team</h1>
       <p className="lead2 muted">The two people building TapeDog.</p>
       <div className="tm-grid">
         {TEAM.map((p) => (

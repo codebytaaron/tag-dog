@@ -139,23 +139,29 @@ export default function Board({ games, week, season, updated, initialTab, initia
   const watchPick = useMemo(() => open.find((g) => g.id === gameday) || [...open].sort((a, b) => b.watch - a.watch).find((g) => g.id !== upsetPick?.id), [open, upsetPick, gameday]);
   const steamPick = useMemo(() => [...open].filter((g) => g.keys.includes("steam")).sort((a, b) => b.score - a.score).find((g) => g.id !== upsetPick?.id && g.id !== watchPick?.id), [open, upsetPick, watchPick]);
 
-  // Scores: live first, then upcoming games by day (Eastern time), then finals.
-  const dayLabel = (d: string) => new Date(d).toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric", timeZone: "America/New_York" });
-  const groups = useMemo(() => {
-    const ok = (g: LiteGame) => match(g) && (sf === "all" || (sf === "live" && stateOf(g) === "in")
-      || (sf === "top25" && !!(g.home.rank || g.away.rank)) || (sf === "mine" && (mine.includes(g.home.id) || mine.includes(g.away.id))));
-    const all = games.filter(ok);
-    const out: { key: string; title: string; items: LiteGame[] }[] = [];
-    const liveG = all.filter((g) => stateOf(g) === "in");
-    if (liveG.length) out.push({ key: "in", title: "Live now", items: liveG });
-    for (const g of all.filter((g) => stateOf(g) === "pre").sort((a, b) => Date.parse(a.date) - Date.parse(b.date))) {
-      const k = dayLabel(g.date), last = out[out.length - 1];
-      if (last && last.key === k) last.items.push(g); else out.push({ key: k, title: k, items: [g] });
+  // Scores: one tab per day (Eastern time). Inside a day: live, then upcoming by kickoff, then finals.
+  const dayKey = (d: string) => new Date(d).toLocaleDateString("en-CA", { timeZone: "America/New_York" });
+  const dayName = (d: string, style: "short" | "long") => new Date(d).toLocaleDateString("en-US", style === "short" ? { weekday: "short", timeZone: "America/New_York" } : { weekday: "long", month: "long", day: "numeric", timeZone: "America/New_York" });
+  const scoreOk = (g: LiteGame) => match(g) && (sf === "all" || (sf === "live" && stateOf(g) === "in")
+    || (sf === "top25" && !!(g.home.rank || g.away.rank)) || (sf === "mine" && (mine.includes(g.home.id) || mine.includes(g.away.id))));
+  const days = useMemo(() => {
+    const m = new Map<string, { key: string; date: string; games: LiteGame[] }>();
+    for (const g of [...games].sort((a, b) => Date.parse(a.date) - Date.parse(b.date))) {
+      const k = dayKey(g.date);
+      if (!m.has(k)) m.set(k, { key: k, date: g.date, games: [] });
+      m.get(k)!.games.push(g);
     }
-    const fin = all.filter((g) => stateOf(g) === "post");
-    if (fin.length) out.push({ key: "post", title: "Final", items: fin });
-    return out;
-  }, [games, live, q, sf, mine]); // eslint-disable-line
+    return [...m.values()];
+  }, [games]); // eslint-disable-line
+  const defaultDay = useMemo(() => (days.find((d) => d.games.some((g) => stateOf(g) === "in"))
+    || days.find((d) => d.games.some((g) => stateOf(g) === "pre")) || days[days.length - 1])?.key || "all", [days]); // eslint-disable-line
+  const [day, setDay] = useState<string>("");
+  const curDay = day || defaultDay;
+  const rank = (g: LiteGame) => ({ in: 0, pre: 1, post: 2 } as Record<string, number>)[stateOf(g)] ?? 1;
+  const groups = useMemo(() => days
+    .filter((d) => curDay === "all" || d.key === curDay)
+    .map((d) => ({ key: d.key, title: dayName(d.date, "long"), items: d.games.filter(scoreOk).sort((a, b) => rank(a) - rank(b) || Date.parse(a.date) - Date.parse(b.date)) }))
+    .filter((d) => d.items.length), [days, curDay, live, q, sf, mine]); // eslint-disable-line
 
   // Fade report card: how flagged games actually finished this week.
   const report = useMemo(() => {
@@ -254,15 +260,16 @@ export default function Board({ games, week, season, updated, initialTab, initia
         <div>
           <div className="eyebrow mono">{season ?? ""} · WEEK {week ?? "–"} · UPDATED <Kickoff date={updated} /></div>
           <h1 className="btitle">{tab === "scores" ? "Scores" : tab === "saved" ? "Your stuff" : "The Fade Board"}</h1>
-          <p className="muted">{tab === "scores" ? "Live and final scores for every FBS game this week. Updates automatically."
+          <p className="muted">{tab === "scores" ? "Every FBS game this week. Scores update live."
             : tab === "saved" ? "Teams you follow and games you saved, on this device."
             : "Every FBS game left to play. Upset = how shaky the favorite looks. Watch = how good the game should be."}</p>
         </div>
-        <div className="tabs">
-          <button className={tab === "board" ? "on" : ""} onClick={() => go("board")}>Board</button>
-          <button className={tab === "scores" ? "on" : ""} onClick={() => go("scores")}>Scores{counts.live > 0 && <i className="ldot" />}</button>
-          <button className={tab === "saved" ? "on" : ""} onClick={() => go("saved")}>Saved <em>{saved.length + mine.length}</em></button>
-        </div>
+        {tab !== "scores" && (
+          <div className="seg">
+            <button className={tab === "board" ? "on" : ""} aria-pressed={tab === "board"} onClick={() => go("board")}>All games</button>
+            <button className={tab === "saved" ? "on" : ""} aria-pressed={tab === "saved"} onClick={() => go("saved")}>Saved <em>{saved.length + mine.length}</em></button>
+          </div>
+        )}
       </div>
 
       {tab === "board" && (<>
@@ -311,29 +318,56 @@ export default function Board({ games, week, season, updated, initialTab, initia
 
       {tab === "scores" && (
         <div className="scores">
-          <div className="controls2"><Link href="/replay" className="textlink">Past weeks and highlights</Link><div className="searchwrap"><input className="search" placeholder="Filter by team" value={q} onChange={(e) => setQ(e.target.value)} /></div></div>          <div className="scf">
-            {([["all", "All games"], ["live", "Live"], ["top25", "Top 25"], ["mine", "My teams"]] as const).map(([k, l]) => (
-              <button key={k} className={`pill ${sf === k ? "on" : ""}`} onClick={() => setSf(k)}>{l}{k === "live" && counts.live ? ` · ${counts.live}` : ""}</button>
-            ))}
+          <div className="sc-bar">
+            <div className="sc-days" role="tablist" aria-label="Day">
+              {days.map((d) => {
+                const lv = d.games.some((g) => stateOf(g) === "in");
+                return (
+                  <button key={d.key} role="tab" aria-selected={curDay === d.key} className={curDay === d.key ? "on" : ""} onClick={() => setDay(d.key)}>
+                    <span>{dayName(d.date, "short")}</span>
+                    <b>{new Date(d.date).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "America/New_York" })}</b>
+                    <small>{lv ? <><i className="ldot" />Live</> : `${d.games.length} game${d.games.length === 1 ? "" : "s"}`}</small>
+                  </button>
+                );
+              })}
+              <button role="tab" aria-selected={curDay === "all"} className={curDay === "all" ? "on" : ""} onClick={() => setDay("all")}>
+                <span>Week</span><b>All</b><small>{games.length} games</small>
+              </button>
+            </div>
+            <div className="sc-tools">
+              <div className="seg" role="group" aria-label="Filter">
+                {([["all", "All"], ["live", "Live"], ["top25", "Top 25"], ["mine", "My teams"]] as const).map(([k, l]) => (
+                  <button key={k} className={sf === k ? "on" : ""} aria-pressed={sf === k} onClick={() => setSf(k)}>{l}{k === "live" && counts.live ? <em>{counts.live}</em> : null}</button>
+                ))}
+              </div>
+              <div className="searchwrap">
+                <input className="search" placeholder="Find a team" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Find a team" />
+                {q && <button className="clr" onClick={() => setQ("")} aria-label="Clear">×</button>}
+              </div>
+            </div>
           </div>
-          {report && (
+          {report && report.upsets.length > 0 && (
             <div className="sumbar">
-              <span><b>{report.rows.length}</b> final</span>
-              <span><b className="c-fade">{report.upsets.length}</b> upset{report.upsets.length === 1 ? "" : "s"}</span>
-              {report.flagged.length > 0 && <span>Flagged favorites lost <b>{report.fu} of {report.flagged.length}</b></span>}
-              {report.upsets.slice(0, 4).map(({ g }) => {
+              <span className="sum-l">Upsets this week</span>
+              {report.upsets.slice(0, 5).map(({ g }) => {
                 const dog = g[g.favorite === "home" ? "away" : "home"], fav = g[g.favorite];
-                return <Link key={g.id} href={`/game/${g.id}`} className="upchip">{dog.logo && <img src={dog.logo} alt="" />}<b>{dog.short}</b><span className="muted">beat {fav.short}</span></Link>;
+                return <Link key={g.id} href={`/game/${g.id}`} className="upchip">{dog.logo && <img src={dog.logo} alt="" />}<b>{dog.short}</b><span className="muted">over {fav.short}</span></Link>;
               })}
             </div>
           )}
           {groups.map((grp) => (
             <section key={grp.key}>
-              <h2 className="sc-day">{grp.key === "in" && <span className="dotrec" />}{grp.title}<span className="muted">{grp.items.length}</span></h2>
+              <h2 className="sc-day">{grp.title}<span className="muted">{grp.items.length}</span></h2>
               <div className="scoregrid">{grp.items.map((g) => <ScoreCard key={g.id} g={g} lv={live[g.id]} mine={mine} />)}</div>
             </section>
           ))}
-          {groups.length === 0 && <div className="empty">No games match “{q}”.</div>}
+          {groups.length === 0 && (
+            <div className="empty">
+              {q ? <>No games match “{q}”.</> : sf === "live" ? "No games are live right now." : sf === "mine" ? "None of your teams play on this day." : "No games on this day."}
+              {(q || sf !== "all") && <> <button className="linkbtn" onClick={() => { setQ(""); setSf("all"); }}>Clear filters</button></>}
+            </div>
+          )}
+          <Link href="/replay" className="textlink sc-past">Past weeks and highlights</Link>
         </div>
       )}
 
@@ -356,7 +390,6 @@ export default function Board({ games, week, season, updated, initialTab, initia
             : <p className="muted">Tap the bookmark on any game to keep it here.</p>}
         </div>
       )}
-      <p className="hint mono">TIP: PRESS ⌘K OR / TO JUMP TO ANY TEAM</p>
-    </div>
+          </div>
   );
 }
