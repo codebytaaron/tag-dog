@@ -63,15 +63,30 @@ function Feature({ label, g, note }: { label: string; g?: LiteGame; note: string
 
 function ScoreCard({ g, lv, mine }: { g: LiteGame; lv?: Live; mine: string[] }) {
   const st = lv?.state ?? g.state;
-  return (
-    <Link href={`/game/${g.id}`} className={`scard ${st}`} style={{ ["--c" as any]: g[g.favorite].color }}>
-      <div className="shead mono">
-        {st === "in" ? <span className="livetag"><i />LIVE · {lv?.detail}</span> : st === "post" ? <span>FINAL</span> : <span><Kickoff date={g.date} />{g.network ? ` · ${g.network}` : ""}</span>}
-        <span className={`tiny t-${g.tier}`}>{g.tier} {g.score}</span>
+  const scored = st !== "pre" && lv?.home != null && lv?.away != null;
+  const Row = ({ s }: { s: "home" | "away" }) => {
+    const t = g[s], sc = scored ? lv![s]! : null, other = scored ? lv![s === "home" ? "away" : "home"]! : null;
+    const lead = scored && sc! > other!;
+    return (
+      <div className={`sc-row ${scored && !lead ? "dim" : ""}`}>
+        {t.logo && <img src={t.logo} alt="" />}
+        <span className="sc-name">{t.rank ? <em>{t.rank}</em> : null}{t.short}{mine.includes(t.id) && <i className="star"> ★</i>}</span>
+        {st === "in" && lv?.poss === t.id && <i className="sc-poss" title="Has the ball" />}
+        {scored ? <b className="sc-pts">{sc}</b> : <span className="sc-rec">{t.record}</span>}
       </div>
-      <Matchup g={g} lv={lv} mine={mine} />
-      <div className="sfoot mono">
-        {st === "in" && lv?.down ? <span className={lv.redZone ? "c-fade" : ""}>{lv.down}</span> : <span className="muted">{g.line}{g.total ? ` · O/U ${g.total}` : ""}</span>}
+    );
+  };
+  return (
+    <Link href={`/game/${g.id}`} className={`scard2 ${st}`}>
+      <div className="sc-top">
+        {st === "in" ? <span className="sc-live"><i />{lv?.detail}</span> : st === "post" ? <span className="sc-final">Final{/OT/.test(lv?.detail || "") ? " (OT)" : ""}</span> : <span><Kickoff date={g.date} /></span>}
+        <span className="muted">{g.network || ""}</span>
+      </div>
+      <Row s="away" /><Row s="home" />
+      <div className="sc-foot">
+        {st === "in" && lv?.down ? <span className={lv.redZone ? "c-fade" : ""}>{lv.down}{lv.redZone ? " · Red zone" : ""}</span>
+          : st === "pre" ? <span>{g.line}{g.total ? ` · O/U ${g.total}` : ""}{g.upsetPct >= 30 ? <em className="sc-up"> · {g.upsetPct}% upset chance</em> : null}</span>
+          : <span className="muted">Closed {g.line}</span>}
       </div>
     </Link>
   );
@@ -87,6 +102,7 @@ export default function Board({ games, week, season, updated, initialTab, initia
   const [sort, setSort] = useState<"upset" | "watch" | "time" | "close">(initialTab === "heat" ? "watch" : "upset");
   const [byTime, setByTime] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [sf, setSf] = useState<"all" | "live" | "top25" | "mine">("all");
   const { ids: saved } = useSaved();
   const { ids: mine, list: myTeams, toggle: toggleTeam } = useFollow();
   const live = useLive(initialLive);
@@ -123,14 +139,23 @@ export default function Board({ games, week, season, updated, initialTab, initia
   const watchPick = useMemo(() => open.find((g) => g.id === gameday) || [...open].sort((a, b) => b.watch - a.watch).find((g) => g.id !== upsetPick?.id), [open, upsetPick, gameday]);
   const steamPick = useMemo(() => [...open].filter((g) => g.keys.includes("steam")).sort((a, b) => b.score - a.score).find((g) => g.id !== upsetPick?.id && g.id !== watchPick?.id), [open, upsetPick, watchPick]);
 
+  // Scores: live first, then upcoming games by day (Eastern time), then finals.
+  const dayLabel = (d: string) => new Date(d).toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric", timeZone: "America/New_York" });
   const groups = useMemo(() => {
-    const all = games.filter(match);
-    return [
-      { key: "in", title: "Live now", items: all.filter((g) => stateOf(g) === "in") },
-      { key: "pre", title: "Up next", items: all.filter((g) => stateOf(g) === "pre").sort((a, b) => Date.parse(a.date) - Date.parse(b.date)) },
-      { key: "post", title: "Final", items: all.filter((g) => stateOf(g) === "post") },
-    ].filter((x) => x.items.length);
-  }, [games, live, q]); // eslint-disable-line
+    const ok = (g: LiteGame) => match(g) && (sf === "all" || (sf === "live" && stateOf(g) === "in")
+      || (sf === "top25" && !!(g.home.rank || g.away.rank)) || (sf === "mine" && (mine.includes(g.home.id) || mine.includes(g.away.id))));
+    const all = games.filter(ok);
+    const out: { key: string; title: string; items: LiteGame[] }[] = [];
+    const liveG = all.filter((g) => stateOf(g) === "in");
+    if (liveG.length) out.push({ key: "in", title: "Live now", items: liveG });
+    for (const g of all.filter((g) => stateOf(g) === "pre").sort((a, b) => Date.parse(a.date) - Date.parse(b.date))) {
+      const k = dayLabel(g.date), last = out[out.length - 1];
+      if (last && last.key === k) last.items.push(g); else out.push({ key: k, title: k, items: [g] });
+    }
+    const fin = all.filter((g) => stateOf(g) === "post");
+    if (fin.length) out.push({ key: "post", title: "Final", items: fin });
+    return out;
+  }, [games, live, q, sf, mine]); // eslint-disable-line
 
   // Fade report card: how flagged games actually finished this week.
   const report = useMemo(() => {
@@ -286,28 +311,25 @@ export default function Board({ games, week, season, updated, initialTab, initia
 
       {tab === "scores" && (
         <div className="scores">
-          <div className="controls2"><Link href="/replay" className="textlink">Past weeks and highlights</Link><div className="searchwrap"><input className="search" placeholder="Filter by team" value={q} onChange={(e) => setQ(e.target.value)} /></div></div>
+          <div className="controls2"><Link href="/replay" className="textlink">Past weeks and highlights</Link><div className="searchwrap"><input className="search" placeholder="Filter by team" value={q} onChange={(e) => setQ(e.target.value)} /></div></div>          <div className="scf">
+            {([["all", "All games"], ["live", "Live"], ["top25", "Top 25"], ["mine", "My teams"]] as const).map(([k, l]) => (
+              <button key={k} className={`pill ${sf === k ? "on" : ""}`} onClick={() => setSf(k)}>{l}{k === "live" && counts.live ? ` · ${counts.live}` : ""}</button>
+            ))}
+          </div>
           {report && (
-            <div className="report">
-              <div className="rhead"><b>Fade report</b><span className="muted">How this week's finished games went</span></div>
-              <div className="rstats">
-                <div><b>{report.upsets.length}</b><span className="mono">UPSETS SO FAR</span></div>
-                <div><b>{report.fu}/{report.flagged.length}</b><span className="mono">FLAGGED FAVS THAT LOST</span></div>
-                <div><b>{report.fc}/{report.flagged.length}</b><span className="mono">FLAGGED DOGS THAT COVERED</span></div>
-              </div>
-              {report.upsets.length > 0 && (
-                <div className="ups">
-                  {report.upsets.slice(0, 8).map(({ g }) => {
-                    const dog = g[g.favorite === "home" ? "away" : "home"], fav = g[g.favorite];
-                    return <Link key={g.id} href={`/game/${g.id}`} className="upchip">{dog.logo && <img src={dog.logo} alt="" />}<b>{dog.short}</b><span className="muted">over {fav.short}</span>{g.tier !== "HOLD" && <em className="mono">FLAGGED</em>}</Link>;
-                  })}
-                </div>
-              )}
+            <div className="sumbar">
+              <span><b>{report.rows.length}</b> final</span>
+              <span><b className="c-fade">{report.upsets.length}</b> upset{report.upsets.length === 1 ? "" : "s"}</span>
+              {report.flagged.length > 0 && <span>Flagged favorites lost <b>{report.fu} of {report.flagged.length}</b></span>}
+              {report.upsets.slice(0, 4).map(({ g }) => {
+                const dog = g[g.favorite === "home" ? "away" : "home"], fav = g[g.favorite];
+                return <Link key={g.id} href={`/game/${g.id}`} className="upchip">{dog.logo && <img src={dog.logo} alt="" />}<b>{dog.short}</b><span className="muted">beat {fav.short}</span></Link>;
+              })}
             </div>
           )}
           {groups.map((grp) => (
             <section key={grp.key}>
-              <h2 className="gtitle mono">{grp.key === "in" && <span className="dotrec" />}{grp.title} <span className="muted">{grp.items.length}</span></h2>
+              <h2 className="sc-day">{grp.key === "in" && <span className="dotrec" />}{grp.title}<span className="muted">{grp.items.length}</span></h2>
               <div className="scoregrid">{grp.items.map((g) => <ScoreCard key={g.id} g={g} lv={live[g.id]} mine={mine} />)}</div>
             </section>
           ))}

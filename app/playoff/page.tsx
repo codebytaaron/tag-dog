@@ -12,7 +12,7 @@ export default async function PlayoffPage() {
   const f = await getFutures();
   const get = (s: any, id: string) => s?.markets?.find((m: any) => m.team?.id === id)?.p ?? null;
   const rows: Row[] = (f.playoff?.markets || []).filter((m) => m.team).map((m) => ({
-    id: m.team!.id, name: m.label, logo: m.team!.logo, make: m.p, qf: get(f.qf, m.team!.id), sf: get(f.sf, m.team!.id), fin: get(f.final, m.team!.id), win: get(f.title, m.team!.id),
+    id: m.team!.id, name: m.team!.name, logo: m.team!.logo, make: m.p, qf: get(f.qf, m.team!.id), sf: get(f.sf, m.team!.id), fin: get(f.final, m.team!.id), win: get(f.title, m.team!.id),
   }));
   const table = [...rows].sort((a, b) => (b.win ?? 0) - (a.win ?? 0) || b.make - a.make).slice(0, 25);
   // Projected field: the 12 likeliest to make it, seeded by how the market rates them to win it all.
@@ -39,21 +39,39 @@ export default async function PlayoffPage() {
       <h1 className="btitle">Playoff bracket</h1>
       <p className="muted">A projected 12-team field and every team's chances, round by round, from live prediction-market prices. Not the official seeding.</p>
 
+      {rows.length > 0 && (
+        <section className="pb-sum">
+          <div>
+            <h3>Looking safe</h3>
+            <div className="pb-chips">{[...rows].sort((a, b) => b.make - a.make).filter((r) => r.make >= 0.9).map((r) => (
+              <Link key={r.id} href={`/team/${r.id}`} className="pb-chip">{r.logo && <img src={r.logo} alt="" />}{r.name}<b>{pc(r.make)}</b></Link>
+            ))}</div>
+          </div>
+          <div>
+            <h3>On the bubble</h3>
+            <div className="pb-chips">{[...rows].sort((a, b) => b.make - a.make).filter((r) => r.make >= 0.25 && r.make < 0.9).slice(0, 10).map((r) => (
+              <Link key={r.id} href={`/team/${r.id}`} className="pb-chip">{r.logo && <img src={r.logo} alt="" />}{r.name}<b>{pc(r.make)}</b></Link>
+            ))}</div>
+          </div>
+          <p className="muted small">Chance to make the 12-team playoff.</p>
+        </section>
+      )}
+
       {field.length === 12 ? (
         <div className="pb">
-          <div className="pb-col"><h3>First round</h3>{fr.map(([a, b], i) => <Game key={i} a={a} b={b} k="qf" w={frW[i]} />)}</div>
-          <div className="pb-col"><h3>Quarterfinals</h3>{qf.map(([a, b], i) => <Game key={i} a={a} b={b} k="sf" w={qfW[i]} />)}</div>
-          <div className="pb-col"><h3>Semifinals</h3>{sf.map(([a, b], i) => <Game key={i} a={a} b={b} k="fin" w={sfW[i]} />)}</div>
-          <div className="pb-col"><h3>Final</h3><Game a={sfW[0]} b={sfW[1]} k="win" w={champ} />
+          <div className="pb-col"><h3>First round</h3><small className="pb-sub">Chance to reach the quarterfinals</small>{fr.map(([a, b], i) => <Game key={i} a={a} b={b} k="qf" w={frW[i]} />)}</div>
+          <div className="pb-col"><h3>Quarterfinals</h3><small className="pb-sub">Chance to reach the semifinals</small>{qf.map(([a, b], i) => <Game key={i} a={a} b={b} k="sf" w={qfW[i]} />)}</div>
+          <div className="pb-col"><h3>Semifinals</h3><small className="pb-sub">Chance to reach the final</small>{sf.map(([a, b], i) => <Game key={i} a={a} b={b} k="fin" w={sfW[i]} />)}</div>
+          <div className="pb-col"><h3>Final</h3><small className="pb-sub">Chance to win the title</small><Game a={sfW[0]} b={sfW[1]} k="win" w={champ} />
             <div className="pb-champ"><span>Projected champion</span>{champ?.logo && <img src={champ.logo} alt="" />}<b>{champ?.name}</b><small>{pc(champ?.win)} to win it all</small></div>
           </div>
         </div>
       ) : <p className="muted">Playoff markets aren't open right now.</p>}
-      <p className="muted small srcnote">Percentages in each round are the chance to reach the next round. Seeds 1 to 4 get first-round byes.</p>
+      <p className="muted small srcnote">Seeds 1 to 4 get first-round byes. The team in bold is the one the market favors to advance.</p>
 
       <section className="card pb-table">
         <div className="cardh"><h3>Round-by-round odds</h3></div>
-        <div className="pbt-row pbt-head"><span>Team</span><span>Make CFP</span><span>Quarters</span><span>Semis</span><span>Final</span><span>Title</span></div>
+        <div className="pbt-row pbt-head"><span>Team</span><span>Make playoff</span><span>Reach quarters</span><span>Reach semis</span><span>Reach final</span><span>Win title</span></div>
         {table.map((r) => (
           <Link key={r.id} href={`/team/${r.id}`} className="pbt-row">
             <span className="pbt-team">{r.logo && <img src={r.logo} alt="" />}{r.name}</span>
