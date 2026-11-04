@@ -1,0 +1,1530 @@
+{
+ "since": "2026-11-04T20:24:47.596Z",
+ "picks": {
+  "401856738": {
+   "id": "401856738",
+   "date": "2026-11-07T17:45Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "2",
+    "short": "Auburn",
+    "abbr": "AUB",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2.png"
+   },
+   "dog": {
+    "id": "8",
+    "short": "Arkansas",
+    "abbr": "ARK",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/8.png"
+   },
+   "line": "AUB -10.5",
+   "spread": 10.5,
+   "score": 39,
+   "tier": "WATCH",
+   "upsetPct": 23,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401856739": {
+   "id": "401856739",
+   "date": "2026-11-08T00:45Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "57",
+    "short": "Florida",
+    "abbr": "FLA",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/57.png"
+   },
+   "dog": {
+    "id": "201",
+    "short": "Oklahoma",
+    "abbr": "OU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/201.png"
+   },
+   "line": "FLA -6.5",
+   "spread": 6.5,
+   "score": 51,
+   "tier": "FADE",
+   "upsetPct": 34,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401856740": {
+   "id": "401856740",
+   "date": "2026-11-07T20:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "99",
+    "short": "LSU",
+    "abbr": "LSU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/99.png"
+   },
+   "dog": {
+    "id": "333",
+    "short": "Alabama",
+    "abbr": "ALA",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/333.png"
+   },
+   "line": "LSU -5.5",
+   "spread": 5.5,
+   "score": 41,
+   "tier": "WATCH",
+   "upsetPct": 34,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401856741": {
+   "id": "401856741",
+   "date": "2026-11-08T00:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": false,
+   "fav": {
+    "id": "61",
+    "short": "Georgia",
+    "abbr": "UGA",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/61.png"
+   },
+   "dog": {
+    "id": "145",
+    "short": "Ole Miss",
+    "abbr": "MISS",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/145.png"
+   },
+   "line": "UGA -3.5",
+   "spread": 3.5,
+   "score": 72,
+   "tier": "FADE",
+   "upsetPct": 44,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401856742": {
+   "id": "401856742",
+   "date": "2026-11-07T21:15Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "344",
+    "short": "Mississippi St",
+    "abbr": "MSST",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/344.png"
+   },
+   "dog": {
+    "id": "238",
+    "short": "Vanderbilt",
+    "abbr": "VAN",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/238.png"
+   },
+   "line": "MSST -3",
+   "spread": 3,
+   "score": 35,
+   "tier": "WATCH",
+   "upsetPct": 43,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401856743": {
+   "id": "401856743",
+   "date": "2026-11-07T17:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": false,
+   "fav": {
+    "id": "251",
+    "short": "Texas",
+    "abbr": "TEX",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/251.png"
+   },
+   "dog": {
+    "id": "142",
+    "short": "Missouri",
+    "abbr": "MIZ",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/142.png"
+   },
+   "line": "TEX -2.5",
+   "spread": 2.5,
+   "score": 47,
+   "tier": "WATCH",
+   "upsetPct": 47,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401856744": {
+   "id": "401856744",
+   "date": "2026-11-07T20:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "2579",
+    "short": "South Carolina",
+    "abbr": "SC",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2579.png"
+   },
+   "dog": {
+    "id": "245",
+    "short": "Texas A&M",
+    "abbr": "TA&M",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/245.png"
+   },
+   "line": "SC -7",
+   "spread": 7,
+   "score": 28,
+   "tier": "WATCH",
+   "upsetPct": 29,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401856745": {
+   "id": "401856745",
+   "date": "2026-11-07T23:15Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "2633",
+    "short": "Tennessee",
+    "abbr": "TENN",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2633.png"
+   },
+   "dog": {
+    "id": "96",
+    "short": "Kentucky",
+    "abbr": "UK",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/96.png"
+   },
+   "line": "TENN -6.5",
+   "spread": 6.5,
+   "score": 35,
+   "tier": "WATCH",
+   "upsetPct": 34,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401856849": {
+   "id": "401856849",
+   "date": "2026-11-07T17:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "254",
+    "short": "Utah",
+    "abbr": "UTAH",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/254.png"
+   },
+   "dog": {
+    "id": "252",
+    "short": "BYU",
+    "abbr": "BYU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/252.png"
+   },
+   "line": "UTAH -5.5",
+   "spread": 5.5,
+   "score": 27,
+   "tier": "HOLD",
+   "upsetPct": 35,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401856850": {
+   "id": "401856850",
+   "date": "2026-11-07T20:45Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "2305",
+    "short": "Kansas",
+    "abbr": "KU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2305.png"
+   },
+   "dog": {
+    "id": "2116",
+    "short": "UCF",
+    "abbr": "UCF",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2116.png"
+   },
+   "line": "KU -3",
+   "spread": 3,
+   "score": 13,
+   "tier": "HOLD",
+   "upsetPct": 39,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401856851": {
+   "id": "401856851",
+   "date": "2026-11-07T20:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "248",
+    "short": "Houston",
+    "abbr": "HOU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/248.png"
+   },
+   "dog": {
+    "id": "2132",
+    "short": "Cincinnati",
+    "abbr": "CIN",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2132.png"
+   },
+   "line": "HOU -10.5",
+   "spread": 10.5,
+   "score": 27,
+   "tier": "HOLD",
+   "upsetPct": 21,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401856852": {
+   "id": "401856852",
+   "date": "2026-11-08T00:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "9",
+    "short": "Arizona St",
+    "abbr": "ASU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/9.png"
+   },
+   "dog": {
+    "id": "38",
+    "short": "Colorado",
+    "abbr": "COLO",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/38.png"
+   },
+   "line": "ASU -3",
+   "spread": 3,
+   "score": 27,
+   "tier": "HOLD",
+   "upsetPct": 40,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401856853": {
+   "id": "401856853",
+   "date": "2026-11-07T17:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "239",
+    "short": "Baylor",
+    "abbr": "BAY",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/239.png"
+   },
+   "dog": {
+    "id": "66",
+    "short": "Iowa State",
+    "abbr": "ISU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/66.png"
+   },
+   "line": "BAY -9.5",
+   "spread": 9.5,
+   "score": 33,
+   "tier": "WATCH",
+   "upsetPct": 24,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401856854": {
+   "id": "401856854",
+   "date": "2026-11-07T18:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": false,
+   "fav": {
+    "id": "197",
+    "short": "Oklahoma St",
+    "abbr": "OKST",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/197.png"
+   },
+   "dog": {
+    "id": "2306",
+    "short": "Kansas St",
+    "abbr": "KSU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2306.png"
+   },
+   "line": "OKST -5.5",
+   "spread": 5.5,
+   "score": 43,
+   "tier": "WATCH",
+   "upsetPct": 35,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401856855": {
+   "id": "401856855",
+   "date": "2026-11-07T03:15Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "12",
+    "short": "Arizona",
+    "abbr": "ARIZ",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/12.png"
+   },
+   "dog": {
+    "id": "2628",
+    "short": "TCU",
+    "abbr": "TCU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2628.png"
+   },
+   "line": "ARIZ -8.5",
+   "spread": 8.5,
+   "score": 57,
+   "tier": "FADE",
+   "upsetPct": 28,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401856856": {
+   "id": "401856856",
+   "date": "2026-11-08T02:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "2641",
+    "short": "Texas Tech",
+    "abbr": "TTU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2641.png"
+   },
+   "dog": {
+    "id": "277",
+    "short": "West Virginia",
+    "abbr": "WVU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/277.png"
+   },
+   "line": "TTU -16.5",
+   "spread": 16.5,
+   "score": 27,
+   "tier": "HOLD",
+   "upsetPct": 13,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401858285": {
+   "id": "401858285",
+   "date": "2026-11-07T17:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": false,
+   "fav": {
+    "id": "228",
+    "short": "Clemson",
+    "abbr": "CLEM",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/228.png"
+   },
+   "dog": {
+    "id": "183",
+    "short": "Syracuse",
+    "abbr": "SYR",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/183.png"
+   },
+   "line": "CLEM -2.5",
+   "spread": 2.5,
+   "score": 15,
+   "tier": "HOLD",
+   "upsetPct": 41,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401858286": {
+   "id": "401858286",
+   "date": "2026-11-07T17:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": false,
+   "fav": {
+    "id": "150",
+    "short": "Duke",
+    "abbr": "DUKE",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/150.png"
+   },
+   "dog": {
+    "id": "152",
+    "short": "NC State",
+    "abbr": "NCSU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/152.png"
+   },
+   "line": "DUKE -4.5",
+   "spread": 4.5,
+   "score": 43,
+   "tier": "WATCH",
+   "upsetPct": 37,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401858287": {
+   "id": "401858287",
+   "date": "2026-11-08T00:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": false,
+   "fav": {
+    "id": "97",
+    "short": "Louisville",
+    "abbr": "LOU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/97.png"
+   },
+   "dog": {
+    "id": "59",
+    "short": "Georgia Tech",
+    "abbr": "GT",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/59.png"
+   },
+   "line": "LOU -14.5",
+   "spread": 14.5,
+   "score": 20,
+   "tier": "HOLD",
+   "upsetPct": 15,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401858288": {
+   "id": "401858288",
+   "date": "2026-11-07T00:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "2567",
+    "short": "SMU",
+    "abbr": "SMU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2567.png"
+   },
+   "dog": {
+    "id": "259",
+    "short": "Virginia Tech",
+    "abbr": "VT",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/259.png"
+   },
+   "line": "SMU -6",
+   "spread": 6,
+   "score": 59,
+   "tier": "FADE",
+   "upsetPct": 36,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401858289": {
+   "id": "401858289",
+   "date": "2026-11-07T17:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": false,
+   "fav": {
+    "id": "52",
+    "short": "Florida St",
+    "abbr": "FSU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/52.png"
+   },
+   "dog": {
+    "id": "103",
+    "short": "Boston College",
+    "abbr": "BC",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/103.png"
+   },
+   "line": "FSU -6.5",
+   "spread": 6.5,
+   "score": 35,
+   "tier": "WATCH",
+   "upsetPct": 33,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401858290": {
+   "id": "401858290",
+   "date": "2026-11-07T20:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "154",
+    "short": "Wake Forest",
+    "abbr": "WAKE",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/154.png"
+   },
+   "dog": {
+    "id": "2771",
+    "short": "Merrimack",
+    "abbr": "MRMK",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2771.png"
+   },
+   "line": "WAKE -46.5",
+   "spread": 46.5,
+   "score": 5,
+   "tier": "HOLD",
+   "upsetPct": 1,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401858291": {
+   "id": "401858291",
+   "date": "2026-11-08T00:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "87",
+    "short": "Notre Dame",
+    "abbr": "ND",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/87.png"
+   },
+   "dog": {
+    "id": "2390",
+    "short": "Miami",
+    "abbr": "MIA",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2390.png"
+   },
+   "line": "ND -7",
+   "spread": 7,
+   "score": 20,
+   "tier": "HOLD",
+   "upsetPct": 29,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401858292": {
+   "id": "401858292",
+   "date": "2026-11-07T17:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": false,
+   "fav": {
+    "id": "153",
+    "short": "North Carolina",
+    "abbr": "UNC",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/153.png"
+   },
+   "dog": {
+    "id": "41",
+    "short": "UConn",
+    "abbr": "CONN",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/41.png"
+   },
+   "line": "UNC -7",
+   "spread": 7,
+   "score": 49,
+   "tier": "WATCH",
+   "upsetPct": 32,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401858510": {
+   "id": "401858510",
+   "date": "2026-11-07T01:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": false,
+   "fav": {
+    "id": "158",
+    "short": "Nebraska",
+    "abbr": "NEB",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/158.png"
+   },
+   "dog": {
+    "id": "356",
+    "short": "Illinois",
+    "abbr": "ILL",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/356.png"
+   },
+   "line": "NEB -4.5",
+   "spread": 4.5,
+   "score": 40,
+   "tier": "WATCH",
+   "upsetPct": 37,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401858511": {
+   "id": "401858511",
+   "date": "2026-11-08T00:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "130",
+    "short": "Michigan",
+    "abbr": "MICH",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/130.png"
+   },
+   "dog": {
+    "id": "127",
+    "short": "Michigan St",
+    "abbr": "MSU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/127.png"
+   },
+   "line": "MICH -13.5",
+   "spread": 13.5,
+   "score": 41,
+   "tier": "WATCH",
+   "upsetPct": 19,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401858512": {
+   "id": "401858512",
+   "date": "2026-11-07T17:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": false,
+   "fav": {
+    "id": "26",
+    "short": "UCLA",
+    "abbr": "UCLA",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/26.png"
+   },
+   "dog": {
+    "id": "135",
+    "short": "Minnesota",
+    "abbr": "MINN",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/135.png"
+   },
+   "line": "UCLA -5.5",
+   "spread": 5.5,
+   "score": 23,
+   "tier": "HOLD",
+   "upsetPct": 32,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401858513": {
+   "id": "401858513",
+   "date": "2026-11-08T00:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "77",
+    "short": "Northwestern",
+    "abbr": "NU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/77.png"
+   },
+   "dog": {
+    "id": "2294",
+    "short": "Iowa",
+    "abbr": "IOWA",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2294.png"
+   },
+   "line": "NU -3",
+   "spread": 3,
+   "score": 57,
+   "tier": "FADE",
+   "upsetPct": 49,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401858514": {
+   "id": "401858514",
+   "date": "2026-11-07T20:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "194",
+    "short": "Ohio State",
+    "abbr": "OSU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/194.png"
+   },
+   "dog": {
+    "id": "2483",
+    "short": "Oregon",
+    "abbr": "ORE",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2483.png"
+   },
+   "line": "OSU -7.5",
+   "spread": 7.5,
+   "score": 27,
+   "tier": "HOLD",
+   "upsetPct": 27,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401858515": {
+   "id": "401858515",
+   "date": "2026-11-07T17:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "2509",
+    "short": "Purdue",
+    "abbr": "PUR",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2509.png"
+   },
+   "dog": {
+    "id": "120",
+    "short": "Maryland",
+    "abbr": "MD",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/120.png"
+   },
+   "line": "PUR -6",
+   "spread": 6,
+   "score": 33,
+   "tier": "WATCH",
+   "upsetPct": 33,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401858516": {
+   "id": "401858516",
+   "date": "2026-11-07T20:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "264",
+    "short": "Washington",
+    "abbr": "WASH",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/264.png"
+   },
+   "dog": {
+    "id": "213",
+    "short": "Penn State",
+    "abbr": "PSU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/213.png"
+   },
+   "line": "WASH -2.5",
+   "spread": 2.5,
+   "score": 27,
+   "tier": "HOLD",
+   "upsetPct": 44,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401858517": {
+   "id": "401858517",
+   "date": "2026-11-07T21:15Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "275",
+    "short": "Wisconsin",
+    "abbr": "WIS",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/275.png"
+   },
+   "dog": {
+    "id": "164",
+    "short": "Rutgers",
+    "abbr": "RUTG",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/164.png"
+   },
+   "line": "WIS -17",
+   "spread": 17,
+   "score": 19,
+   "tier": "HOLD",
+   "upsetPct": 12,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401860911": {
+   "id": "401860911",
+   "date": "2026-11-07T23:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": false,
+   "fav": {
+    "id": "68",
+    "short": "Boise St",
+    "abbr": "BOIS",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/68.png"
+   },
+   "dog": {
+    "id": "36",
+    "short": "Colorado St",
+    "abbr": "CSU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/36.png"
+   },
+   "line": "BOIS -17.5",
+   "spread": 17.5,
+   "score": 32,
+   "tier": "WATCH",
+   "upsetPct": 12,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401860912": {
+   "id": "401860912",
+   "date": "2026-11-08T03:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "204",
+    "short": "Oregon St",
+    "abbr": "ORST",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/204.png"
+   },
+   "dog": {
+    "id": "326",
+    "short": "Texas St",
+    "abbr": "TXST",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/326.png"
+   },
+   "line": "ORST -6.5",
+   "spread": 6.5,
+   "score": 45,
+   "tier": "WATCH",
+   "upsetPct": 34,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401860913": {
+   "id": "401860913",
+   "date": "2026-11-08T02:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": false,
+   "fav": {
+    "id": "278",
+    "short": "Fresno St",
+    "abbr": "FRES",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/278.png"
+   },
+   "dog": {
+    "id": "328",
+    "short": "Utah State",
+    "abbr": "USU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/328.png"
+   },
+   "line": "FRES -2.5",
+   "spread": 2.5,
+   "score": 20,
+   "tier": "HOLD",
+   "upsetPct": 44,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401862817": {
+   "id": "401862817",
+   "date": "2026-11-06T00:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": false,
+   "fav": {
+    "id": "2636",
+    "short": "UTSA",
+    "abbr": "UTSA",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2636.png"
+   },
+   "dog": {
+    "id": "2226",
+    "short": "FAU",
+    "abbr": "FAU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2226.png"
+   },
+   "line": "UTSA -7",
+   "spread": 7,
+   "score": 28,
+   "tier": "WATCH",
+   "upsetPct": 30,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401862818": {
+   "id": "401862818",
+   "date": "2026-11-07T00:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "151",
+    "short": "East Carolina",
+    "abbr": "ECU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/151.png"
+   },
+   "dog": {
+    "id": "58",
+    "short": "South Florida",
+    "abbr": "USF",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/58.png"
+   },
+   "line": "ECU -2.5",
+   "spread": 2.5,
+   "score": 15,
+   "tier": "HOLD",
+   "upsetPct": 44,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401862819": {
+   "id": "401862819",
+   "date": "2026-11-07T20:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "5",
+    "short": "UAB",
+    "abbr": "UAB",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/5.png"
+   },
+   "dog": {
+    "id": "2429",
+    "short": "Charlotte",
+    "abbr": "CLT",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2429.png"
+   },
+   "line": "UAB -8.5",
+   "spread": 8.5,
+   "score": 25,
+   "tier": "HOLD",
+   "upsetPct": 24,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401862820": {
+   "id": "401862820",
+   "date": "2026-11-07T20:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "2426",
+    "short": "Navy",
+    "abbr": "NAVY",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2426.png"
+   },
+   "dog": {
+    "id": "218",
+    "short": "Temple",
+    "abbr": "TEM",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/218.png"
+   },
+   "line": "NAVY -7.5",
+   "spread": 7.5,
+   "score": 37,
+   "tier": "WATCH",
+   "upsetPct": 28,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401862821": {
+   "id": "401862821",
+   "date": "2026-11-07T21:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "249",
+    "short": "North Texas",
+    "abbr": "UNT",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/249.png"
+   },
+   "dog": {
+    "id": "242",
+    "short": "Rice",
+    "abbr": "RICE",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/242.png"
+   },
+   "line": "UNT -17",
+   "spread": 17,
+   "score": 13,
+   "tier": "HOLD",
+   "upsetPct": 11,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401862822": {
+   "id": "401862822",
+   "date": "2026-11-07T17:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": false,
+   "fav": {
+    "id": "202",
+    "short": "Tulsa",
+    "abbr": "TLSA",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/202.png"
+   },
+   "dog": {
+    "id": "2655",
+    "short": "Tulane",
+    "abbr": "TULN",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2655.png"
+   },
+   "line": "TLSA -1.5",
+   "spread": 1.5,
+   "score": 55,
+   "tier": "FADE",
+   "upsetPct": 51,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401862823": {
+   "id": "401862823",
+   "date": "2026-11-08T00:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "349",
+    "short": "Army",
+    "abbr": "ARMY",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/349.png"
+   },
+   "dog": {
+    "id": "2005",
+    "short": "Air Force",
+    "abbr": "AFA",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2005.png"
+   },
+   "line": "ARMY -3",
+   "spread": 3,
+   "score": 31,
+   "tier": "WATCH",
+   "upsetPct": 41,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401864532": {
+   "id": "401864532",
+   "date": "2026-11-08T02:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": false,
+   "fav": {
+    "id": "62",
+    "short": "Hawai'i",
+    "abbr": "HAW",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/62.png"
+   },
+   "dog": {
+    "id": "2638",
+    "short": "UTEP",
+    "abbr": "UTEP",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2638.png"
+   },
+   "line": "HAW -9.5",
+   "spread": 9.5,
+   "score": 40,
+   "tier": "WATCH",
+   "upsetPct": 26,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401864533": {
+   "id": "401864533",
+   "date": "2026-11-07T02:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": false,
+   "fav": {
+    "id": "167",
+    "short": "New Mexico",
+    "abbr": "UNM",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/167.png"
+   },
+   "dog": {
+    "id": "2440",
+    "short": "Nevada",
+    "abbr": "NEV",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2440.png"
+   },
+   "line": "UNM -9.5",
+   "spread": 9.5,
+   "score": 40,
+   "tier": "WATCH",
+   "upsetPct": 23,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401864534": {
+   "id": "401864534",
+   "date": "2026-11-07T21:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "23",
+    "short": "San José St",
+    "abbr": "SJSU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/23.png"
+   },
+   "dog": {
+    "id": "2459",
+    "short": "N Illinois",
+    "abbr": "NIU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2459.png"
+   },
+   "line": "SJSU -10",
+   "spread": 10,
+   "score": 25,
+   "tier": "HOLD",
+   "upsetPct": 22,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401864535": {
+   "id": "401864535",
+   "date": "2026-11-08T03:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "2439",
+    "short": "UNLV",
+    "abbr": "UNLV",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2439.png"
+   },
+   "dog": {
+    "id": "2751",
+    "short": "Wyoming",
+    "abbr": "WYO",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2751.png"
+   },
+   "line": "UNLV -6",
+   "spread": 6,
+   "score": 33,
+   "tier": "WATCH",
+   "upsetPct": 34,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401866455": {
+   "id": "401866455",
+   "date": "2026-11-05T00:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "113",
+    "short": "UMass",
+    "abbr": "MASS",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/113.png"
+   },
+   "dog": {
+    "id": "2050",
+    "short": "Ball State",
+    "abbr": "BALL",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2050.png"
+   },
+   "line": "MASS -2.5",
+   "spread": 2.5,
+   "score": 5,
+   "tier": "HOLD",
+   "upsetPct": 39,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401866456": {
+   "id": "401866456",
+   "date": "2026-11-05T00:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "2199",
+    "short": "E Michigan",
+    "abbr": "EMU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2199.png"
+   },
+   "dog": {
+    "id": "2117",
+    "short": "C Michigan",
+    "abbr": "CMU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2117.png"
+   },
+   "line": "EMU -1.5",
+   "spread": 1.5,
+   "score": 21,
+   "tier": "HOLD",
+   "upsetPct": 48,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401866457": {
+   "id": "401866457",
+   "date": "2026-11-05T00:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": false,
+   "fav": {
+    "id": "2649",
+    "short": "Toledo",
+    "abbr": "TOL",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2649.png"
+   },
+   "dog": {
+    "id": "16",
+    "short": "Sacramento St",
+    "abbr": "SAC",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/16.png"
+   },
+   "line": "TOL -25",
+   "spread": 25,
+   "score": 20,
+   "tier": "HOLD",
+   "upsetPct": 6,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401869927": {
+   "id": "401869927",
+   "date": "2026-11-07T19:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "2026",
+    "short": "App State",
+    "abbr": "APP",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2026.png"
+   },
+   "dog": {
+    "id": "2247",
+    "short": "Georgia St",
+    "abbr": "GAST",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2247.png"
+   },
+   "line": "APP -5.5",
+   "spread": 5.5,
+   "score": 7,
+   "tier": "HOLD",
+   "upsetPct": 31,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401869936": {
+   "id": "401869936",
+   "date": "2026-11-07T20:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "2032",
+    "short": "Arkansas St",
+    "abbr": "ARST",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2032.png"
+   },
+   "dog": {
+    "id": "2433",
+    "short": "UL Monroe",
+    "abbr": "ULM",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2433.png"
+   },
+   "line": "ARST -14.5",
+   "spread": 14.5,
+   "score": 5,
+   "tier": "HOLD",
+   "upsetPct": 14,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401869945": {
+   "id": "401869945",
+   "date": "2026-11-07T18:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "324",
+    "short": "Coastal",
+    "abbr": "CCU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/324.png"
+   },
+   "dog": {
+    "id": "295",
+    "short": "Old Dominion",
+    "abbr": "ODU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/295.png"
+   },
+   "line": "CCU -7",
+   "spread": 7,
+   "score": 13,
+   "tier": "HOLD",
+   "upsetPct": 27,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401869951": {
+   "id": "401869951",
+   "date": "2026-11-07T20:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "290",
+    "short": "GA Southern",
+    "abbr": "GASO",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/290.png"
+   },
+   "dog": {
+    "id": "276",
+    "short": "Marshall",
+    "abbr": "MRSH",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/276.png"
+   },
+   "line": "GASO -10.5",
+   "spread": 10.5,
+   "score": 7,
+   "tier": "HOLD",
+   "upsetPct": 21,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401869964": {
+   "id": "401869964",
+   "date": "2026-11-06T01:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": false,
+   "fav": {
+    "id": "256",
+    "short": "James Madison",
+    "abbr": "JMU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/256.png"
+   },
+   "dog": {
+    "id": "2572",
+    "short": "Southern Miss",
+    "abbr": "USM",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2572.png"
+   },
+   "line": "JMU -14.5",
+   "spread": 14.5,
+   "score": 20,
+   "tier": "HOLD",
+   "upsetPct": 14,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401869968": {
+   "id": "401869968",
+   "date": "2026-11-07T22:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "309",
+    "short": "Louisiana",
+    "abbr": "UL",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/309.png"
+   },
+   "dog": {
+    "id": "6",
+    "short": "South Alabama",
+    "abbr": "USA",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/6.png"
+   },
+   "line": "UL -7.5",
+   "spread": 7.5,
+   "score": 7,
+   "tier": "HOLD",
+   "upsetPct": 25,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401870795": {
+   "id": "401870795",
+   "date": "2026-11-08T01:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": false,
+   "fav": {
+    "id": "2335",
+    "short": "Liberty",
+    "abbr": "LIB",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2335.png"
+   },
+   "dog": {
+    "id": "166",
+    "short": "New Mexico St",
+    "abbr": "NMSU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/166.png"
+   },
+   "line": "LIB -16.5",
+   "spread": 16.5,
+   "score": 14,
+   "tier": "HOLD",
+   "upsetPct": 13,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401871073": {
+   "id": "401871073",
+   "date": "2026-11-07T20:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": false,
+   "fav": {
+    "id": "48",
+    "short": "Delaware",
+    "abbr": "DEL",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/48.png"
+   },
+   "dog": {
+    "id": "338",
+    "short": "Kennesaw St",
+    "abbr": "KENN",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/338.png"
+   },
+   "line": "DEL -2.5",
+   "spread": 2.5,
+   "score": 15,
+   "tier": "HOLD",
+   "upsetPct": 44,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401871074": {
+   "id": "401871074",
+   "date": "2026-11-07T21:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "2229",
+    "short": "FIU",
+    "abbr": "FIU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2229.png"
+   },
+   "dog": {
+    "id": "2623",
+    "short": "Missouri St",
+    "abbr": "MOST",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2623.png"
+   },
+   "line": "FIU -4.5",
+   "spread": 4.5,
+   "score": 13,
+   "tier": "HOLD",
+   "upsetPct": 32,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401871075": {
+   "id": "401871075",
+   "date": "2026-11-08T00:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": true,
+   "fav": {
+    "id": "55",
+    "short": "Jax State",
+    "abbr": "JXST",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/55.png"
+   },
+   "dog": {
+    "id": "2534",
+    "short": "Sam Houston",
+    "abbr": "SHSU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2534.png"
+   },
+   "line": "JXST -17",
+   "spread": 17,
+   "score": 0,
+   "tier": "HOLD",
+   "upsetPct": 11,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401871076": {
+   "id": "401871076",
+   "date": "2026-11-07T20:30Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": false,
+   "fav": {
+    "id": "98",
+    "short": "Western KY",
+    "abbr": "WKU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/98.png"
+   },
+   "dog": {
+    "id": "2393",
+    "short": "MTSU",
+    "abbr": "MTSU",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2393.png"
+   },
+   "line": "WKU -1.5",
+   "spread": 1.5,
+   "score": 9,
+   "tier": "HOLD",
+   "upsetPct": 44,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  },
+  "401871098": {
+   "id": "401871098",
+   "date": "2026-11-07T21:00Z",
+   "week": 10,
+   "season": 2026,
+   "favHome": false,
+   "fav": {
+    "id": "2348",
+    "short": "Louisiana Tech",
+    "abbr": "LT",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2348.png"
+   },
+   "dog": {
+    "id": "2653",
+    "short": "Troy",
+    "abbr": "TROY",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2653.png"
+   },
+   "line": "LT -4.5",
+   "spread": 4.5,
+   "score": 35,
+   "tier": "WATCH",
+   "upsetPct": 37,
+   "savedAt": "2026-11-04T20:24:47.811Z"
+  }
+ }
+}
