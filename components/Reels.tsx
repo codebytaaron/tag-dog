@@ -4,9 +4,19 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Reel } from "@/lib/reels";
 import { useFollow, useProfile, useSaved } from "./SaveButton";
 
-type F = "foryou" | "top25" | "upsets" | "close" | "liked";
-const FILTERS: [F, string][] = [["foryou", "For you"], ["top25", "Top 25"], ["upsets", "Upsets"], ["close", "Close games"], ["liked", "Liked"]];
+type F = "foryou" | "top25" | "upsets" | "close" | "social" | "liked";
+const FILTERS: [F, string][] = [["foryou", "For you"], ["top25", "Top 25"], ["upsets", "Upsets"], ["close", "Close games"], ["social", "From Bluesky"], ["liked", "Liked"]];
 const SPEEDS = [1, 1.5, 2];
+// Bluesky videos are HLS streams: Safari plays them natively, other browsers use hls.js (loaded only when needed).
+const isHls = (s: string) => /\.m3u8(\?|$)/.test(s);
+async function attachHls(v: HTMLVideoElement) {
+  const src = v.dataset.src || "";
+  if (!isHls(src) || v.dataset.hls) return;
+  v.dataset.hls = "1";
+  if (v.canPlayType("application/vnd.apple.mpegurl")) { v.src = src; return; }
+  const Hls = (await import("hls.js")).default;
+  if (Hls.isSupported()) { const h = new Hls({ maxBufferLength: 12 }); h.loadSource(src); h.attachMedia(v); }
+}
 const mmss = (s: number) => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, "0")}`;
 
 // ---- local stores (this device only) ----
@@ -109,7 +119,7 @@ export default function Reels({ initial, nextWeek, first }: { initial: Reel[]; n
   // Teams that appear in the feed, most clips first, for the team picker.
   const teams = useMemo(() => {
     const m = new Map<string, { id: string; short: string; logo: string; n: number }>();
-    for (const r of items) for (const t of [r.home, r.away]) { const e = m.get(t.id) || { id: t.id, short: t.short, logo: t.logo, n: 0 }; e.n++; m.set(t.id, e); }
+    for (const r of items) for (const t of [r.home, r.away]) { if (!t.id) continue; const e = m.get(t.id) || { id: t.id, short: t.short, logo: t.logo, n: 0 }; e.n++; m.set(t.id, e); }
     return [...m.values()].sort((a, b) => b.n - a.n || a.short.localeCompare(b.short));
   }, [items]);
   const teamName = teams.find((t) => t.id === team)?.short;
@@ -120,6 +130,7 @@ export default function Reels({ initial, nextWeek, first }: { initial: Reel[]; n
     if (f === "top25") return l.filter((r) => r.home.rank || r.away.rank);
     if (f === "upsets") return l.filter((r) => r.tags.includes("Upset"));
     if (f === "close") return l.filter((r) => r.tags.includes("One-score game") || r.tags.includes("Overtime"));
+    if (f === "social") return l.filter((r) => r.source === "bluesky");
     if (f === "liked") return l.filter((r) => likes.includes(r.key));
     return l;
   }, [items, f, likes, team]);
@@ -169,8 +180,8 @@ export default function Reels({ initial, nextWeek, first }: { initial: Reel[]; n
           if (v.dataset.k) { const seen = load<Record<string, number>>(SEEN, {}); seen[v.dataset.k] = Date.now(); save(SEEN, seen); }
           setIdx(i); setProg(0); setPaused(false);
           v.volume = vol; v.playbackRate = speed; v.preload = "auto";
-          v.play().catch(() => setPaused(true));
-          for (const n of [i + 1, i + 2]) if (vids[n]) vids[n].preload = "auto";
+          attachHls(v).then(() => v.play().catch(() => setPaused(true)));
+          for (const n of [i + 1, i + 2]) if (vids[n]) { vids[n].preload = "auto"; attachHls(vids[n]); }
           if (i >= view.length - 5) more();
         } else if (!v.paused) v.pause();
       }
@@ -275,7 +286,7 @@ export default function Reels({ initial, nextWeek, first }: { initial: Reel[]; n
               <div className="rl-inner">
                 <div className="rl-main">
                   <div className="rl-video">
-                    <video data-i={i} data-k={r.key} src={r.mp4} poster={r.thumb} muted={muted} playsInline preload={i < 2 ? "auto" : "none"}
+                    <video data-i={i} data-k={r.key} data-src={r.mp4} src={isHls(r.mp4) ? undefined : r.mp4} poster={r.thumb} muted={muted} playsInline preload={i < 2 ? "auto" : "none"}
                       onClick={() => onTap(r)}
                       onTimeUpdate={(e) => { if (i === idx) { const v = e.currentTarget; setProg(v.duration ? v.currentTime / v.duration : 0); } }}
                       onEnded={(e) => { if (auto && i < view.length - 1) go(i + 1); else { signal(r, 0.5); e.currentTarget.currentTime = 0; e.currentTarget.play().catch(() => {}); } }} />
@@ -285,6 +296,7 @@ export default function Reels({ initial, nextWeek, first }: { initial: Reel[]; n
                     <div className="rl-prog"><i style={{ width: `${i === idx ? prog * 100 : 0}%` }} /></div>
                   </div>
                   <div className="rl-cap">
+                    {r.gameId ? (
                     <div className="rl-match">
                       {(["away", "home"] as const).map((s, k) => (
                         <Link key={s} href={`/team/${r[s].id}`} className={r[s].winner ? "w" : ""}>
@@ -295,12 +307,13 @@ export default function Reels({ initial, nextWeek, first }: { initial: Reel[]; n
                         </Link>
                       ))}
                     </div>
+                    ) : null}
                     <h2>{r.title}</h2>
                     <div className="rl-sub">
                       {(() => { const m = mine(); const t = [r.home, r.away].find((x) => m.has(x.id)) || [r.home, r.away].find((x) => (affSnap[`team:${x.id}`] || 0) >= 2); return t ? <span className="why">{m.has(t.id) ? `Because you follow ${t.short}` : `Because you watch ${t.short}`}</span> : null; })()}
                       {r.tags.map((t) => <span key={t} className={t === "Upset" ? "up" : ""}>{t}</span>)}
-                      <span className="plain">Week {r.week} · {mmss(r.duration)}</span>
-                      {r.url && <a href={r.url} target="_blank" rel="noopener noreferrer" className="plain">Video: ESPN ↗</a>}
+                      <span className="plain">{r.source === "bluesky" ? `@${r.handle} on Bluesky` : `Week ${r.week}`}{r.duration ? ` · ${mmss(r.duration)}` : ""}</span>
+                      {r.url && <a href={r.url} target="_blank" rel="noopener noreferrer" className="plain">Video: {r.source === "bluesky" ? "Bluesky" : "ESPN"} ↗</a>}
                     </div>
                   </div>
                   {next && (
@@ -314,8 +327,8 @@ export default function Reels({ initial, nextWeek, first }: { initial: Reel[]; n
                   <button className={liked ? "on like" : ""} onClick={() => toggleLike(r, "button")} aria-label={liked ? "Unlike" : "Like"}>{Icon.heart(liked)}<span>{liked ? "Liked" : "Like"}</span></button>
                   <button onClick={() => share(r)} aria-label="Share">{Icon.share}<span>Share</span></button>
                   <button onClick={() => copy(r)} aria-label="Copy link">{Icon.link}<span>Link</span></button>
-                  <button className={isSaved ? "on" : ""} onClick={() => { if (!isSaved) signal(r, 1.5); toggleSave(r.gameId); flash(isSaved ? "Removed from saved" : "Game saved"); }} aria-label="Save game">{Icon.save(isSaved)}<span>{isSaved ? "Saved" : "Save"}</span></button>
-                  <Link href={`/game/${r.gameId}`} aria-label="Full recap">{Icon.recap}<span>Recap</span></Link>
+                  {r.gameId && <button className={isSaved ? "on" : ""} onClick={() => { if (!isSaved) signal(r, 1.5); toggleSave(r.gameId); flash(isSaved ? "Removed from saved" : "Game saved"); }} aria-label="Save game">{Icon.save(isSaved)}<span>{isSaved ? "Saved" : "Save"}</span></button>}
+                  {r.gameId && <Link href={`/game/${r.gameId}`} aria-label="Full recap">{Icon.recap}<span>Recap</span></Link>}
                   <button onClick={() => notInterested(r, i)} aria-label="Show less like this">{Icon.less}<span>Less</span></button>
                   <button onClick={nextSpeed} aria-label="Playback speed"><b className="rl-speed">{speed}×</b><span>Speed</span></button>
                   <button className={auto ? "on" : ""} onClick={toggleAuto} aria-label="Autoplay next"><b className="rl-speed">{auto ? "On" : "Off"}</b><span>Autoplay</span></button>
