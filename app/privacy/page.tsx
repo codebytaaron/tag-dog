@@ -9,7 +9,7 @@ export default function Privacy() {
   return (
     <main className="wrap legalpg">
       <div className="eyebrow mono">LAST UPDATED NOVEMBER 2026</div>
-      <h1 className="big">Privacy</h1>
+      <h1 className="btitle">Privacy</h1>
 
       <h2>The short version</h2>
       <p>TapeDog has no accounts, no sign-in, no email list and no advertising trackers. We don't collect your name, email or location, and we don't sell or share personal information.</p>
