@@ -13,9 +13,10 @@ async function attachHls(v: HTMLVideoElement) {
   const src = v.dataset.src || "";
   if (!isHls(src) || v.dataset.hls) return;
   v.dataset.hls = "1";
-  if (v.canPlayType("application/vnd.apple.mpegurl")) { v.src = src; return; }
+  // Prefer hls.js wherever the browser supports it; some browsers claim native HLS support but fail to play.
   const Hls = (await import("hls.js")).default;
-  if (Hls.isSupported()) { const h = new Hls({ maxBufferLength: 12 }); h.loadSource(src); h.attachMedia(v); }
+  if (Hls.isSupported()) { v.removeAttribute("src"); const h = new Hls({ maxBufferLength: 12 }); h.loadSource(src); h.attachMedia(v); }
+  else v.src = src;
 }
 const mmss = (s: number) => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, "0")}`;
 
