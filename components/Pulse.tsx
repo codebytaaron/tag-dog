@@ -67,6 +67,8 @@ export default function Pulse({ polls, standings, futures, initialTab }: { polls
 
       <div className="ptabs">
         {TABS.map(([k, l]) => <button key={k} className={tab === k ? "on" : ""} onClick={() => setTab(k)}>{l}</button>)}
+        <Link href="/playoff" className="ptab-link">Playoff bracket ›</Link>
+        <Link href="/record" className="ptab-link">Our track record ›</Link>
       </div>
 
       {(tab === "ap" || tab === "coaches") && (poll ? (

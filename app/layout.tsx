@@ -41,7 +41,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <div className="wrap footin">
             <div className="fbrand"><Logo size={22} /><b>TAPEDOG</b><span className="muted">Finds the college football favorites worth fading.</span></div>
             <nav className="flinks">
-              <Link href="/board">Board</Link><Link href="/board?tab=scores">Scores</Link><Link href="/replay">Past results</Link><Link href="/reels">Reels</Link><Link href="/tracker">Tracker</Link><Link href="/rankings">Rankings</Link><Link href="/about">How it works</Link><Link href="/dogzone">Dog Zone</Link><Link href="/profile">Profile</Link><Link href="/our-team">Our team</Link>
+              <Link href="/board">Board</Link><Link href="/board?tab=scores">Scores</Link><Link href="/replay">Past results</Link><Link href="/reels">Reels</Link><Link href="/tracker">Tracker</Link><Link href="/rankings">Rankings</Link><Link href="/playoff">Playoff</Link><Link href="/record">Track record</Link><Link href="/about">How it works</Link><Link href="/dogzone">Dog Zone</Link><Link href="/profile">Profile</Link><Link href="/our-team">Our team</Link>
             </nav>
             <Link href="/our-team" className="builtby">Meet the <b>team</b> <span>→</span></Link>
           </div>

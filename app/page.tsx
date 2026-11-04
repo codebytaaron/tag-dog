@@ -128,7 +128,7 @@ export default async function Landing() {
           <Reveal>
             <div className="secthead">
               <h2 className="h2">Title race</h2>
-              <Link href="/rankings?tab=title" className="textlink">All odds</Link>
+              <span className="links2"><Link href="/playoff" className="textlink">Playoff bracket</Link><Link href="/rankings?tab=title" className="textlink">All odds</Link></span>
             </div>
             <div className="race2">
               {race.map((m, k) => (
@@ -153,7 +153,7 @@ export default async function Landing() {
                 <h2 className="h2">How the Tape Score works</h2>
                 <p>Every favorite starts near zero. We add points for the spots that get favorites beat: a big game next week, a letdown after a big one, a long road trip, a line drifting toward the underdog, bad weather. At 50 or more, we call it a fade.</p>
                 <p className="muted small">Data from ESPN, six sportsbooks, Kalshi, Open-Meteo, Bluesky and Google News.</p>
-                <Link href="/about" className="textlink">Read the full method</Link>
+                <span className="links2"><Link href="/record" className="textlink">See our track record</Link><Link href="/about" className="textlink">Read the full method</Link></span>
               </div>
               <Link href={`/game/${ex.id}`} className="howx-card">
                 <div className="hx-head">
