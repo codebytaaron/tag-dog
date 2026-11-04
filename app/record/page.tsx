@@ -3,6 +3,7 @@ import { getRecord, type Call } from "@/lib/record";
 import Kickoff from "@/components/Kickoff";
 import EdgeStat from "@/components/EdgeStat";
 import { edgeFrom, lab, buckets } from "@/lib/edge";
+import { getLiveRecord } from "@/lib/forward";
 
 export const revalidate = 1800;
 export const maxDuration = 60;
@@ -12,7 +13,8 @@ const pct = (a: number, b: number) => (b ? Math.round((a / b) * 100) : 0);
 const pc = (a: number, b: number) => (b ? `${Math.round((a / b) * 100)}%` : "–");
 
 export default async function RecordPage() {
-  const { calls, year } = await getRecord();
+  const [{ calls, year }, live] = await Promise.all([getRecord(), getLiveRecord()]);
+  const lf = live.calls.filter((c) => c.tier === "FADE"), lg = lf.filter((c) => c.cover !== null);
   const stats = (l: Call[]) => ({ n: l.length, up: l.filter((c) => c.upset).length, cov: l.filter((c) => c.cover === true).length, graded: l.filter((c) => c.cover !== null).length });
   const all = stats(calls), fade = stats(calls.filter((c) => c.tier === "FADE")), watch = stats(calls.filter((c) => c.tier === "WATCH")), hold = stats(calls.filter((c) => c.tier === "HOLD"));
   const fades = calls.filter((c) => c.tier === "FADE").sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
@@ -32,6 +34,18 @@ export default async function RecordPage() {
         <div><b className="c-fade">{pc(fade.up, fade.n)}</b><span>Of FADE favorites lost outright</span><small>All favorites: {pc(all.up, all.n)}{upLift ? ` (${upLift > 0 ? "+" : ""}${upLift} pts)` : ""}</small></div>
         <div><b className="c-tape">{pc(fade.cov, fade.graded)}</b><span>Of FADE underdogs covered</span><small>All underdogs: {pc(all.cov, all.graded)}</small></div>
       </div>
+
+      <section className="card rec-live">
+        <div className="cardh"><h3>Live record</h3><span className="muted small">Calls saved before kickoff{live.since ? ` since ${new Date(live.since).toLocaleDateString("en-US", { month: "short", day: "numeric" })}` : ""}</span></div>
+        {lf.length ? (
+          <div className="rec-hero">
+            <div><b>{lf.length}</b><span>Live FADE calls graded</span></div>
+            <div><b className="c-fade">{Math.round(lf.filter((c) => c.upset).length / lf.length * 100)}%</b><span>Favorite lost outright</span></div>
+            <div><b className="c-tape">{lg.length ? Math.round(lg.filter((c) => c.cover).length / lg.length * 100) : 0}%</b><span>Underdog covered</span></div>
+          </div>
+        ) : <p className="muted">Tracking started. Every call is now saved before kickoff and graded after the final, with no way to change it later. The first results show up after this week's games ({live.pending} calls saved so far).</p>}
+        <p className="muted small rec-note">This is the honest number: picks frozen before kickoff, never re-scored. The backtest below is for testing ideas.</p>
+      </section>
 
       <section className="card rec-lab">
         <div className="cardh"><h3>Model lab</h3><span className="muted small">Same games, different rules</span></div>

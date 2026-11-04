@@ -1,0 +1,40 @@
+name: Save pregame picks
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency: snapshot
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: scripts
+      - name: Load the data branch
+        run: |
+          git fetch origin data || true
+          if git rev-parse --verify origin/data >/dev/null 2>&1; then git show origin/data:picks.json > picks.json; fi
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Save calls for upcoming games
+        run: node scripts/snapshot.mjs picks.json
+      - name: Commit to the data branch
+        run: |
+          [ -f picks.json ] || exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cp picks.json /tmp/picks.json
+          if git rev-parse --verify origin/data >/dev/null 2>&1; then git checkout -B data origin/data; else git checkout --orphan data; git rm -rf -q . ; fi
+          cp /tmp/picks.json picks.json
+          git add picks.json
+          git diff --cached --quiet && exit 0
+          git commit -q -m "Save pregame picks"
+          git push origin data
