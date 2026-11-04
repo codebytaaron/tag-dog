@@ -111,7 +111,7 @@ export default async function Landing() {
               <div className="ap-ctas"><AppNotify /><Link href="/app" className="textlink">See the app</Link></div>
             </div>
             <div className="at-phones" aria-hidden>
-              <img src="/app/home.jpg" alt="" /><img src="/app/board.jpg" alt="" />
+              <img src="/app/home.jpg" alt="" /><img src="/app/game.jpg" alt="" />
             </div>
           </div>
         </Reveal>

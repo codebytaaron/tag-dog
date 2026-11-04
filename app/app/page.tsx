@@ -12,8 +12,9 @@ export const metadata = {
 
 const SHOTS = [
   { src: "/app/home.jpg", cap: "Your teams, ranked by what matters right now" },
-  { src: "/app/board.jpg", cap: "The Fade Board, with our track record built in" },
-  { src: "/app/tape.jpg", cap: "Every favorite gets a TAPE score" },
+  { src: "/app/game.jpg", cap: "Every game: why the favorite is flagged" },
+  { src: "/app/scores.jpg", cap: "Every FBS score, live" },
+  { src: "/app/record.jpg", cap: "Our record, out in the open" },
   { src: "/app/you.jpg", cap: "Picks, streaks and badges" },
   { src: "/app/onboard.jpg", cap: "Set up in under a minute" },
 ];
@@ -48,7 +49,7 @@ export default async function AppPage() {
         </div>
         <div className="ap-phones" aria-hidden>
           <img src="/app/home.jpg" alt="" className="ap-ph p1" />
-          <img src="/app/board.jpg" alt="" className="ap-ph p2" />
+          <img src="/app/game.jpg" alt="" className="ap-ph p2" />
         </div>
       </section>
 
