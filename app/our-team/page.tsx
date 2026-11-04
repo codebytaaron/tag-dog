@@ -3,8 +3,10 @@ import Link from "next/link";
 export const metadata = { title: "Meet the team | TapeDog" };
 
 const TEAM = [
-  { slug: "teddy", name: "Teddy A.", role: "Founder & CEO", line: "Built TapeDog from the ground up. Has loved college football since he was a kid.", initials: "TA" },
-  { slug: "parker", name: "Parker Tichio", role: "Head of Business Development", line: "Leads partnerships and business development. Joined TapeDog in November 2026.", initials: "PT" },
+  { slug: "teddy", name: "Teddy Aaron", role: "Founder & CEO", initials: "TA", note: "Building TapeDog since 2026",
+    bio: "Builder and lifelong college football fan. Has built products used by thousands of people while still in high school." },
+  { slug: "parker", name: "Parker Tichio", role: "Head of Business Development", initials: "PT", note: "Dartmouth College ’30",
+    bio: "Leads partnerships and business development. Joined TapeDog in November 2026." },
 ];
 
 export default function OurTeam() {
@@ -12,17 +14,16 @@ export default function OurTeam() {
     <main className="wrap teampg">
       <div className="eyebrow mono">OUR TEAM</div>
       <h1 className="big">Meet the team</h1>
-      <p className="lead2 muted">The people building TapeDog.</p>
-      <div className="teamgrid2">
+      <p className="lead2 muted">The two people building TapeDog.</p>
+      <div className="tm-grid">
         {TEAM.map((p) => (
-          <Link key={p.slug} href={`/our-team/${p.slug}`} className="tcard">
-            <span className="tav">{p.initials}</span>
-            <div>
-              <b>{p.name}</b>
-              <span className="trole">{p.role}</span>
-              <p>{p.line}</p>
+          <Link key={p.slug} href={`/our-team/${p.slug}`} className="tm-card">
+            <div className="tm-top">
+              <span className="tm-av">{p.initials}</span>
+              <div><div className="tm-name">{p.name}</div><div className="tm-role">{p.role}</div></div>
             </div>
-            <span className="textlink">Learn more</span>
+            <p className="tm-bio">{p.bio}</p>
+            <div className="tm-foot"><span>{p.note}</span><span className="tm-more">Learn more ›</span></div>
           </Link>
         ))}
       </div>

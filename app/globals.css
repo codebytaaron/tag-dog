@@ -1639,3 +1639,14 @@ body::after { opacity: .045; }
 .tv-tile { container-type: inline-size; }
 .nab { display: none; }
 @container (max-width: 240px) { .nfull { display: none; } .nab { display: inline; } }
+/* ---------- team page ---------- */
+.tm-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 16px; margin-top: 36px; }
+.tm-card { display: flex; flex-direction: column; gap: 14px; padding: 28px; border-radius: 18px; background: var(--panel); border: 1px solid var(--line); transition: border-color .15s, transform .15s; }
+.tm-card:hover { border-color: var(--tape); transform: translateY(-2px); }
+.tm-top { display: flex; align-items: center; gap: 16px; }
+.tm-av { width: 68px; height: 68px; border-radius: 50%; display: grid; place-items: center; background: var(--tape); color: var(--ontape); font-family: var(--display); font-size: 26px; flex: none; }
+.tm-name { font-size: 24px; font-weight: 700; letter-spacing: -.01em; }
+.tm-role { font-size: 14px; font-weight: 600; color: var(--tape); margin-top: 2px; }
+.tm-bio { margin: 0; color: var(--ink2); font-size: 15.5px; line-height: 1.6; flex: 1; }
+.tm-foot { display: flex; justify-content: space-between; align-items: center; padding-top: 14px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+.tm-more { color: var(--tape); font-weight: 600; font-size: 14px; }
