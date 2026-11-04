@@ -4,6 +4,10 @@
 import { unstable_cache } from "next/cache";
 import { darkJson, readable } from "./espn";
 import { getFPI, type FPI } from "./fpi";
+import { getRanks } from "./ranks";
+
+// Poll ranks used when ESPN game data leaves them out (it does between poll releases).
+let RANKS: Record<string, number> = {};
 
 const ESPN = "https://site.api.espn.com/apis/site/v2/sports/football/college-football";
 const AN_URL = "https://api.actionnetwork.com/web/v1/scoreboard/ncaaf?period=game&division=FBS&bookIds=15,30,68,69,71,75,79,123";
@@ -61,7 +65,7 @@ function toTeam(c: any): Team {
     id: t.id, name: t.displayName || "TBD", short: t.shortDisplayName || t.name || "TBD",
     location: t.location || t.shortDisplayName || "", nick: t.name || "", abbr: t.abbreviation || "",
     logo: t.logo || t.logos?.[0]?.href || "", color: readable("#" + (t.color || "3a3a3a"), t.alternateColor ? "#" + t.alternateColor : undefined), alt: "#" + (t.alternateColor || "1a1a1a"),
-    rank: rk && rk <= 25 ? rk : null, record: c?.records?.[0]?.summary || "0-0",
+    rank: rk && rk <= 25 ? rk : RANKS[t.id] ?? null, record: c?.records?.[0]?.summary || "0-0",
   };
 }
 
@@ -71,7 +75,7 @@ async function schedule(teamId: string): Promise<Sched> {
   return (d.events || []).map((e: any) => {
     const opp = e.competitions?.[0]?.competitors?.find((x: any) => x.team?.id !== teamId);
     const rk = opp?.curatedRank?.current;
-    return { date: Date.parse(e.date), oppName: opp?.team?.shortDisplayName || "TBD", oppRank: rk && rk <= 25 ? rk : null };
+    return { date: Date.parse(e.date), oppName: opp?.team?.shortDisplayName || "TBD", oppRank: rk && rk <= 25 ? rk : RANKS[opp?.team?.id] ?? null };
   }).sort((a: any, b: any) => a.date - b.date);
 }
 
@@ -254,6 +258,7 @@ async function enrich(b: any, an: any[], ks: KEvent[], fp: Record<string, FPI>):
 }
 
 async function buildSlate(): Promise<Slate> {
+  RANKS = await getRanks();
   const [sb, an, ks, fpiMap] = await Promise.all([
     j(`${ESPN}/scoreboard?groups=80&limit=300`, 600),
     safe(j(AN_URL, 600, UA), { games: [] }),
@@ -302,7 +307,7 @@ export async function getLiveOdds(g: Game) {
   return { books: books.length ? books : g.books, openH, consH, total, ml, kalshi: matchKalshi(parseK(ks), g) || g.kalshi, bets: ag?.num_bets || g.bets, at: new Date().toISOString() };
 }
 
-const cachedSlate = unstable_cache(buildSlate, ["tapedog-slate-v6"], { revalidate: 900 });
+const cachedSlate = unstable_cache(buildSlate, ["tapedog-slate-v7"], { revalidate: 900 });
 export async function getSlate(): Promise<Slate> {
   return safe(cachedSlate(), { season: null, week: null, updated: new Date().toISOString(), games: [] });
 }

@@ -2,6 +2,9 @@
 // one-score finishes, overtime) and its best clips are picked (full-game highlights first; studio
 // talk, interviews and previews are skipped). Ordering, variety and personalization happen on the client.
 import { darkJson } from "./espn";
+import { getRanks } from "./ranks";
+
+let RANKS: Record<string, number> = {};
 
 const ESPN = "https://site.api.espn.com/apis/site/v2/sports/football/college-football";
 export type ReelTeam = { id: string; abbr: string; short: string; logo: string; rank: number | null; score: number | null; winner: boolean };
@@ -23,7 +26,7 @@ const side = (c: any): ReelTeam => {
   const rk = c?.curatedRank?.current;
   return {
     id: c?.team?.id || "", abbr: c?.team?.abbreviation || "", short: c?.team?.shortDisplayName || "", logo: c?.team?.logo || "",
-    rank: rk && rk <= 25 ? rk : null, score: c?.score != null ? Number(c.score) : null, winner: !!c?.winner,
+    rank: rk && rk <= 25 ? rk : RANKS[c?.team?.id] ?? null, score: c?.score != null ? Number(c.score) : null, winner: !!c?.winner,
   };
 };
 
@@ -44,6 +47,7 @@ function rate(e: any) {
 }
 
 export async function getReelsForWeek(week: number | null): Promise<{ week: number; clips: Reel[] }> {
+  RANKS = await getRanks();
   const sb = await board(week ? `&seasontype=2&week=${week}` : "");
   const wk = week ?? sb?.week?.number ?? 1;
   const games = (sb?.events || []).filter((e: any) => e.status?.type?.state === "post")

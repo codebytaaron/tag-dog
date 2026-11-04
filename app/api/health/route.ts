@@ -25,6 +25,7 @@ export async function GET() {
     favoriteSource: { fromLine: up.filter((x) => x.spread != null).length, noLine: up.filter((x) => x.spread == null).map(name) },
     polls: polls.map((p) => `${p.name}: ${p.rows.length}`), standings: stands.length,
     futures: { title: fut.title?.markets.length || 0, titleUnmatched: (fut.title?.markets || []).filter((m) => !m.team).map((m) => m.label), poly: Object.keys(fut.polyTitle || {}).length, playoff: fut.playoff?.markets.length || 0, heisman: fut.heisman?.markets.length || 0, coach: fut.coach?.markets.length || 0 },
+    rankedGames: g.filter((x) => x.home.rank || x.away.rank).length,
     gameday: await getGameDayId(g),
   });
 }
