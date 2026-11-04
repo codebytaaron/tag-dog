@@ -22,13 +22,13 @@ export async function getSocialReels(week: number): Promise<Reel[]> {
     seen.add(p.uri);
     const text = String(p.record?.text || "").trim();
     const age = (Date.now() - Date.parse(p.indexedAt)) / 864e5;
-    if (age > 14 || text.length < 20 || !CFB.test(text) || !PLAY.test(text) || OTHER.test(text)) continue;
+    if (age > 120 || text.length < 20 || !CFB.test(text) || !PLAY.test(text) || OTHER.test(text)) continue;
     const rkey = String(p.uri).split("/").pop();
     const likes = (p.likeCount || 0) + 2 * (p.repostCount || 0);
     out.push({
       key: `bsky-${rkey}`, gameId: "", title: text.split("\n")[0].slice(0, 140), url: `https://bsky.app/profile/${p.author?.handle}/post/${rkey}`,
       mp4: vid.playlist, thumb: vid.thumbnail || "", duration: 0, away: blank, home: blank, week, tags: ["Social"],
-      score: Math.max(5, 18 + Math.log1p(likes) * 6 - age * 1.5), source: "bluesky", handle: p.author?.handle || "",
+      score: Math.max(4, 16 + Math.log1p(likes) * 5 - age * 0.12), source: "bluesky", handle: p.author?.handle || "",
     });
   }
   return out.sort((a, b) => b.score - a.score).slice(0, 30);
