@@ -1625,3 +1625,12 @@ body::after { opacity: .045; }
 .tvfull .tv-poss { width: clamp(8px, 1.2vh, 14px); height: clamp(8px, 1.2vh, 14px); }
 .tvfull img[src*="teamlogos"] { filter: drop-shadow(0 2px 6px rgba(0,0,0,.6)); }
 @media (max-width: 800px) { .tv-intro { grid-template-columns: 1fr; } .tv-ctl-sp { display: none; } }
+
+/* TV mode sizing: scale with tile width as well as height; scroll rather than squeeze when very full */
+.tvfull .tv-grid { grid-template-rows: repeat(var(--rows), minmax(140px, 1fr)); overflow-y: auto; }
+.tvfull .tv-name { font-size: clamp(15px, min(3.6vh, 2vw), 46px); }
+.tvfull .tv-score { font-size: clamp(28px, min(8vh, 4.4vw), 120px); }
+.tvfull .tv-row img { width: clamp(24px, min(6vh, 3.2vw), 80px); height: clamp(24px, min(6vh, 3.2vw), 80px); }
+.tvfull .tv-head { font-size: clamp(12px, min(1.9vh, 1.1vw), 22px); }
+.tvfull .tv-foot { font-size: clamp(12px, min(2vh, 1.2vw), 24px); }
+.tv-name { overflow: hidden; text-overflow: ellipsis; }

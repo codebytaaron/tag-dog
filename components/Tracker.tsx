@@ -113,7 +113,7 @@ export default function Tracker({ games, initial }: { games: LiteGame[]; initial
 
   // TV mode grid: pick columns so every tile fits on one screen.
   const n = picked.length;
-  const cols = n <= 1 ? 1 : n <= 4 ? 2 : n <= 9 ? 3 : 4;
+  const cols = n <= 1 ? 1 : n <= 4 ? 2 : n <= 9 ? 3 : n <= 16 ? 4 : 5;
   const rows = Math.max(1, Math.ceil(n / cols));
 
   const tiles = picked.map((g) => {
