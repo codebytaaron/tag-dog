@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getSlate, type Game } from "@/lib/data";
 import Kickoff from "@/components/Kickoff";
+import Hero from "@/components/Hero";
 import { getGameDayId } from "@/lib/gameday";
 import { getFutures } from "@/lib/pulse";
 import { getEdge } from "@/lib/edge";
@@ -40,10 +41,16 @@ export default async function FrontPage() {
   const watch = [...pool].sort((a, b) => (b.id === gd ? 1 : 0) - (a.id === gd ? 1 : 0) || b.watch - a.watch).slice(0, 5);
   const strip = [...pool].sort((a, b) => Date.parse(a.date) - Date.parse(b.date)).slice(0, 14);
   const race = (fut?.title?.markets || []).slice(0, 8);
+  const fly = fades.slice(0, 18).map((g) => ({
+    id: g.id, line: g.line, score: g.score, tier: g.tier, up: g.upsetPct,
+    away: { abbr: g.away.abbr, logo: g.away.logo, color: g.away.color },
+    home: { abbr: g.home.abbr, logo: g.home.logo, color: g.home.color },
+  }));
   const day = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", timeZone: "America/New_York" });
 
   return (
     <main className="fp">
+      <Hero games={fly} count={s.games.length} week={s.week} />
       <div className="fp-strip" aria-label="Upcoming games">
         <div className="wrap fp-strip-in">
           <span className="fp-strip-label mono">WEEK {s.week ?? "–"}</span>
