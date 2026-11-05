@@ -2087,3 +2087,12 @@ a.edge:hover { border-color: var(--line2); box-shadow: var(--shadow); }
   .fp-app img { display: none; }
   .fp-match { grid-template-columns: 1fr; }
 }
+
+/* ---------- calm pass: content is visible immediately, no decorative motion ---------- */
+.reveal, .reveal.on { opacity: 1 !important; transform: none !important; transition: none !important; }
+.row, .pnode, .perk2, .peekbox { animation: none !important; }
+.srccloud span, .tool, .gsrc, .pflow, .spot::after, .fword.in, .fword.out { animation: none !important; }
+.spot::after { display: none; }
+html.shake main { animation: none !important; }
+.mega { font-size: clamp(40px, 6vw, 72px) !important; line-height: .95; }
+.chip2.gdchip { background: var(--tape); color: var(--ontape); border-color: var(--tape); font-weight: 700; }

@@ -19,13 +19,6 @@ export default function Nav() {
   const path = usePathname();
   const tab = useSearchParams().get("tab");
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    const f = () => setScrolled(window.scrollY > 40);
-    f();
-    window.addEventListener("scroll", f, { passive: true });
-    return () => window.removeEventListener("scroll", f);
-  }, []);
   useEffect(() => setOpen(false), [path, tab]);
 
   const scores = (path === "/board" && tab === "scores") || path === "/replay";
@@ -38,7 +31,7 @@ export default function Nav() {
   ];
 
   return (
-    <header className={`nav ${path === "/" ? "nav-fixed" : ""} ${path === "/" && !open && !scrolled ? "nav-float" : ""}`}>
+    <header className="nav">
       <div className="wrap navin">
         <Link href="/" className="brand"><Logo /> <span>TAPEDOG</span></Link>
         <nav className="links">

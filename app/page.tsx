@@ -63,7 +63,7 @@ export default async function FrontPage() {
               <span className="fp-kicker mono">UPSET OF THE WEEK</span>
               <h1 className="fp-h1">Can {dogOf(lead).short} take down {rk(favOf(lead))}{favOf(lead).short}?</h1>
               <p className="fp-dek">
-                {favOf(lead).short} is {lead.line} {lead.favorite === "home" ? "at home" : "on the road"}, but our model puts {dogOf(lead).short}'s chances at <b>{lead.upsetPct}%</b>.
+                {favOf(lead).short} is {lead.spread != null ? `a ${lead.spread}-point favorite` : "favored"} {lead.favorite === "home" ? "at home" : "on the road"}, but our model puts {dogOf(lead).short}'s chances at <b>{lead.upsetPct}%</b>.
                 {lead.factors.find((f) => f.points > 0) ? ` ${lead.factors.find((f) => f.points > 0)!.detail}` : ""}
               </p>
               <div className="fp-match">
