@@ -49,19 +49,19 @@ export default async function RecordPage() {
 
       <section className="card rec-lab">
         <div className="cardh"><h3>Model lab</h3><span className="muted small">Same games, different rules</span></div>
-        <div className="rec-row rec-head"><span>Rule</span><span>Games</span><span>Favorite lost</span><span>Dog covered</span></div>
+        <div className="rec-row rec-lab5 rec-head"><span>Rule</span><span>Games</span><span>Favorite lost</span><span>Lines expected</span><span>Dog covered</span></div>
         {lab(calls).map((r) => (
-          <div key={r.name} className="rec-row"><span><b>{r.name}</b><small className="muted"> {r.rule}</small></span><span>{r.n}</span><span>{r.n ? `${r.upset}%` : "–"}</span><span>{r.n ? `${r.cover}%` : "–"}</span></div>
+          <div key={r.name} className="rec-row rec-lab5"><span><b>{r.name}</b><small className="muted"> {r.rule}</small></span><span>{r.n}</span><span>{r.n ? `${r.upset}%` : "–"}</span><span className="muted">{r.n ? `${r.expected}%` : "–"}</span><span>{r.n ? `${r.cover}%` : "–"}</span></div>
         ))}
         <div className="rec-cal">
           <span className="mono muted small">CALIBRATION · DO HIGHER TAPE SCORES LOSE MORE?</span>
           <div className="rec-bars">
             {buckets(calls).map((b) => (
-              <div key={b.label} className="rec-bar"><i style={{ height: `${Math.max(4, b.upset)}%` }} /><b>{b.n ? `${b.upset}%` : "–"}</b><small>TAPE {b.label}<br />{b.n} games</small></div>
+              <div key={b.label} className="rec-bar"><i style={{ height: `${Math.max(4, b.upset)}%` }} /><b>{b.n ? `${b.upset}%` : "–"}</b><small>TAPE {b.label}<br />{b.n} games · lines {b.expected}%</small></div>
             ))}
           </div>
         </div>
-        <p className="muted small rec-note">Every rule here uses only what was known before kickoff, and every rule runs on the same games, so a change has to win on identical data. Small samples swing a lot: treat anything under 100 games as early evidence, not proof. These are backtests, not live predictions.</p>
+        <p className="muted small rec-note">Every rule here uses only what was known before kickoff, and every rule runs on the same games. The fair test is "favorite lost" against "lines expected" for the same games: beating all favorites isn't enough, because close games get upset more often anyway. We tried several rules on these games, so the best-looking one may simply be lucky. Treat anything under 100 games as early evidence, not proof.</p>
       </section>
 
       <section className="card rec-tiers">
