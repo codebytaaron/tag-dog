@@ -43,7 +43,6 @@ export default function Nav() {
         <Link href="/" className="brand"><Logo /> <span>TAPEDOG</span></Link>
         <nav className="links">
           {LINKS.map((l) => <Link key={l.href} href={l.href} className={l.on ? "on" : ""}>{l.label}</Link>)}
-          <Link href="/dogzone" className={`dz ${path === "/dogzone" ? "on" : ""}`}>Dog Zone</Link>
           <Link href="/app" className={`navapp ${path === "/app" ? "on" : ""}`}>Get the app</Link>
         </nav>
         <ThemeToggle />

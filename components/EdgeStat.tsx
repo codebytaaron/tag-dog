@@ -1,16 +1,19 @@
 import Link from "next/link";
 import type { Edge } from "@/lib/edge";
 
-// "2.5×": the headline stat, with the honest footnote every time it's shown.
+// Our headline stat, compared with what the betting lines expected for the same games (not with all favorites,
+// which would flatter us because flagged games tend to have closer spreads).
 export default function EdgeStat({ e, link = true }: { e: Edge; link?: boolean }) {
   const body = (
     <>
-      <b className="edge-x">{e.mult.toFixed(1)}×</b>
-      <div className="edge-t">
-        <strong>the average favorite upset rate</strong>
-        <span>{e.fadePct}% of TapeDog's flagged favorites lost, compared with {e.allPct}% across all {e.allN} games analyzed.</span>
-        <small className="mono">{e.year} historical backtest · {e.fadeN} flagged games · not live predictions</small>
+      <div className="edge-nums">
+        <div><b className="edge-x">{e.fadePct}%</b><span>of our flagged favorites lost</span></div>
+        <div><b className="edge-y">{e.expPct}%</b><span>expected by the betting lines</span></div>
       </div>
+      <p className="edge-t">
+        {e.fadeN} games, {e.year} season. With a sample this small the true rate could be anywhere from {e.lo}% to {e.hi}%, so treat it as early evidence.
+        Graded after the fact using only pregame information; our live record, frozen at kickoff, is building now.
+      </p>
     </>
   );
   return link ? <Link href="/record" className="edge">{body}</Link> : <div className="edge">{body}</div>;
