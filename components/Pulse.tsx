@@ -10,8 +10,9 @@ const TABS: [string, string][] = [
 ];
 const KEY: Record<string, string> = { "Southeastern Conference": "SEC", "Big Ten Conference": "Big Ten", "Big 12 Conference": "Big 12", "Atlantic Coast Conference": "ACC" };
 
-function Move({ rank, prev }: { rank: number; prev: number | null }) {
-  if (!prev) return <span className="mv new mono">NEW</span>;
+function Move({ rank, prev, known }: { rank: number; prev: number | null; known: boolean }) {
+  // When ESPN hasn't published last week's ranks, show a dash instead of calling everyone "new".
+  if (!prev) return known ? <span className="mv new mono">NEW</span> : <span className="mv mono muted">–</span>;
   const d = prev - rank;
   if (!d) return <span className="mv mono">–</span>;
   return <span className={`mv mono ${d > 0 ? "up" : "down"}`}>{d > 0 ? "▲" : "▼"}{Math.abs(d)}</span>;
@@ -79,8 +80,8 @@ export default function Pulse({ polls, standings, futures, initialTab }: { polls
               <b className="prk">{r.rank}</b>
               <span className="pteam">{r.team.logo && <img src={r.team.logo} alt="" />}<b>{r.team.name}</b>{r.fpv > 0 && <small className="mono muted">({r.fpv})</small>}{mine.has(r.team.id) && <em className="star">★</em>}</span>
               <span className="mono">{r.record}</span>
-              <span className="mono muted">{r.points.toLocaleString()}</span>
-              <Move rank={r.rank} prev={r.prev} />
+              <span className="mono muted">{r.points > 0 ? r.points.toLocaleString() : "–"}</span>
+              <Move rank={r.rank} prev={r.prev} known={poll.rows.some((x) => !!x.prev)} />
             </Link>
           ))}
           {poll.others && <p className="mono muted small others">ALSO RECEIVING VOTES: {poll.others}</p>}

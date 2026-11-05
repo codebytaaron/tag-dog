@@ -2096,3 +2096,10 @@ a.edge:hover { border-color: var(--line2); box-shadow: var(--shadow); }
 html.shake main { animation: none !important; }
 .mega { font-size: clamp(40px, 6vw, 72px) !important; line-height: .95; }
 .chip2.gdchip { background: var(--tape); color: var(--ontape); border-color: var(--tape); font-weight: 700; }
+
+/* Landing hero, sized to sit above the front page: fits the screen and leaves the scores strip in view. */
+.fp .hero { min-height: 78vh; min-height: 78svh; }
+.fp .hero h1 { font-size: clamp(44px, 7.4vw, 108px); }
+.fp .herocopy { padding-top: 24px; padding-bottom: 40px; }
+.fp .scrollcue { display: none; }
+@media (max-width: 700px) { .fp .hero { min-height: 70svh; } }
