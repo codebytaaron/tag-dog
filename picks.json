@@ -223,8 +223,8 @@
    "spread": 5,
    "score": 27,
    "tier": "HOLD",
-   "upsetPct": 35,
-   "savedAt": "2026-11-05T01:00:11.401Z"
+   "upsetPct": 36,
+   "savedAt": "2026-11-05T08:23:07.166Z"
   },
   "401856850": {
    "id": "401856850",
@@ -373,8 +373,8 @@
    "spread": 7.5,
    "score": 69,
    "tier": "FADE",
-   "upsetPct": 31,
-   "savedAt": "2026-11-05T01:00:11.401Z"
+   "upsetPct": 30,
+   "savedAt": "2026-11-05T08:23:07.166Z"
   },
   "401856856": {
    "id": "401856856",
@@ -569,12 +569,12 @@
     "abbr": "MIA",
     "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2390.png"
    },
-   "line": "ND -7.5",
-   "spread": 7.5,
+   "line": "ND -7",
+   "spread": 7,
    "score": 20,
    "tier": "HOLD",
-   "upsetPct": 28,
-   "savedAt": "2026-11-05T01:00:11.402Z"
+   "upsetPct": 29,
+   "savedAt": "2026-11-05T08:23:07.167Z"
   },
   "401858292": {
    "id": "401858292",
