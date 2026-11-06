@@ -98,8 +98,8 @@
    "spread": 3.5,
    "score": 72,
    "tier": "FADE",
-   "upsetPct": 45,
-   "savedAt": "2026-11-05T16:42:13.432Z"
+   "upsetPct": 44,
+   "savedAt": "2026-11-06T11:23:50.176Z"
   },
   "401856742": {
    "id": "401856742",
@@ -169,12 +169,12 @@
     "abbr": "TA&M",
     "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/245.png"
    },
-   "line": "SC -7",
-   "spread": 7,
-   "score": 28,
-   "tier": "WATCH",
+   "line": "SC -6.5",
+   "spread": 6.5,
+   "score": 21,
+   "tier": "HOLD",
    "upsetPct": 29,
-   "savedAt": "2026-11-04T20:24:47.811Z"
+   "savedAt": "2026-11-06T11:23:50.176Z"
   },
   "401856745": {
    "id": "401856745",
@@ -244,12 +244,12 @@
     "abbr": "UCF",
     "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2116.png"
    },
-   "line": "KU -3",
-   "spread": 3,
-   "score": 13,
+   "line": "KU -3.5",
+   "spread": 3.5,
+   "score": 7,
    "tier": "HOLD",
-   "upsetPct": 39,
-   "savedAt": "2026-11-06T03:20:03.827Z"
+   "upsetPct": 37,
+   "savedAt": "2026-11-06T11:23:50.176Z"
   },
   "401856851": {
    "id": "401856851",
@@ -344,12 +344,12 @@
     "abbr": "KSU",
     "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2306.png"
    },
-   "line": "OKST -6",
-   "spread": 6,
+   "line": "OKST -6.5",
+   "spread": 6.5,
    "score": 43,
    "tier": "WATCH",
    "upsetPct": 34,
-   "savedAt": "2026-11-05T16:42:13.432Z"
+   "savedAt": "2026-11-06T11:23:50.176Z"
   },
   "401856855": {
    "id": "401856855",
@@ -394,12 +394,12 @@
     "abbr": "WVU",
     "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/277.png"
    },
-   "line": "TTU -17.5",
-   "spread": 17.5,
-   "score": 21,
+   "line": "TTU -16.5",
+   "spread": 16.5,
+   "score": 27,
    "tier": "HOLD",
    "upsetPct": 13,
-   "savedAt": "2026-11-05T16:42:13.432Z"
+   "savedAt": "2026-11-06T11:23:50.176Z"
   },
   "401858285": {
    "id": "401858285",
@@ -498,8 +498,8 @@
    "spread": 6.5,
    "score": 47,
    "tier": "WATCH",
-   "upsetPct": 35,
-   "savedAt": "2026-11-06T03:20:03.826Z"
+   "upsetPct": 36,
+   "savedAt": "2026-11-06T11:23:50.176Z"
   },
   "401858289": {
    "id": "401858289",
@@ -723,8 +723,8 @@
    "spread": 7.5,
    "score": 27,
    "tier": "HOLD",
-   "upsetPct": 28,
-   "savedAt": "2026-11-05T22:37:50.872Z"
+   "upsetPct": 27,
+   "savedAt": "2026-11-06T11:23:50.176Z"
   },
   "401858515": {
    "id": "401858515",
@@ -773,8 +773,8 @@
    "spread": 2.5,
    "score": 27,
    "tier": "HOLD",
-   "upsetPct": 44,
-   "savedAt": "2026-11-05T22:37:50.872Z"
+   "upsetPct": 45,
+   "savedAt": "2026-11-06T11:23:50.176Z"
   },
   "401858517": {
    "id": "401858517",
@@ -823,8 +823,8 @@
    "spread": 17.5,
    "score": 32,
    "tier": "WATCH",
-   "upsetPct": 13,
-   "savedAt": "2026-11-06T03:20:03.827Z"
+   "upsetPct": 12,
+   "savedAt": "2026-11-06T11:23:50.176Z"
   },
   "401860912": {
    "id": "401860912",
@@ -873,8 +873,8 @@
    "spread": 2.5,
    "score": 20,
    "tier": "HOLD",
-   "upsetPct": 45,
-   "savedAt": "2026-11-05T16:42:13.432Z"
+   "upsetPct": 44,
+   "savedAt": "2026-11-06T11:23:50.176Z"
   },
   "401862817": {
    "id": "401862817",
@@ -923,8 +923,8 @@
    "spread": 2.5,
    "score": 5,
    "tier": "HOLD",
-   "upsetPct": 40,
-   "savedAt": "2026-11-05T22:37:50.872Z"
+   "upsetPct": 41,
+   "savedAt": "2026-11-06T11:23:50.176Z"
   },
   "401862819": {
    "id": "401862819",
@@ -1021,10 +1021,10 @@
    },
    "line": "TLSA -2.5",
    "spread": 2.5,
-   "score": 43,
-   "tier": "WATCH",
-   "upsetPct": 47,
-   "savedAt": "2026-11-06T03:20:03.826Z"
+   "score": 27,
+   "tier": "HOLD",
+   "upsetPct": 45,
+   "savedAt": "2026-11-06T11:23:50.176Z"
   },
   "401862823": {
    "id": "401862823",
@@ -1148,8 +1148,8 @@
    "spread": 5.5,
    "score": 33,
    "tier": "WATCH",
-   "upsetPct": 35,
-   "savedAt": "2026-11-05T16:42:13.432Z"
+   "upsetPct": 36,
+   "savedAt": "2026-11-06T11:23:50.176Z"
   },
   "401866455": {
    "id": "401866455",
@@ -1273,8 +1273,8 @@
    "spread": 14.5,
    "score": 5,
    "tier": "HOLD",
-   "upsetPct": 13,
-   "savedAt": "2026-11-05T01:00:11.402Z"
+   "upsetPct": 14,
+   "savedAt": "2026-11-06T11:23:50.176Z"
   },
   "401869945": {
    "id": "401869945",
@@ -1298,8 +1298,8 @@
    "spread": 6.5,
    "score": 13,
    "tier": "HOLD",
-   "upsetPct": 28,
-   "savedAt": "2026-11-05T16:42:13.432Z"
+   "upsetPct": 29,
+   "savedAt": "2026-11-06T11:23:50.176Z"
   },
   "401869951": {
    "id": "401869951",
@@ -1398,8 +1398,8 @@
    "spread": 16.5,
    "score": 14,
    "tier": "HOLD",
-   "upsetPct": 12,
-   "savedAt": "2026-11-05T22:37:50.872Z"
+   "upsetPct": 13,
+   "savedAt": "2026-11-06T11:23:50.176Z"
   },
   "401871073": {
    "id": "401871073",
