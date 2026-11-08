@@ -5,6 +5,7 @@ import type { LiteGame } from "@/lib/data";
 import type { Live } from "@/lib/live";
 import SaveButton, { useSaved, useFollow } from "./SaveButton";
 import Kickoff from "./Kickoff";
+import LegalNote from "./LegalNote";
 import { useLive } from "./useLive";
 import { interest } from "@/lib/taste";
 
@@ -390,6 +391,7 @@ export default function Board({ games, week, season, updated, initialTab, initia
             : <p className="muted">Tap the bookmark on any game to keep it here.</p>}
         </div>
       )}
-          </div>
+      <LegalNote />
+    </div>
   );
 }

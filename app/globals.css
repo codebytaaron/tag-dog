@@ -2103,3 +2103,56 @@ html.shake main { animation: none !important; }
 .fp .herocopy { padding-top: 24px; padding-bottom: 40px; }
 .fp .scrollcue { display: none; }
 @media (max-width: 700px) { .fp .hero { min-height: 70svh; } }
+
+/* ---------- app style: the site now looks and behaves like the iPhone app ---------- */
+:root, :root[data-theme="dark"] {
+  --bg: #0a0a09; --bg2: #111110; --panel: #171715; --panel2: #1f1e1b;
+  --line: rgba(255,255,255,.07); --line2: rgba(255,255,255,.12);
+  --ink: #f2ede1; --ink2: #d6d0c1; --muted: #a39e8f; --dim: #6f6b60;
+  --r: 16px; --r-lg: 22px; --r-sm: 10px; --ctl-h: 36px;
+}
+body { letter-spacing: -.005em; }
+
+/* Labels: the app's small tracked caps instead of typewriter text */
+.eyebrow, .eyebrow.mono { font-family: var(--body); font-weight: 700; font-size: 11px; letter-spacing: .14em; color: var(--tape); text-transform: uppercase; }
+.gtitle, .gtitle.mono, .slot.mono, .thead.mono, .mono.muted.small { font-family: var(--body); letter-spacing: .08em; }
+.fp-date, .fp-kicker, .fp-strip-label, .fp-sg-when { font-family: var(--body); font-weight: 700; letter-spacing: .1em; }
+.fp-meta, .fp-pts { font-family: var(--body); }
+
+/* Cards: one surface, soft border, generous radius (like the app) */
+.card, .listcard, .scard2, .feat, .tf, .fp-box, .fp-lead-card, .edge, .ap-feat, .ap-steps li, .rec-hero > div, .lens, .apptease {
+  border-radius: var(--r) !important; border-color: var(--line) !important;
+}
+.card, .listcard, .scard2, .fp-box, .edge, .ap-feat, .rec-hero > div { background: var(--panel); }
+.fp-lead-card, .apptease { border-radius: var(--r-lg) !important; }
+
+/* Buttons and filters: the app's capsules */
+.btn { border-radius: 14px; font-weight: 700; }
+.btn.primary { background: var(--tape); color: #14120a; }
+.pill, .lens { border-radius: 999px !important; }
+.pill.on { background: var(--tape); border-color: var(--tape); color: #14120a; }
+.seg, .tabs { border-radius: 999px; background: var(--panel); }
+.seg button, .tabs button { border-radius: 999px; }
+.seg button.on, .tabs button.on { background: var(--panel2); box-shadow: none; }
+.search { border-radius: 999px; background: var(--panel); }
+
+/* Navigation: glass bar like iOS */
+.nav { background: rgba(10,10,9,.72); backdrop-filter: saturate(160%) blur(18px); -webkit-backdrop-filter: saturate(160%) blur(18px); }
+[data-theme="light"] .nav { background: rgba(246,244,238,.8); }
+
+/* Legal note under odds and picks */
+.legalnote { font-size: 11px; line-height: 1.5; color: var(--dim); margin: 22px 0 6px; max-width: 760px; }
+
+/* Bottom tabs on phones, like the app */
+.mtabs { display: none; }
+@media (max-width: 760px) {
+  .mtabs { display: flex; position: fixed; left: 12px; right: 12px; bottom: calc(10px + env(safe-area-inset-bottom)); z-index: 70;
+    justify-content: space-around; padding: 6px; border-radius: 26px; background: rgba(23,23,21,.78); border: 1px solid var(--line2);
+    backdrop-filter: saturate(160%) blur(18px); -webkit-backdrop-filter: saturate(160%) blur(18px); box-shadow: 0 12px 30px rgba(0,0,0,.45); }
+  [data-theme="light"] .mtabs { background: rgba(255,255,255,.85); }
+  .mtabs a { flex: 1; display: grid; justify-items: center; gap: 2px; padding: 6px 0; border-radius: 20px; color: var(--muted); font-size: 10px; font-weight: 600; }
+  .mtabs a.on { color: var(--tape); background: rgba(255,255,255,.06); }
+  body { padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
+  .ap-sticky { bottom: calc(84px + env(safe-area-inset-bottom)); }
+  .links { display: none; }
+}

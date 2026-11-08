@@ -6,6 +6,7 @@ import Link from "next/link";
 import Logo from "@/components/Logo";
 import ScoreAlerts from "@/components/ScoreAlerts";
 import AppBanner from "@/components/AppBanner";
+import MobileTabs from "@/components/MobileTabs";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Anton, Inter_Tight, JetBrains_Mono } from "next/font/google";
@@ -32,11 +33,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning className={`${display.variable} ${body.variable} ${mono.variable}`}>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: "(function(){try{var t=localStorage.getItem('tapedog.theme');if(!t)t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme='dark'}})()" }} />
+        <script dangerouslySetInnerHTML={{ __html: "(function(){try{var t=localStorage.getItem('tapedog.theme');if(!t)t='dark';document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme='dark'}})()" }} />
       </head>
       <body>
         <Suspense fallback={<div className="nav" style={{ height: 64 }} />}><Nav /></Suspense>
         <AppBanner />
+        <Suspense fallback={null}><MobileTabs /></Suspense>
         <ScoreAlerts />
         {children}
         <footer className="foot">
