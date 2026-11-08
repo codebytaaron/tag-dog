@@ -6,6 +6,8 @@ import Hero from "@/components/Hero";
 import { getFutures } from "@/lib/pulse";
 import AppNotify from "@/components/AppNotify";
 import LegalNote from "@/components/LegalNote";
+import { getEdge } from "@/lib/edge";
+import { getRecord } from "@/lib/record";
 
 export const revalidate = 120;
 export const maxDuration = 60;
@@ -62,7 +64,12 @@ function SpotCard({ g, i }: { g: Game; i: number }) {
 }
 
 export default async function Home() {
-  const [s, live, fut] = await Promise.all([getSlate(), getLive().catch(() => ({} as Record<string, Live>)), getFutures().catch(() => null)]);
+  const [s, live, fut, edge, rec] = await Promise.all([
+    getSlate(), getLive().catch(() => ({} as Record<string, Live>)), getFutures().catch(() => null),
+    getEdge(), getRecord().catch(() => null),
+  ]);
+  // A real example for "Inside a TAPE score": this week's top spot, or our most recent FADE call that hit.
+  const lastHit = rec?.calls.filter((c) => c.tier === "FADE" && c.upset).sort((a, b) => Date.parse(b.date) - Date.parse(a.date))[0];
   const stateOf = (g: Game) => live[g.id]?.state ?? g.state;
   const now = s.games.filter((g) => stateOf(g) === "in");
   // Only games that haven't kicked off and have a real betting line count as upset spots.
@@ -143,6 +150,83 @@ export default async function Home() {
             <p className="hm-src">From Kalshi prediction markets.</p>
           </section>
         )}
+
+        <section>
+          <header className="hm-h"><h2>How TapeDog works</h2><Link href="/about">Full method</Link></header>
+          <div className="hm-steps">
+            <div><span>1</span><b>Every favorite gets a TAPE score</b><p>From 0 to 99. The higher it is, the shakier the favorite looks this week.</p></div>
+            <div><span>2</span><b>We show our work</b><p>Each game lists the reasons in plain English, next to what the sportsbooks and Kalshi think.</p></div>
+            <div><span>3</span><b>Scores of 50+ get flagged</b><p>Those are FADE games: favorites with the most ways to slip. Then we grade every call after the final.</p></div>
+          </div>
+        </section>
+
+        <section className="hm-two">
+          <div className="hm-panel">
+            <h3>Inside a TAPE score</h3>
+            {spots[0] ? (
+              <>
+                <p className="hm-dim">{favOf(spots[0]).short} vs {dogOf(spots[0]).short}, this week</p>
+                {spots[0].factors.filter((f) => f.points > 0).slice(0, 4).map((f) => (
+                  <div key={f.key} className="hm-factor"><span>{f.label}</span><b>+{f.points}</b></div>
+                ))}
+                <div className="hm-factor hm-total"><span>TAPE score</span><b className={`c-${spots[0].tier.toLowerCase()}`}>{spots[0].score} · {spots[0].tier}</b></div>
+              </>
+            ) : lastHit ? (
+              <>
+                <p className="hm-dim">Our last FADE call that hit: {lastHit.dog.short} beat {lastHit.fav.short} {lastHit.dogPts}–{lastHit.favPts}</p>
+                {lastHit.flags.slice(0, 4).map((f) => <div key={f} className="hm-factor"><span>{f}</span><b>✓</b></div>)}
+                <div className="hm-factor hm-total"><span>TAPE score</span><b className="c-fade">{lastHit.score} · FADE</b></div>
+              </>
+            ) : <p className="hm-dim">Examples appear once this week's lines are posted.</p>}
+            <p className="hm-small">What adds points: a big game next week, a letdown after a big win, road trips, short rest and a line moving toward the underdog.</p>
+          </div>
+
+          <div className="hm-panel">
+            <h3>Our track record</h3>
+            {edge ? (
+              <>
+                <div className="hm-stats">
+                  <div><b className="c-fade">{edge.fadePct}%</b><span>of our flagged favorites lost</span></div>
+                  <div><b>{edge.expPct}%</b><span>expected by the betting lines</span></div>
+                </div>
+                <p className="hm-small">{edge.fadeN} graded games this season. That's a small sample, so treat it as early evidence. Every pick is now also saved before kickoff and graded after, so the live record can't be edited.</p>
+                <Link href="/record" className="hm-more">See every call →</Link>
+              </>
+            ) : <p className="hm-dim">Grading this season's games…</p>}
+          </div>
+        </section>
+
+        <section>
+          <header className="hm-h"><h2>What's on TapeDog</h2></header>
+          <div className="hm-feats">
+            <Link href="/board"><b>Fade Board</b><span>Every game ranked by upset risk.</span></Link>
+            <Link href="/board?tab=scores"><b>Live scores</b><span>Every FBS game, with drive charts and win chances.</span></Link>
+            <Link href="/tracker"><b>Score Tracker</b><span>Your games on one screen, built for game day.</span></Link>
+            <Link href="/reels"><b>Reels</b><span>The week's best plays, one swipe at a time.</span></Link>
+            <Link href="/rankings"><b>Rankings & odds</b><span>The polls, title odds, Heisman and the coaching hot seat.</span></Link>
+            <Link href="/playoff"><b>Playoff bracket</b><span>The projected 12-team field and each team's chances.</span></Link>
+          </div>
+        </section>
+
+        <section className="hm-two">
+          <div className="hm-panel">
+            <h3>Where the numbers come from</h3>
+            <ul className="hm-src-list">
+              <li><b>ESPN</b><span>Scores, schedules, stats, rankings and power ratings</span></li>
+              <li><b>Sportsbooks</b><span>Betting lines from six books, via Action Network</span></li>
+              <li><b>Kalshi</b><span>Prediction-market prices for games and titles</span></li>
+              <li><b>Open-Meteo</b><span>Game-day weather</span></li>
+              <li><b>Google News and Bluesky</b><span>Headlines and reporter posts</span></li>
+            </ul>
+          </div>
+          <div className="hm-panel">
+            <h3>Questions</h3>
+            <details><summary>Is this betting advice?</summary><p>No. TapeDog is for entertainment and information. We don't take bets, link to sportsbooks or sell picks.</p></details>
+            <details><summary>How often does it update?</summary><p>Lines and scores refresh every few minutes, and live games every few seconds.</p></details>
+            <details><summary>Does a FADE mean the favorite will lose?</summary><p>No. Most favorites still win. A FADE means the favorite is more likely than usual to slip.</p></details>
+            <details><summary>Is it free?</summary><p>Yes, the site and the iPhone app are free, with no account needed.</p></details>
+          </div>
+        </section>
 
         <section className="hm-app">
           <div>
