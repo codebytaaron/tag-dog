@@ -38,11 +38,29 @@ export default function Terms() {
       <h2>The iPhone app</h2>
       <p>These terms cover the TapeDog iPhone app too. The app is free, is for entertainment and information only, and is rated 17+ because it shows betting lines and prediction-market prices. Picks, streaks and badges are just for fun: there is no money, prize or wager involved, and nothing in the app can be used to place a bet. Alerts and Lock Screen scores can be delayed or wrong; don't rely on them for anything important. Your use of the app is also subject to Apple's App Store terms.</p>
 
+      <h2>Age</h2>
+      <p>TapeDog is meant for adults. You must be at least 17 to use the iPhone app and at least 18 to use the site. Showing betting lines and prediction-market prices is not an offer or invitation to gamble: sports betting is only legal for people of legal age (usually 21) in places where it's allowed, and that is between you and any operator you choose.</p>
+
+      <h2>You use TapeDog at your own risk</h2>
+      <p>You are solely responsible for any decision you make, including any wager or trade, whether or not it relates to something you saw on TapeDog. Upset chances, TAPE scores, track records, picks and AI briefs are opinions and estimates based on past data. Past results do not predict future results.</p>
+
       <h2>Acceptable use</h2>
       <p>Don't overload, scrape at scale, attack or try to break the site, or use it for anything unlawful.</p>
 
       <h2>No warranty and limits on liability</h2>
       <p>TapeDog is provided as is and as available, without warranties of any kind. To the fullest extent allowed by law, TapeDog and its team are not liable for any loss arising from use of the site, including any wagering decisions.</p>
+
+      <h2>Liability cap</h2>
+      <p>To the fullest extent allowed by law, TapeDog and its team are not liable for any indirect, incidental, special, consequential or punitive damages, or for any lost money, profits, data or opportunities, and our total liability for any claim relating to TapeDog will not exceed $50. Some places don't allow these limits, so they may not apply to you.</p>
+
+      <h2>Indemnity</h2>
+      <p>If you use TapeDog in a way that breaks these terms or the law and someone brings a claim against us because of it, you agree to cover the resulting costs, including reasonable legal fees.</p>
+
+      <h2>Apple</h2>
+      <p>If you use the iPhone app, these terms are between you and TapeDog, not Apple. Apple is not responsible for the app or its content, has no obligation to provide support for it, and is a third-party beneficiary of these terms with the right to enforce them against you.</p>
+
+      <h2>If part of these terms doesn't apply</h2>
+      <p>If a court finds any part of these terms unenforceable, the rest still applies.</p>
 
       <h2>Changes</h2>
       <p>We may update these terms as the site changes. The date at the top shows the latest version, and continuing to use TapeDog means you accept it.</p>

@@ -7,6 +7,7 @@ import { getFutures } from "@/lib/pulse";
 import { getEdge } from "@/lib/edge";
 import EdgeStat from "@/components/EdgeStat";
 import AppNotify from "@/components/AppNotify";
+import LegalNote from "@/components/LegalNote";
 
 export const revalidate = 900;
 export const maxDuration = 60;
@@ -147,6 +148,8 @@ export default async function FrontPage() {
           </section>
         )}
       </div>
+
+      <div className="wrap"><LegalNote /></div>
 
       <div className="wrap fp-cols fp-bottom">
         <section className="fp-box fp-method">
