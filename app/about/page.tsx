@@ -11,18 +11,18 @@ const WHY = [
 
 const SOURCES: [string, string, string][] = [
   ["ESPN", "Schedules, scores, rankings, win model", "https://www.espn.com/college-football/"],
-  ["DraftKings", "Spreads, totals, moneylines", "https://sportsbook.draftkings.com/leagues/football/ncaaf"],
-  ["FanDuel", "Spreads, totals, moneylines", "https://sportsbook.fanduel.com/navigation/ncaaf"],
-  ["BetMGM", "Spreads, totals, moneylines", "https://sports.betmgm.com/en/sports/football-11/betting/usa-9/college-football-211"],
-  ["Caesars", "Spreads, totals, moneylines", "https://sportsbook.caesars.com/us/nj/bet/americanfootball"],
-  ["bet365", "Spreads, totals, moneylines", "https://www.bet365.com/#/AS/B12/"],
-  ["BetRivers", "Spreads, totals, moneylines", "https://www.betrivers.com/?page=sportsbook#sports-hub/american_football/ncaaf"],
-  ["Action Network", "Opening line and bets tracked", "https://www.actionnetwork.com/ncaaf/odds"],
-  ["Kalshi", "Prediction-market win odds", "https://kalshi.com/markets/kxncaafgame"],
-  ["Polymarket", "Second prediction market for title odds", "https://polymarket.com/"],
+  ["DraftKings", "Spreads, totals, moneylines", ""],
+  ["FanDuel", "Spreads, totals, moneylines", ""],
+  ["BetMGM", "Spreads, totals, moneylines", ""],
+  ["Caesars", "Spreads, totals, moneylines", ""],
+  ["bet365", "Spreads, totals, moneylines", ""],
+  ["BetRivers", "Spreads, totals, moneylines", ""],
+  ["Action Network", "Opening line and bets tracked", ""],
+  ["Kalshi", "Prediction-market win odds", ""],
+  ["Polymarket", "Second prediction market for title odds", ""],
   ["ESPN FPI", "Team power ratings, efficiency and projections", "https://www.espn.com/college-football/fpi"],
   ["Open-Meteo", "Kickoff-hour weather at the stadium", "https://open-meteo.com/"],
-  ["Bluesky", "Posts from reporters and analysts", "https://bsky.app/"],
+  ["Bluesky", "Posts from reporters and analysts in The Buzz", "https://bsky.app/"],
   ["Google News", "Game headlines", "https://news.google.com/"],
   ["ESPN video", "Highlights and game recaps", "https://www.espn.com/college-football/"],
   ["Gemini", "Writes the AI breakdown", "https://gemini.google.com/"],
@@ -94,7 +94,9 @@ export default function How() {
       <section className="sect0">
         <div className="eyebrow mono">DATA SOURCES</div>
         <div className="srcgrid">
-          {SOURCES.map(([n, d, u]) => <a key={n} href={u} target="_blank" rel="noopener" className="src2"><b>{n} <i className="c-tape">↗</i></b><span className="muted">{d}</span></a>)}
+          {SOURCES.map(([n, d, u]) => u
+            ? <a key={n} href={u} target="_blank" rel="noopener" className="src2"><b>{n} <i className="c-tape">↗</i></b><span className="muted">{d}</span></a>
+            : <div key={n} className="src2"><b>{n}</b><span className="muted">{d}</span></div>)}
         </div>
         <p className="mono muted small refresh">ODDS REFRESH EVERY 15 MIN · LIVE SCORES EVERY 20 SEC · RUNS ITSELF</p>
       </section>

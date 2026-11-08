@@ -12,10 +12,10 @@ export default function Terms() {
       <p>By using TapeDog you agree to these terms. If you don't agree, please don't use the site.</p>
 
       <h2>What TapeDog is</h2>
-      <p>TapeDog is a free college football website for entertainment and information. Scores, odds, ratings, rankings, weather, posts and other data come from third parties and may be delayed, incomplete or wrong. Tape Scores, upset chances and Watch scores are our own estimates, not predictions or guarantees.</p>
+      <p>TapeDog is a free college football predictions website and iPhone app, for entertainment and information. Scores, odds, ratings, rankings, weather, posts and other data come from third parties and may be delayed, incomplete or wrong. Tape Scores, upset chances and picks are our own predictions: opinions, not guarantees.</p>
 
-      <h2>Not betting advice</h2>
-      <p>Nothing on TapeDog is betting, financial or legal advice. TapeDog does not take bets, is not a sportsbook or prediction market, and is not paid for links to them. Sportsbooks and prediction markets are not legal or available everywhere; if you choose to use them, you are responsible for being of legal age and following the laws where you live. If gambling stops being fun, call 1-800-GAMBLER.</p>
+      <h2>Predictions, not gambling</h2>
+      <p>TapeDog is a predictions product, not a gambling service. Nothing on TapeDog is betting, financial or legal advice. TapeDog does not take bets, offer prizes, operate a sportsbook or prediction market, link to them, or get paid by them. TapeDog is not responsible for any gambling losses, debts or gambling-related problems, whether or not they relate to something you saw on TapeDog. Sportsbooks and prediction markets are not legal or available everywhere; if you choose to use them, you are responsible for being of legal age and following the laws where you live. If gambling stops being fun, call 1-800-GAMBLER.</p>
 
       <h2>Live scores and the Score Tracker</h2>
       <p>Live information can lag, pause or be corrected after the fact. The delay setting is a convenience and may not match your broadcast exactly. Don't rely on TapeDog for anything time-sensitive.</p>
@@ -39,7 +39,7 @@ export default function Terms() {
       <p>These terms cover the TapeDog iPhone app too. The app is free, is for entertainment and information only, and is rated 17+ because it shows betting lines and prediction-market prices. Picks, streaks and badges are just for fun: there is no money, prize or wager involved, and nothing in the app can be used to place a bet. Alerts and Lock Screen scores can be delayed or wrong; don't rely on them for anything important. Your use of the app is also subject to Apple's App Store terms.</p>
 
       <h2>Age</h2>
-      <p>TapeDog is meant for adults. You must be at least 17 to use the iPhone app and at least 18 to use the site. Showing betting lines and prediction-market prices is not an offer or invitation to gamble: sports betting is only legal for people of legal age (usually 21) in places where it's allowed, and that is between you and any operator you choose.</p>
+      <p>TapeDog is meant for adults. You must be at least 18 to use the site or the iPhone app. Showing betting lines and prediction-market prices is not an offer or invitation to gamble: sports betting is only legal for people of legal age (usually 21) in places where it's allowed, and that is between you and any operator you choose.</p>
 
       <h2>You use TapeDog at your own risk</h2>
       <p>You are solely responsible for any decision you make, including any wager or trade, whether or not it relates to something you saw on TapeDog. Upset chances, TAPE scores, track records, picks and AI briefs are opinions and estimates based on past data. Past results do not predict future results.</p>

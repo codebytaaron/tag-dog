@@ -124,6 +124,22 @@ export default async function RecordPage() {
         })}
       </section>
 
+      {(() => {
+        const t25 = calls.filter((c) => c.note).sort((a, b) => Date.parse(b.date) - Date.parse(a.date)).slice(0, 12);
+        return t25.length > 0 && (
+          <section className="card rec-why">
+            <div className="cardh"><h3>Top 25 games: what we got right and wrong</h3><span className="muted small">Latest {t25.length}</span></div>
+            {t25.map((c) => (
+              <Link key={c.id} href={`/game/${c.id}`} className="rec-why-i">
+                <span className="rec-logos">{c.fav.logo && <img src={c.fav.logo} alt="" />}{c.dog.logo && <img src={c.dog.logo} alt="" />}</span>
+                <span className="rec-txt"><b>{c.favRank ? `No. ${c.favRank} ` : ""}{c.fav.short} vs {c.dogRank ? `No. ${c.dogRank} ` : ""}{c.dog.short} <span className="muted">· {c.favPts}-{c.dogPts}</span></b><small>{c.note}</small></span>
+                <span className={`hm-tier t-${c.tier}`}>{c.tier}</span>
+              </Link>
+            ))}
+          </section>
+        );
+      })()}
+
       <h2 className="gtitle mono">Every FADE call <span className="muted">{fades.length}</span></h2>
       <div className="rec-list">
         {fades.map((c) => (

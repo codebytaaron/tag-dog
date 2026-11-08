@@ -14,7 +14,25 @@ export type Call = {
   score: number; tier: "FADE" | "WATCH" | "HOLD"; flags: string[]; favPts: number; dogPts: number; upset: boolean; cover: boolean | null;
   /** Candidate signals under test. They don't add to the score. */
   extra: string[];
+  /** AP ranks at kickoff, when ranked. */
+  favRank?: number; dogRank?: number;
+  /** Post-game note on what the call got right or wrong (Top 25 games only). */
+  note?: string;
 };
+
+// A short, factual note on why a call hit or missed. Only for games with a Top 25 team.
+export function whyNote(c: Call): string | undefined {
+  if (!c.favRank && !c.dogRank) return undefined;
+  const margin = Math.abs(c.favPts - c.dogPts), why = c.flags.slice(0, 2).join(" and ").toLowerCase();
+  const fav = `${c.favRank ? `No. ${c.favRank} ` : ""}${c.fav.short}`, dog = `${c.dogRank ? `No. ${c.dogRank} ` : ""}${c.dog.short}`;
+  if (c.tier === "FADE" && c.upset) return `Called it. ${why ? `The ${why} spot` : "The setup"} pointed to trouble, and ${dog} won by ${margin}.`;
+  if (c.tier === "FADE") return `Missed. ${why ? `The ${why} spot` : "The setup"} didn't matter: ${fav} won by ${margin}.`;
+  if (c.upset) return c.flags.length
+    ? `Missed. We saw ${why} but not enough to flag it, and ${dog} won by ${margin}.`
+    : `Missed. None of the warning signs we track showed up, and ${dog} won by ${margin}.`;
+  if (c.tier === "WATCH") return `Held. ${fav} survived the ${why || "warning"} spot and won by ${margin}.`;
+  return `Right call. Few warning signs, and ${fav} won by ${margin}.`;
+}
 
 async function j(url: string, rv: number, headers?: Record<string, string>) {
   const r = await fetch(url, { next: { revalidate: rv }, headers });
@@ -118,7 +136,9 @@ async function gradeWeek(year: number, w: number, live: boolean, homes: Record<s
       id: e.id, week: w, date: e.date, fav: team(fav), dog: team(dog), favHome, spread, score,
       tier: score >= 50 ? "FADE" : score >= 28 ? "WATCH" : "HOLD", flags, favPts, dogPts,
       upset: dogPts > favPts, cover: spread == null || margin === 0 ? null : margin > 0, extra: [],
+      favRank: rk[fav.team.id] || undefined, dogRank: rk[dog.team.id] || undefined,
     });
+    out[out.length - 1].note = whyNote(out[out.length - 1]);
     jobs.push([out.length - 1, e, fav, dog, favHome]);
   }
   // Candidate signals, ten games at a time (weather and map lookups).
@@ -163,7 +183,7 @@ async function season(year: number, week: number, current: boolean) {
   for (let i = 0; i < all.length; i += 3) {
     weeks.push(...await Promise.all(all.slice(i, i + 3).map((w) => {
       const fresh = current && w >= week - 1;
-      return unstable_cache(() => gradeWeek(year, w, fresh, homes, !current), ["tapedog-record-week-v4", String(year), String(w)], { revalidate: fresh ? 1800 : 604800 })()
+      return unstable_cache(() => gradeWeek(year, w, fresh, homes, !current), ["tapedog-record-week-v5", String(year), String(w)], { revalidate: fresh ? 1800 : 604800 })()
         .catch(() => [] as Call[]);
     })));
   }
@@ -175,7 +195,7 @@ async function build() {
   const week: number = cur.week?.number || 1, year: number = cur.season?.year || new Date().getFullYear();
   return { year, week, calls: await season(year, week, true) };
 }
-export const getRecord = unstable_cache(build, ["tapedog-record-v4"], { revalidate: 1800 });
+export const getRecord = unstable_cache(build, ["tapedog-record-v5"], { revalidate: 1800 });
 
 // Last season: a second set of games the model was never tuned on. Regular season is 15 weeks plus a week 0/16 edge.
 async function buildPast() {
@@ -183,4 +203,4 @@ async function buildPast() {
   const year: number = (cur.season?.year || new Date().getFullYear()) - 1;
   return { year, calls: await season(year, 15, false) };
 }
-export const getPastRecord = unstable_cache(buildPast, ["tapedog-record-past-v1"], { revalidate: 604800 });
+export const getPastRecord = unstable_cache(buildPast, ["tapedog-record-past-v2"], { revalidate: 604800 });
