@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { Suspense } from "react";
 import Nav from "@/components/Nav";
 import Link from "next/link";
+import { AFFILIATION, DISCLAIMER, HELP } from "@/lib/legal";
 import Logo from "@/components/Logo";
 import ScoreAlerts from "@/components/ScoreAlerts";
 import AppBanner from "@/components/AppBanner";
@@ -55,8 +56,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <div className="fcol"><b>TapeDog</b><Link href="/about">How it works</Link><Link href="/our-team">Our team</Link><Link href="/app">iPhone app</Link><Link href="/dogzone">Dog Zone</Link><Link href="/profile">Your profile</Link></div>
           </div>
           <div className="wrap fnote">
-            <p>For entertainment and information only. Not betting advice. Not affiliated with ESPN, the NCAA, any school, conference, sportsbook or Kalshi. Team names and logos belong to their owners. Highlights play from ESPN.</p>
-            <p>21+ where sports betting is legal, and not available in every state. Gambling problem? Call 1-800-GAMBLER.</p>
+            <p>{DISCLAIMER}</p>
+            <p>{AFFILIATION} {HELP}</p>
             <p className="legal"><Link href="/terms">Terms</Link> · <Link href="/privacy">Privacy</Link> · © {new Date().getFullYear()} TapeDog</p>
           </div>
         </footer>

@@ -9,14 +9,6 @@ export type Odds = {
   kalshi: { home: number; away: number; volume: number } | null; bets: number; at: string; history?: { t: number; p: number }[];
 };
 
-const BOOK_URL: Record<string, string> = {
-  DraftKings: "https://sportsbook.draftkings.com/leagues/football/ncaaf",
-  FanDuel: "https://sportsbook.fanduel.com/navigation/ncaaf",
-  BetMGM: "https://sports.betmgm.com/en/sports/football-11/betting/usa-9/college-football-211",
-  Caesars: "https://sportsbook.caesars.com/us/nj/bet/americanfootball",
-  bet365: "https://www.bet365.com/#/AS/B12/",
-  BetRivers: "https://www.betrivers.com/?page=sportsbook#sports-hub/american_football/ncaaf",
-};
 
 const imp = (m: number | null) => (m == null ? null : m < 0 ? -m / (-m + 100) : 100 / (m + 100));
 const fs = (n: number | null) => (n == null ? "–" : n === 0 ? "PK" : (n > 0 ? "+" : "") + n);
@@ -92,7 +84,7 @@ export default function LiveOdds({ id, fav, away, home, fpi, fallbackBookFav, in
 
       <div className="lotop">
         <div className="kal">
-          <div className="kalh mono"><a href="https://kalshi.com/markets/kxncaafgame" target="_blank" rel="noopener" className="c-tape">KALSHI MARKET ↗</a>{o.kalshi && <span className="muted">${Math.round(o.kalshi.volume).toLocaleString()} TRADED</span>}</div>
+          <div className="kalh mono"><span className="c-tape">KALSHI MARKET</span>{o.kalshi && <span className="muted">${Math.round(o.kalshi.volume).toLocaleString()} TRADED</span>}</div>
           {o.kalshi ? (
             <>
               <div className="kalrow">
@@ -130,22 +122,21 @@ export default function LiveOdds({ id, fav, away, home, fpi, fallbackBookFav, in
           <div className="sh2 mono"><span>SPORTSBOOK</span><span>{D.abbr} SPREAD</span><span>{D.abbr} ML</span><span>{F.abbr} ML</span><span>TOTAL</span></div>
           {rows.map((r) => (
             <div key={r.book} className="sr2">
-              <a href={BOOK_URL[r.book] || "#"} target="_blank" rel="nofollow noopener noreferrer" className="booklink">{r.book} <i>↗</i></a>
+              <span className="booklink">{r.book}</span>
               <span className={`mono ${r.dogSpread === bestS ? "best" : ""}`}>{fs(r.dogSpread)}</span>
               <span className={`mono ${r.dogML === bestM ? "best" : ""}`}>{fm(r.dogML)}</span>
               <span className="mono">{fm(r.favML)}</span>
               <span className="mono">{r.total ?? "–"}</span>
             </div>
           ))}
-          <p className="mono muted small">HIGHLIGHTED = BEST PRICE ON {D.short.toUpperCase()} · TAP A BOOK TO OPEN IT</p>
+          <p className="mono muted small">HIGHLIGHTED = BEST PRICE ON {D.short.toUpperCase()}</p>
         </div>
       )}
       <div className="srcrow2">
         <span className="mono muted small">SOURCES</span>
         <a href={`https://www.espn.com/college-football/game/_/gameId/${id}`} target="_blank" rel="noopener">ESPN Gamecast ↗</a>
-        <a href="https://www.actionnetwork.com/ncaaf/odds" target="_blank" rel="noopener">Action Network odds ↗</a>
-        <a href="https://kalshi.com/markets/kxncaafgame" target="_blank" rel="noopener">Kalshi ↗</a>
-        <span className="mono muted small resp">21+ · GAMBLE RESPONSIBLY · 1-800-GAMBLER</span>
+        <span className="mono muted small">Odds: Action Network, Kalshi</span>
+        <span className="mono muted small resp">PREDICTIONS ONLY · NOT A GAMBLING SERVICE · 1-800-GAMBLER</span>
       </div>
     </section>
   );

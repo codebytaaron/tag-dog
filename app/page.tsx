@@ -2,7 +2,6 @@ import Link from "next/link";
 import { getSlate, type Game } from "@/lib/data";
 import { getLive, type Live } from "@/lib/live";
 import Kickoff from "@/components/Kickoff";
-import { getFutures } from "@/lib/pulse";
 import AppNotify from "@/components/AppNotify";
 import LegalNote from "@/components/LegalNote";
 import { getEdge } from "@/lib/edge";
@@ -63,8 +62,8 @@ function SpotCard({ g, i }: { g: Game; i: number }) {
 }
 
 export default async function Home() {
-  const [s, live, fut, edge, rec] = await Promise.all([
-    getSlate(), getLive().catch(() => ({} as Record<string, Live>)), getFutures().catch(() => null),
+  const [s, live, edge, rec] = await Promise.all([
+    getSlate(), getLive().catch(() => ({} as Record<string, Live>)),
     getEdge(), getRecord().catch(() => null),
   ]);
   // A real example for "Inside a TAPE score": this week's top spot, or our most recent FADE call that hit.
@@ -82,10 +81,27 @@ export default async function Home() {
     return dog > fav && g.spread != null;
   });
   const weekDone = !now.length && !ahead.length;
-  const race = (fut?.title?.markets || []).slice(0, 6);
+  // Matchups that drift across the page background, like the old hero.
+  const sky = (ahead.length ? [...ahead].sort((a, b) => b.score - a.score) : [...s.games].sort((a, b) => b.heat - a.heat)).slice(0, 14);
 
   return (
     <main className="hm">
+      <div className="hm-sky" aria-hidden>
+        {sky.map((g, k) => {
+          const lane = k % 7, depth = lane % 3, dur = [70, 54, 40][depth] + (k % 4) * 4;
+          return (
+            <div key={g.id} className={`lane d${depth} ${lane % 2 ? "rev" : ""}`}
+              style={{ top: `${4 + lane * 13.5}%`, animationDuration: `${dur}s`, animationDelay: `${-((k * 9.1) % dur)}s` }}>
+              <div className="fly">
+                <img src={g.away.logo} alt="" /><b>{g.away.abbr}</b><i>at</i><b>{g.home.abbr}</b><img src={g.home.logo} alt="" />
+                {stateOf(g) === "pre"
+                  ? <><span className="fl">{g.line}</span>{g.tier !== "HOLD" && <span className={`ft t-${g.tier}`}>{g.upsetPct}%</span>}</>
+                  : live[g.id]?.away != null ? <span className="fl">{live[g.id]!.away}–{live[g.id]!.home}{stateOf(g) === "post" ? " F" : ""}</span> : <span className="fl">{g.line}</span>}
+              </div>
+            </div>
+          );
+        })}
+      </div>
       <section className="hx">
         <div className="wrap hx-in">
           <div className="hx-copy">
@@ -173,20 +189,6 @@ export default async function Home() {
                 <div className="hm-grid">{upsets.slice(0, 6).map((g) => <ScoreCard key={g.id} g={g} lv={live[g.id]} />)}</div>
               </>
             )}
-          </section>
-        )}
-
-        {race.length > 0 && (
-          <section>
-            <header className="hm-h"><h2>National title odds</h2><Link href="/rankings?tab=title">All odds</Link></header>
-            <div className="hm-race">
-              {race.map((m, k) => (
-                <Link key={m.label} href={m.team ? `/team/${m.team.id}` : "/rankings?tab=title"} className="hm-race-i">
-                  <span className="hm-dim">{k + 1}</span><Logo src={m.team?.logo} size={26} /><b>{m.label}</b><span className="hm-race-p">{Math.round(m.p * 100)}%</span>
-                </Link>
-              ))}
-            </div>
-            <p className="hm-src">From Kalshi prediction markets.</p>
           </section>
         )}
 

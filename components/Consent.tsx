@@ -29,11 +29,11 @@ export default function Consent() {
       <div className="consent-card">
         <h2 id="consent-h">Before you continue</h2>
         <ul>
-          <li>TapeDog is for entertainment and information. Upset chances and TAPE scores are our estimates, not predictions or guarantees.</li>
-          <li>Nothing here is betting, financial or legal advice. We don't take bets, link to sportsbooks or offer prizes.</li>
+          <li>TapeDog makes college football predictions for entertainment and information. Upset chances and TAPE scores are opinions, not guarantees.</li>
+          <li>TapeDog is not a gambling service. Nothing here is betting, financial or legal advice. We don't take bets, link to sportsbooks or offer prizes.</li>
           <li>Scores, odds and other data come from third parties and can be late or wrong.</li>
-          <li>You're responsible for your own decisions. TapeDog isn't liable for any losses from using the site.</li>
-          <li>Gambling problem? Call 1-800-GAMBLER.</li>
+          <li>You're solely responsible for your own decisions, including any betting. TapeDog isn't responsible for gambling losses or problems.</li>
+          <li>If gambling is a problem for you or someone you know, call 1-800-GAMBLER.</li>
         </ul>
         <label><input type="checkbox" checked={age} onChange={(e) => setAge(e.target.checked)} /> I'm 18 or older.</label>
         <label><input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} /> I agree to the <Link href="/terms">Terms of Use</Link> and <Link href="/privacy">Privacy Policy</Link>.</label>

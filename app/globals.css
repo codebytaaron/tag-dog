@@ -2323,3 +2323,44 @@ body { letter-spacing: -.005em; }
   .hx-band-in div { border-left: 0; padding-left: 0; border-top: 1px solid var(--line); }
 }
 @media (max-width: 560px) { .hx-float { min-width: 0; max-width: 62%; } .hx-copy > p { font-size: 17px; } }
+
+/* Homepage: matchups drifting behind the content */
+.hm { position: relative; isolation: isolate; }
+.hm-sky { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; opacity: .32;
+  mask-image: linear-gradient(transparent, #000 12%, #000 88%, transparent); }
+.hm-sky .fly { box-shadow: none; }
+@media (prefers-reduced-motion: reduce) { .hm-sky .lane { animation: none; } }
+@media (max-width: 640px) { .hm-sky { opacity: .2; } }
+
+/* Team avatars and profile pages */
+.dogav { display: inline-grid; place-items: center; flex: none; border-radius: 28%; background: color-mix(in srgb, var(--dc) 16%, var(--panel));
+  border: 1px solid color-mix(in srgb, var(--dc) 45%, var(--line2)); box-shadow: 0 10px 30px color-mix(in srgb, var(--dc) 22%, transparent); }
+.pf { max-width: 880px; padding-top: 28px; padding-bottom: 64px; }
+.pf-back { display: inline-block; font-size: 13px; color: var(--muted); margin-bottom: 22px; }
+.pf-back:hover { color: var(--ink); }
+.pf-hero { display: flex; align-items: center; gap: 24px; margin-bottom: 26px; }
+.pf-role { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--tape); }
+.pf-hero h1 { font-size: clamp(36px, 6vw, 56px); line-height: 1; margin: 6px 0 12px; letter-spacing: -.02em; }
+.pf-bio { max-width: 680px; margin-bottom: 40px; }
+.pf-bio p { font-size: 17px; line-height: 1.65; margin: 0 0 12px; }
+.pf-h { font-size: 13px; font-family: var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; font-weight: 600; }
+.pf-top { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-bottom: 12px; }
+.pf-rest { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.pf-game { position: relative; display: flex; flex-direction: column; gap: 4px; padding: 16px; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; color: var(--ink); transition: border-color .2s, transform .2s; }
+.pf-game:hover { border-color: var(--line2); transform: translateY(-2px); }
+.pf-game.big { padding: 20px; border-color: color-mix(in srgb, var(--tape) 35%, var(--line)); }
+.pf-logos { display: flex; gap: 6px; margin-bottom: 8px; }
+.pf-logos img { width: 30px; height: 30px; object-fit: contain; }
+.pf-game.big .pf-logos img { width: 38px; height: 38px; }
+.pf-tag { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--dim); }
+.pf-game.big .pf-tag { color: var(--tape); }
+.pf-game b { font-size: 16px; } .pf-game.big b { font-size: 19px; }
+.pf-when { font-size: 12px; color: var(--muted); }
+.pf-note { font-size: 14px; color: var(--ink2); line-height: 1.5; margin-top: 4px; }
+.pf-play { margin-top: 10px; font-size: 12px; font-weight: 600; color: var(--tape); }
+.pf-cta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 36px; }
+@media (max-width: 560px) { .pf-hero { flex-direction: column; align-items: flex-start; gap: 16px; } }
+.rec-why-i { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; padding: 12px 0; border-top: 1px solid var(--line); color: var(--ink); }
+.rec-why-i:first-of-type { border-top: 0; }
+.rec-why-i small { display: block; color: var(--ink2); font-size: 13px; line-height: 1.45; margin-top: 3px; }
+.hm .hx { background-color: transparent; }
