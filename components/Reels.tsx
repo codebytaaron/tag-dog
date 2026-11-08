@@ -4,10 +4,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Reel } from "@/lib/reels";
 import { useFollow, useProfile, useSaved } from "./SaveButton";
 
-type F = "foryou" | "top25" | "upsets" | "close" | "social" | "liked";
-const FILTERS: [F, string][] = [["foryou", "For you"], ["top25", "Top 25"], ["upsets", "Upsets"], ["close", "Close games"], ["social", "From Bluesky"], ["liked", "Liked"]];
+type F = "foryou" | "top25" | "upsets" | "close" | "ot" | "liked";
+const FILTERS: [F, string][] = [["foryou", "For you"], ["top25", "Top 25"], ["upsets", "Upsets"], ["close", "Close games"], ["ot", "Overtime"], ["liked", "Liked"]];
 const SPEEDS = [1, 1.5, 2];
-// Bluesky videos are HLS streams: Safari plays them natively, other browsers use hls.js (loaded only when needed).
+// Some clips are HLS streams: Safari plays them natively, other browsers use hls.js (loaded only when needed).
 const isHls = (s: string) => /\.m3u8(\?|$)/.test(s);
 async function attachHls(v: HTMLVideoElement) {
   const src = v.dataset.src || "";
@@ -131,7 +131,7 @@ export default function Reels({ initial, nextWeek, first }: { initial: Reel[]; n
     if (f === "top25") return l.filter((r) => r.home.rank || r.away.rank);
     if (f === "upsets") return l.filter((r) => r.tags.includes("Upset"));
     if (f === "close") return l.filter((r) => r.tags.includes("One-score game") || r.tags.includes("Overtime"));
-    if (f === "social") return l.filter((r) => r.source === "bluesky");
+    if (f === "ot") return l.filter((r) => r.tags.includes("Overtime"));
     if (f === "liked") return l.filter((r) => likes.includes(r.key));
     return l;
   }, [items, f, likes, team]);
@@ -313,8 +313,8 @@ export default function Reels({ initial, nextWeek, first }: { initial: Reel[]; n
                     <div className="rl-sub">
                       {(() => { const m = mine(); const t = [r.home, r.away].find((x) => m.has(x.id)) || [r.home, r.away].find((x) => (affSnap[`team:${x.id}`] || 0) >= 2); return t ? <span className="why">{m.has(t.id) ? `Because you follow ${t.short}` : `Because you watch ${t.short}`}</span> : null; })()}
                       {r.tags.map((t) => <span key={t} className={t === "Upset" ? "up" : ""}>{t}</span>)}
-                      <span className="plain">{r.source === "bluesky" ? `@${r.handle} on Bluesky` : `Week ${r.week}`}{r.duration ? ` · ${mmss(r.duration)}` : ""}</span>
-                      {r.url && <a href={r.url} target="_blank" rel="noopener noreferrer" className="plain">Video: {r.source === "bluesky" ? "Bluesky" : "ESPN"} ↗</a>}
+                      <span className="plain">{`Week ${r.week}`}{r.duration ? ` · ${mmss(r.duration)}` : ""}</span>
+                      {r.url && <a href={r.url} target="_blank" rel="noopener noreferrer" className="plain">Video: ESPN ↗</a>}
                     </div>
                   </div>
                   {next && (

@@ -2,6 +2,7 @@
 // rebuild for past weeks (the AP poll at the time, schedule spots, rest, travel, the closing and opening lines)
 // and graded against the final score. Live-only signals (weather, Kalshi, ESPN FPI) are not part of past grades.
 import { unstable_cache } from "next/cache";
+import { CANDIDATES, geocode, isRivalry, kickoffWeather, miles, tzGap, type Venue } from "@/lib/signals";
 
 const ESPN = "https://site.api.espn.com/apis/site/v2/sports/football/college-football";
 const UA = { "user-agent": "Mozilla/5.0 (compatible; TapeDog/1.0)" };
@@ -11,6 +12,8 @@ export type RT = { id: string; name: string; short: string; abbr: string; logo: 
 export type Call = {
   id: string; week: number; date: string; fav: RT; dog: RT; favHome: boolean; spread: number | null;
   score: number; tier: "FADE" | "WATCH" | "HOLD"; flags: string[]; favPts: number; dogPts: number; upset: boolean; cover: boolean | null;
+  /** Candidate signals under test. They don't add to the score. */
+  extra: string[];
 };
 
 async function j(url: string, rv: number, headers?: Record<string, string>) {
@@ -19,7 +22,7 @@ async function j(url: string, rv: number, headers?: Record<string, string>) {
   return r.json();
 }
 const norm = (s: string) => (s || "").toLowerCase().replace(/[^a-z]/g, "");
-const board = (w: number, rv: number) => j(`${ESPN}/scoreboard?groups=80&limit=300&seasontype=2&week=${w}`, rv).catch(() => ({ events: [] }));
+const board = (year: number, w: number, rv: number) => j(`${ESPN}/scoreboard?groups=80&limit=300&seasontype=2&week=${w}&dates=${year}`, rv).catch(() => ({ events: [] }));
 async function poll(year: number, w: number) {
   try {
     const d = await j(`https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/${year}/types/2/weeks/${w}/rankings/1`, 604800);
@@ -48,9 +51,9 @@ async function espnOdds(id: string, rv: number) {
 const etDate = (iso: string) => new Date(Date.parse(iso) - 5 * 3600000).toISOString().slice(0, 10).replace(/-/g, "");
 const team = (c: any): RT => ({ id: c.team?.id, name: c.team?.displayName || "", short: c.team?.shortDisplayName || "", abbr: c.team?.abbreviation || "", logo: c.team?.logo || "" });
 
-async function gradeWeek(year: number, w: number, live: boolean): Promise<Call[]> {
+async function gradeWeek(year: number, w: number, live: boolean, homes: Record<string, Venue>, past: boolean): Promise<Call[]> {
   const rv = live ? 1800 : 604800;
-  const [cur, prev, next, rk] = await Promise.all([board(w, rv), w > 1 ? board(w - 1, 604800) : { events: [] }, board(w + 1, 3600), poll(year, w)]);
+  const [cur, prev, next, rk] = await Promise.all([board(year, w, rv), w > 1 ? board(year, w - 1, 604800) : { events: [] }, board(year, w + 1, past ? 604800 : 3600), poll(year, w)]);
   const opp = (sb: any) => {
     const m = new Map<string, { opp: string; date: number }>();
     for (const e of sb.events || []) {
@@ -65,7 +68,8 @@ async function gradeWeek(year: number, w: number, live: boolean): Promise<Call[]
   const finals = (cur.events || []).filter((e: any) => e.status?.type?.state === "post");
   // An empty week means ESPN didn't answer. Throw so the empty result is never cached.
   if (!finals.length) { if (live) return []; throw new Error(`week ${w}: no finals`); }
-  const an = (await Promise.all([...new Set(finals.map((e: any) => etDate(e.date)))].map((d) => lines(d as string, rv)))).flat();
+  // Action Network only serves the current season, so past seasons use ESPN lines alone.
+  const an = past ? [] : (await Promise.all([...new Set(finals.map((e: any) => etDate(e.date)))].map((d) => lines(d as string, rv)))).flat();
   // Lines for past weeks come from ESPN, eight games at a time.
   const espn = new Map<string, Awaited<ReturnType<typeof espnOdds>>>();
   for (let i = 0; i < finals.length; i += 8) {
@@ -76,6 +80,7 @@ async function gradeWeek(year: number, w: number, live: boolean): Promise<Call[]
   if (!an.length && ![...espn.values()].some(Boolean)) throw new Error(`week ${w}: no lines`);
   const hit = (t: any, x: any) => !!t && (norm(t.full_name) === norm(x.team?.displayName) || norm(t.location) === norm(x.team?.location) || t.abbr === x.team?.abbreviation);
   const out: Call[] = [];
+  const jobs: [number, any, any, any, boolean][] = [];
   for (const e of finals) {
     const cs = e.competitions[0].competitors;
     const h = cs.find((x: any) => x.homeAway === "home"), a = cs.find((x: any) => x.homeAway === "away");
@@ -112,24 +117,70 @@ async function gradeWeek(year: number, w: number, live: boolean): Promise<Call[]
     out.push({
       id: e.id, week: w, date: e.date, fav: team(fav), dog: team(dog), favHome, spread, score,
       tier: score >= 50 ? "FADE" : score >= 28 ? "WATCH" : "HOLD", flags, favPts, dogPts,
-      upset: dogPts > favPts, cover: spread == null || margin === 0 ? null : margin > 0,
+      upset: dogPts > favPts, cover: spread == null || margin === 0 ? null : margin > 0, extra: [],
     });
+    jobs.push([out.length - 1, e, fav, dog, favHome]);
+  }
+  // Candidate signals, ten games at a time (weather and map lookups).
+  for (let i = 0; i < jobs.length; i += 10) {
+    await Promise.all(jobs.slice(i, i + 10).map(async ([k, e, fav, dog, fh]) => { out[k].extra = await candidates(e, fav, dog, fh, homes).catch(() => []); }));
   }
   return out;
+}
+
+async function candidates(e: any, fav: any, dog: any, favHome: boolean, homes: Record<string, Venue>): Promise<string[]> {
+  const c = e.competitions[0], v = c.venue?.address || {};
+  const venue: Venue = { city: v.city || "", state: v.state || "", indoor: !!c.venue?.indoor };
+  const out: string[] = [];
+  const add = (k: keyof typeof CANDIDATES) => out.push(CANDIDATES[k]);
+  if (isRivalry(fav.team?.location, dog.team?.location)) add("rivalry");
+  const wx = await kickoffWeather(e.date, venue);
+  if (wx) { if (wx.windMph >= 15) add("wind"); if (wx.rainMm >= 1) add("wet"); if (wx.tempF <= 32) add("cold"); }
+  const home = homes[fav.team?.id];
+  if (!favHome || c.neutralSite) {
+    const [a, b] = await Promise.all([home ? geocode(home.city, home.state) : null, geocode(venue.city, venue.state)]);
+    if (a && b) { if (miles(a, b) >= 1200) add("trip"); if (a.tz && b.tz && tzGap(a.tz, b.tz, e.date) >= 2) add("zones"); }
+  }
+  return out;
+}
+
+async function season(year: number, week: number, current: boolean) {
+  // Each team's home stadium, from the games it hosted this season (used to measure travel).
+  const homes: Record<string, Venue> = {};
+  const all = Array.from({ length: week }, (_, i) => i + 1);
+  for (let i = 0; i < all.length; i += 5) {
+    const bs = await Promise.all(all.slice(i, i + 5).map((w) => board(year, w, 604800)));
+    for (const b of bs) for (const e of b.events || []) {
+      const c = e.competitions?.[0];
+      if (!c || c.neutralSite) continue;
+      const h = c.competitors?.find((x: any) => x.homeAway === "home");
+      if (h && c.venue?.address?.city && !homes[h.team.id]) homes[h.team.id] = { city: c.venue.address.city, state: c.venue.address.state || "", indoor: !!c.venue.indoor };
+    }
+  }
+  // A few weeks at a time so ESPN and Action Network don't rate-limit us. A failed week is skipped this time
+  // (and not cached), so it fills in on the next refresh instead of staying empty for a week.
+  const weeks: Call[][] = [];
+  for (let i = 0; i < all.length; i += 3) {
+    weeks.push(...await Promise.all(all.slice(i, i + 3).map((w) => {
+      const fresh = current && w >= week - 1;
+      return unstable_cache(() => gradeWeek(year, w, fresh, homes, !current), ["tapedog-record-week-v4", String(year), String(w)], { revalidate: fresh ? 1800 : 604800 })()
+        .catch(() => [] as Call[]);
+    })));
+  }
+  return weeks.flat();
 }
 
 async function build() {
   const cur = await j(`${ESPN}/scoreboard?groups=80&limit=300`, 1800);
   const week: number = cur.week?.number || 1, year: number = cur.season?.year || new Date().getFullYear();
-  // A few weeks at a time so ESPN and Action Network don't rate-limit us. A failed week is skipped this time
-  // (and not cached), so it fills in on the next refresh instead of staying empty for a week.
-  const weeks: Call[][] = [];
-  const all = Array.from({ length: week }, (_, i) => i + 1);
-  for (let i = 0; i < all.length; i += 3) {
-    weeks.push(...await Promise.all(all.slice(i, i + 3).map((w) =>
-      unstable_cache(() => gradeWeek(year, w, w >= week - 1), ["tapedog-record-week-v3", String(year), String(w)], { revalidate: w >= week - 1 ? 1800 : 604800 })()
-        .catch(() => [] as Call[]))));
-  }
-  return { year, week, calls: weeks.flat() };
+  return { year, week, calls: await season(year, week, true) };
 }
-export const getRecord = unstable_cache(build, ["tapedog-record-v3"], { revalidate: 1800 });
+export const getRecord = unstable_cache(build, ["tapedog-record-v4"], { revalidate: 1800 });
+
+// Last season: a second set of games the model was never tuned on. Regular season is 15 weeks plus a week 0/16 edge.
+async function buildPast() {
+  const cur = await j(`${ESPN}/scoreboard?groups=80&limit=300`, 1800);
+  const year: number = (cur.season?.year || new Date().getFullYear()) - 1;
+  return { year, calls: await season(year, 15, false) };
+}
+export const getPastRecord = unstable_cache(buildPast, ["tapedog-record-past-v1"], { revalidate: 604800 });
