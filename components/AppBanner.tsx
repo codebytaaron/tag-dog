@@ -14,11 +14,11 @@ export default function AppBanner() {
   if (!show || path === "/app") return null;
   return (
     <div className="appbanner">
-      <Link href="/app" className="ab-main">
+      <a href="https://apps.apple.com/us/app/tapedog/id6830856077" className="ab-main" target="_blank" rel="noopener">
         <span className="ab-icon"><Logo size={22} /></span>
         <span className="ab-txt"><b>TapeDog for iPhone</b><small>Live scores on your Lock Screen. Upset alerts.</small></span>
-        <span className="ab-cta">See it</span>
-      </Link>
+        <span className="ab-cta">Get</span>
+      </a>
       <button className="ab-x" aria-label="Dismiss" onClick={() => { try { localStorage.setItem(KEY, "1"); } catch {} setShow(false); }}>×</button>
     </div>
   );

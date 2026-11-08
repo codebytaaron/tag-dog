@@ -7,6 +7,7 @@ export const revalidate = 1800;
 export const maxDuration = 60;
 export const metadata = {
   title: "TapeDog for iPhone",
+  itunes: { appId: "6830856077" },
   description: "Live scores, upset alerts, Lock Screen scoreboards and a daily AI brief for every FBS game. TapeDog for iPhone.",
 };
 
@@ -41,7 +42,7 @@ export default async function AppPage() {
     <main className="apppage">
       <section className="wrap ap-hero">
         <div className="ap-copy">
-          <div className="eyebrow mono">TAPEDOG FOR IPHONE · COMING SOON</div>
+          <div className="eyebrow mono">TAPEDOG FOR IPHONE · FREE ON THE APP STORE</div>
           <h1 className="ap-title">Every upset.<br /><span className="c-tape">In your pocket.</span></h1>
           <p className="ap-lede">Live scores, upset alerts and your team's whole season, in one app built to find the favorites worth fading.</p>
           <div className="ap-ctas"><AppNotify big /><Link href="/board" className="btn ghost">Use the web version</Link></div>
@@ -85,7 +86,7 @@ export default async function AppPage() {
       </section>
 
       <section className="wrap ap-final">
-        <h2 className="h2">Be first in line.</h2>
+        <h2 className="h2">Get TapeDog.</h2>
         <AppNotify big />
         <p className="muted small">For entertainment only. TapeDog doesn't take bets. 17+. Gambling problem? Call 1-800-GAMBLER. <Link href="/privacy" className="textlink">Privacy</Link> <Link href="/terms" className="textlink">Terms</Link></p>
       </section>

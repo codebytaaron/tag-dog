@@ -7,6 +7,7 @@ import Logo from "@/components/Logo";
 import ScoreAlerts from "@/components/ScoreAlerts";
 import AppBanner from "@/components/AppBanner";
 import MobileTabs from "@/components/MobileTabs";
+import Consent from "@/components/Consent";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Anton, Inter_Tight, JetBrains_Mono } from "next/font/google";
@@ -25,6 +26,7 @@ export const metadata = {
     description: "Upset odds, live scores, highlights and playoff odds for every FBS game.",
     url: "https://tapedog.vercel.app", siteName: "TapeDog", type: "website",
   },
+  itunes: { appId: "6830856077" },
   twitter: { card: "summary_large_image", title: "TapeDog", description: "Find the college football favorites worth fading." },
 };
 export const viewport = { themeColor: "#0a0a09" };
@@ -37,6 +39,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body>
         <Suspense fallback={<div className="nav" style={{ height: 64 }} />}><Nav /></Suspense>
+        <Consent />
         <AppBanner />
         <Suspense fallback={null}><MobileTabs /></Suspense>
         <ScoreAlerts />
