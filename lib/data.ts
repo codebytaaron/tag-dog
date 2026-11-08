@@ -260,7 +260,7 @@ async function enrich(b: any, an: any[], ks: KEvent[], fp: Record<string, FPI>):
 async function buildSlate(): Promise<Slate> {
   RANKS = await getRanks();
   const [sb, an, ks, fpiMap] = await Promise.all([
-    j(`${ESPN}/scoreboard?groups=80&limit=300`, 600),
+    currentBoard(),
     safe(j(AN_URL, 600, UA), { games: [] }),
     safe(j(KALSHI_URL, 600), { events: [] }),
     getFPI(),
@@ -305,6 +305,20 @@ export async function getLiveOdds(g: Game) {
   }
   if (consH == null && books.length) { consH = books[0].spreadHome; total = books[0].total ?? total; ml = [books[0].mlHome, books[0].mlAway]; }
   return { books: books.length ? books : g.books, openH, consH, total, ml, kalshi: matchKalshi(parseK(ks), g) || g.kalshi, bets: ag?.num_bets || g.bets, at: new Date().toISOString() };
+}
+
+// Once every game this week is final (Sunday through Tuesday, Eastern), move on to next week's slate.
+// The iPhone app does the same switch, so both always show the same week.
+async function currentBoard() {
+  const sb = await j(`${ESPN}/scoreboard?groups=80&limit=300`, 600);
+  const ev = sb.events || [];
+  const day = new Date(Date.now() - 5 * 3600000).getUTCDay(); // 0 = Sunday, Eastern
+  const w = sb.week?.number;
+  if (w && ev.length && ev.every((e: any) => e.status?.type?.state === "post") && [0, 1, 2].includes(day)) {
+    const next = await safe(j(`${ESPN}/scoreboard?groups=80&limit=300&seasontype=2&week=${w + 1}`, 600), null);
+    if (next?.events?.length) return { ...next, week: { ...(next.week || {}), number: w + 1 }, season: next.season || sb.season };
+  }
+  return sb;
 }
 
 const cachedSlate = unstable_cache(buildSlate, ["tapedog-slate-v7"], { revalidate: 900 });
