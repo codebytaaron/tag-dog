@@ -2,7 +2,6 @@ import Link from "next/link";
 import { getSlate, type Game } from "@/lib/data";
 import { getLive, type Live } from "@/lib/live";
 import Kickoff from "@/components/Kickoff";
-import Hero from "@/components/Hero";
 import { getFutures } from "@/lib/pulse";
 import AppNotify from "@/components/AppNotify";
 import LegalNote from "@/components/LegalNote";
@@ -84,15 +83,55 @@ export default async function Home() {
   });
   const weekDone = !now.length && !ahead.length;
   const race = (fut?.title?.markets || []).slice(0, 6);
-  const fly = (ahead.length ? spots.concat(board) : []).map((g) => ({
-    id: g.id, line: g.line, score: g.score, tier: g.tier, up: g.upsetPct,
-    away: { abbr: g.away.abbr, logo: g.away.logo, color: g.away.color },
-    home: { abbr: g.home.abbr, logo: g.home.logo, color: g.home.color },
-  }));
 
   return (
     <main className="hm">
-      <Hero games={fly} count={s.games.length} week={s.week} />
+      <section className="hx">
+        <div className="wrap hx-in">
+          <div className="hx-copy">
+            <span className="hx-pill"><i />{now.length ? `${now.length} games live now` : ahead.length ? `Week ${s.week} · ${ahead.length} games on the board` : `Week ${s.week} is final`}</span>
+            <h1>Find the favorites<br /><span>worth fading.</span></h1>
+            <p>TapeDog rates every college football favorite for upset risk, explains why in plain English, and tracks every game live.</p>
+            <div className="hx-ctas">
+              <AppNotify />
+              <Link href="/board" className="btn ghost">Open the Fade Board</Link>
+            </div>
+            <div className="hx-proof">
+              {edge && <span><b>{edge.fadePct}%</b> of flagged favorites lost</span>}
+              <span><b>Free</b> · no account</span>
+              <span><b>Every</b> FBS game</span>
+            </div>
+          </div>
+          <div className="hx-visual" aria-hidden>
+            <div className="hx-glow" />
+            <div className="hx-phone"><img src="/app/home.jpg" alt="" /></div>
+            {(spots[0] || lastHit) && (
+              <div className="hx-float hx-f1">
+                <span className="hx-f-label">{spots[0] ? "Upset of the week" : "Last FADE that hit"}</span>
+                <b>{spots[0] ? `${dogOf(spots[0]).short} over ${favOf(spots[0]).short}` : `${lastHit!.dog.short} over ${lastHit!.fav.short}`}</b>
+                <span className="hx-f-num">{spots[0] ? `${spots[0].upsetPct}% upset chance` : `Won ${lastHit!.dogPts}–${lastHit!.favPts}`}</span>
+              </div>
+            )}
+            {edge && (
+              <div className="hx-float hx-f2">
+                <span className="hx-f-label">Track record</span>
+                <b>{edge.fadePct}% <small>vs {edge.expPct}% expected</small></b>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {edge && (
+        <section className="hx-band">
+          <div className="wrap hx-band-in">
+            <div><b>{edge.allN}</b><span>games graded this season</span></div>
+            <div><b className="c-fade">{edge.fadePct}%</b><span>of FADE favorites lost</span></div>
+            <div><b>{edge.expPct}%</b><span>what the betting lines expected</span></div>
+            <div><b>{s.games.length}</b><span>FBS games tracked this week</span></div>
+          </div>
+        </section>
+      )}
 
       <div className="wrap hm-body">
         {now.length > 0 && (
