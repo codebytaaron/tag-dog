@@ -2,7 +2,6 @@
 // one-score finishes, overtime) and its best clips are picked (full-game highlights first; studio
 // talk, interviews and previews are skipped). Ordering, variety and personalization happen on the client.
 import { darkJson } from "./espn";
-import { getSocialReels } from "./socialreels";
 import { getRanks } from "./ranks";
 
 let RANKS: Record<string, number> = {};
@@ -53,7 +52,7 @@ export async function getReelsForWeek(week: number | null): Promise<{ week: numb
   const sb = await board(week ? `&seasontype=2&week=${week}` : "");
   const wk = week ?? sb?.week?.number ?? 1;
   const games = (sb?.events || []).filter((e: any) => e.status?.type?.state === "post")
-    .map((e: any) => ({ e, ...rate(e) })).sort((a: any, b: any) => b.base - a.base).slice(0, 26);
+    .map((e: any) => ({ e, ...rate(e) })).sort((a: any, b: any) => b.base - a.base).slice(0, 40);
   const lists = await Promise.all(games.map(async (x: any) => {
     try {
       const r = await fetch(`${ESPN}/summary?event=${x.e.id}`, { next: { revalidate: 3600 } });
@@ -61,10 +60,10 @@ export async function getReelsForWeek(week: number | null): Promise<{ week: numb
       const d = await darkJson(r);
       const vids = (d.videos || []).filter((v: any) => (v.links?.source?.href || v.links?.source?.HD?.href) && !TALK.test(v.headline || ""));
       const ordered = [...vids.filter((v: any) => /highlights/i.test(v.headline || "")), ...vids.filter((v: any) => !/highlights/i.test(v.headline || ""))];
-      return ordered.slice(0, 4).map((v: any, k: number): Reel => ({
+      return ordered.slice(0, 6).map((v: any, k: number): Reel => ({
         key: `${x.e.id}-${v.id || k}`, gameId: x.e.id, title: v.headline || "", url: v.links?.web?.href || "",
         mp4: v.links?.source?.HD?.href || v.links?.source?.href, thumb: v.thumbnail || "", duration: v.duration || 0,
-        away: x.away, home: x.home, week: wk, tags: x.tags, score: x.base * (k === 0 ? 1 : 0.75 - k * 0.1),
+        away: x.away, home: x.home, week: wk, tags: x.tags, score: x.base * (k === 0 ? 1 : Math.max(0.2, 0.75 - k * 0.1)), source: "espn",
       }));
     } catch { return []; }
   }));
@@ -74,6 +73,7 @@ export async function getReelsForWeek(week: number | null): Promise<{ week: numb
 export async function getReels() {
   const cur = await getReelsForWeek(null);
   const prev = cur.week > 1 ? await getReelsForWeek(cur.week - 1) : { week: 0, clips: [] as Reel[] };
-  const social = await getSocialReels(cur.week);
-  return { week: cur.week, clips: [...cur.clips, ...prev.clips.map((c) => ({ ...c, score: c.score * 0.6 })), ...social] };
+  // Every clip is ESPN's own highlight video for an FBS game, linked back to ESPN.
+  const prev2 = cur.week > 2 ? await getReelsForWeek(cur.week - 2) : { week: 0, clips: [] as Reel[] };
+  return { week: cur.week, clips: [...cur.clips, ...prev.clips.map((c) => ({ ...c, score: c.score * 0.6 })), ...prev2.clips.map((c) => ({ ...c, score: c.score * 0.4 }))] };
 }

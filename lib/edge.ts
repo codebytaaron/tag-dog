@@ -1,4 +1,5 @@
 import { getRecord, type Call } from "@/lib/record";
+import { CANDIDATES } from "@/lib/signals";
 
 // The headline stat: how much more often TapeDog's FADE favorites lose than the average favorite.
 export type Edge = { year: number; fadePct: number; expPct: number; allPct: number; fadeN: number; allN: number; coverPct: number; lo: number; hi: number };
@@ -55,4 +56,43 @@ export function buckets(calls: Call[]) {
     const l = calls.filter((c) => c.score >= lo && c.score <= hi);
     return { label, n: l.length, upset: pct(l.filter((c) => c.upset).length, l.length), expected: expected(l) };
   });
+}
+
+// Candidate signals, tested on two seasons. A signal only earns points in the TAPE score if favorites in those
+// games lose more often than the lines expected in BOTH seasons, on at least 30 games each. One good season can be luck.
+export type SeasonCut = { n: number; upset: number; expected: number; diff: number };
+export type CandidateRow = { name: string; cur: SeasonCut; past: SeasonCut; verdict: "Passes" | "Fails" | "Too few games" };
+const MIN_GAMES = 30;
+
+const cut = (l: Call[]): SeasonCut => {
+  const v = l.map((c) => lineUpset(c.spread)).filter((x): x is number => x != null);
+  const up = l.length ? (l.filter((c) => c.upset).length / l.length) * 100 : 0;
+  const ex = v.length ? (v.reduce((a, b) => a + b, 0) / v.length) * 100 : 0;
+  return { n: l.length, upset: Math.round(up), expected: Math.round(ex), diff: Math.round(up - ex) };
+};
+
+export function candidateLab(cur: Call[], past: Call[], names: string[]): CandidateRow[] {
+  return names.map((name) => {
+    const a = cut(cur.filter((c) => c.extra?.includes(name))), b = cut(past.filter((c) => c.extra?.includes(name)));
+    const verdict = a.n < MIN_GAMES || b.n < MIN_GAMES ? "Too few games" : a.diff > 0 && b.diff > 0 ? "Passes" : "Fails";
+    return { name, cur: a, past: b, verdict };
+  });
+}
+
+// The current TAPE rules on last season: games the model was never tuned on.
+export const holdout = (past: Call[]) => ({ all: cut(past), fade: cut(past.filter((c) => c.tier === "FADE")) });
+
+// Model versions side by side. "Travel" adds points when the favorite crosses 2+ time zones or travels
+// 1,200+ miles, the two signals that beat the lines in both seasons. It is a test model, not the live score.
+export const TRAVEL_POINTS = 10;
+const travelScore = (c: Call) => Math.min(99, c.score + (c.extra?.some((x) => x === CANDIDATES.zones || x === CANDIDATES.trip) ? TRAVEL_POINTS : 0));
+export type ModelRow = { name: string; about: string; cur: SeasonCut; past: SeasonCut };
+
+export function compareModels(cur: Call[], past: Call[]): ModelRow[] {
+  const fade = (l: Call[], s: (c: Call) => number) => cut(l.filter((c) => s(c) >= 50));
+  return [
+    { name: "Current TAPE", about: "What the site and app use today", cur: fade(cur, (c) => c.score), past: fade(past, (c) => c.score) },
+    { name: "TAPE + travel", about: `+${TRAVEL_POINTS} for 2+ time zones or 1,200+ miles`, cur: fade(cur, travelScore), past: fade(past, travelScore) },
+    { name: "Betting lines alone", about: "Every favorite, as a baseline", cur: cut(cur), past: cut(past) },
+  ];
 }

@@ -1,19 +1,22 @@
 import Link from "next/link";
-import { getRecord, type Call } from "@/lib/record";
+import { getRecord, getPastRecord, type Call } from "@/lib/record";
+import { CANDIDATES } from "@/lib/signals";
 import Kickoff from "@/components/Kickoff";
 import EdgeStat from "@/components/EdgeStat";
-import { edgeFrom, lab, buckets } from "@/lib/edge";
+import { edgeFrom, lab, buckets, candidateLab, holdout, compareModels } from "@/lib/edge";
 import { getLiveRecord } from "@/lib/forward";
 
 export const revalidate = 1800;
-export const maxDuration = 60;
+export const maxDuration = 300;
 export const metadata = { title: "Track record | TapeDog" };
 
 const pct = (a: number, b: number) => (b ? Math.round((a / b) * 100) : 0);
 const pc = (a: number, b: number) => (b ? `${Math.round((a / b) * 100)}%` : "–");
 
 export default async function RecordPage() {
-  const [{ calls, year }, live] = await Promise.all([getRecord(), getLiveRecord()]);
+  const [{ calls, year }, live, past] = await Promise.all([getRecord(), getLiveRecord(), getPastRecord().catch(() => ({ year: 0, calls: [] as Call[] }))]);
+  const models = compareModels(calls, past.calls), ho = holdout(past.calls), cands = candidateLab(calls, past.calls, Object.values(CANDIDATES));
+  const sg = (n: number) => `${n > 0 ? "+" : ""}${n}`;
   const lf = live.calls.filter((c) => c.tier === "FADE"), lg = lf.filter((c) => c.cover !== null);
   const stats = (l: Call[]) => ({ n: l.length, up: l.filter((c) => c.upset).length, cov: l.filter((c) => c.cover === true).length, graded: l.filter((c) => c.cover !== null).length });
   const all = stats(calls), fade = stats(calls.filter((c) => c.tier === "FADE")), watch = stats(calls.filter((c) => c.tier === "WATCH")), hold = stats(calls.filter((c) => c.tier === "HOLD"));
@@ -62,6 +65,47 @@ export default async function RecordPage() {
           </div>
         </div>
         <p className="muted small rec-note">Every rule here uses only what was known before kickoff, and every rule runs on the same games. The fair test is "favorite lost" against "lines expected" for the same games: beating all favorites isn't enough, because close games get upset more often anyway. We tried several rules on these games, so the best-looking one may simply be lucky. Treat anything under 100 games as early evidence, not proof.</p>
+      </section>
+
+      <section className="card rec-lab">
+        <div className="cardh"><h3>Model comparison</h3><span className="muted small">FADE calls · favorite lost vs. lines expected</span></div>
+        <div className="rec-row rec-lab5 rec-head"><span>Model</span><span>{year} games</span><span>{year}</span><span>{past.year || "Last season"} games</span><span>{past.year || "Last season"}</span></div>
+        {models.map((m) => (
+          <div key={m.name} className="rec-row rec-lab5">
+            <span><b>{m.name}</b><small className="muted"> {m.about}</small></span>
+            <span className="muted">{m.cur.n}</span>
+            <span>{m.cur.n ? `${m.cur.upset}% vs ${m.cur.expected}%` : "–"}</span>
+            <span className="muted">{m.past.n}</span>
+            <span>{m.past.n ? `${m.past.upset}% vs ${m.past.expected}%` : "–"}</span>
+          </div>
+        ))}
+        <p className="muted small rec-note">The first number is how often the favorite lost; the second is what the betting lines expected for those same games. A model only helps if the first beats the second in both seasons. "TAPE + travel" is a test version and doesn't change any live call.</p>
+      </section>
+
+      {past.calls.length > 0 && (
+        <section className="card rec-lab">
+          <div className="cardh"><h3>Last season check</h3><span className="muted small">{past.year} · games the model was never tuned on</span></div>
+          <div className="rec-row rec-lab5 rec-head"><span>Group</span><span>Games</span><span>Favorite lost</span><span>Lines expected</span><span>Difference</span></div>
+          {([["All favorites", ho.all], ["FADE", ho.fade]] as const).map(([n, c]) => (
+            <div key={n} className="rec-row rec-lab5"><span><b>{n}</b></span><span>{c.n}</span><span>{c.n ? `${c.upset}%` : "–"}</span><span className="muted">{c.n ? `${c.expected}%` : "–"}</span><span>{c.n ? `${sg(c.diff)} pts` : "–"}</span></div>
+          ))}
+          <p className="muted small rec-note">Same TAPE rules, run on a full season they weren't built from. If FADE favorites lose more often than the lines expected here too, the edge is less likely to be luck.</p>
+        </section>
+      )}
+
+      <section className="card rec-lab">
+        <div className="cardh"><h3>New signals under test</h3><span className="muted small">Not part of the TAPE score yet</span></div>
+        <div className="rec-row rec-lab5 rec-head"><span>Signal</span><span>{year}</span><span>{past.year || "Last season"}</span><span>Games</span><span>Verdict</span></div>
+        {cands.map((c) => (
+          <div key={c.name} className="rec-row rec-lab5">
+            <span><b>{c.name}</b></span>
+            <span>{c.cur.n ? `${sg(c.cur.diff)} pts` : "–"}</span>
+            <span>{c.past.n ? `${sg(c.past.diff)} pts` : "–"}</span>
+            <span className="muted">{c.cur.n} / {c.past.n}</span>
+            <span className={c.verdict === "Passes" ? "c-tape" : c.verdict === "Fails" ? "c-fade" : "muted"}>{c.verdict}</span>
+          </div>
+        ))}
+        <p className="muted small rec-note">Each number is how much more often favorites lost in those games than the betting lines expected. A signal only joins the TAPE score if it beats the lines in both seasons on at least 30 games each. Weather is the forecast at kickoff; travel is measured from the favorite's home stadium.</p>
       </section>
 
       <section className="card rec-tiers">

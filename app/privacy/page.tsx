@@ -32,7 +32,7 @@ export default function Privacy() {
       <p>To keep the site fast, some content loads straight from other services, which can see your IP address under their own privacy policies:</p>
       <ul>
         <li>ESPN: live scores, play-by-play, team logos, past results and highlight videos</li>
-        <li>Bluesky: reporter posts and avatars in The Buzz, and highlight videos in Reels</li>
+        <li>Bluesky: reporter posts and avatars in The Buzz</li>
         <li>Sportsbooks, Kalshi and Polymarket: only if you click a link to them</li>
       </ul>
       <p>Fonts are hosted by TapeDog itself, not loaded from Google.</p>
