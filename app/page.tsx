@@ -3,7 +3,6 @@ import { getSlate, type Game } from "@/lib/data";
 import { getLive, type Live } from "@/lib/live";
 import Kickoff from "@/components/Kickoff";
 import AppNotify from "@/components/AppNotify";
-import LegalNote from "@/components/LegalNote";
 import { getEdge } from "@/lib/edge";
 import { getRecord } from "@/lib/record";
 
@@ -86,23 +85,23 @@ export default async function Home() {
 
   return (
     <main className="hm">
-      <div className="hm-sky" aria-hidden>
-        {sky.map((g, k) => {
-          const lane = k % 7, depth = lane % 3, dur = [70, 54, 40][depth] + (k % 4) * 4;
-          return (
-            <div key={g.id} className={`lane d${depth} ${lane % 2 ? "rev" : ""}`}
-              style={{ top: `${4 + lane * 13.5}%`, animationDuration: `${dur}s`, animationDelay: `${-((k * 9.1) % dur)}s` }}>
-              <div className="fly">
-                <img src={g.away.logo} alt="" /><b>{g.away.abbr}</b><i>at</i><b>{g.home.abbr}</b><img src={g.home.logo} alt="" />
-                {stateOf(g) === "pre"
-                  ? <><span className="fl">{g.line}</span>{g.tier !== "HOLD" && <span className={`ft t-${g.tier}`}>{g.upsetPct}%</span>}</>
-                  : live[g.id]?.away != null ? <span className="fl">{live[g.id]!.away}–{live[g.id]!.home}{stateOf(g) === "post" ? " F" : ""}</span> : <span className="fl">{g.line}</span>}
-              </div>
-            </div>
-          );
-        })}
-      </div>
       <section className="hx">
+        <div className="hm-sky" aria-hidden>
+          {sky.map((g, k) => {
+            const lane = k % 7, depth = lane % 3, dur = [70, 54, 40][depth] + (k % 4) * 4;
+            return (
+              <div key={g.id} className={`lane d${depth} ${lane % 2 ? "rev" : ""}`}
+                style={{ top: `${4 + lane * 13.5}%`, animationDuration: `${dur}s`, animationDelay: `${-((k * 9.1) % dur)}s` }}>
+                <div className="fly">
+                  <img src={g.away.logo} alt="" /><b>{g.away.abbr}</b><i>at</i><b>{g.home.abbr}</b><img src={g.home.logo} alt="" />
+                  {stateOf(g) === "pre"
+                    ? <><span className="fl">{g.line}</span>{g.tier !== "HOLD" && <span className={`ft t-${g.tier}`}>{g.upsetPct}%</span>}</>
+                    : live[g.id]?.away != null ? <span className="fl">{live[g.id]!.away}–{live[g.id]!.home}{stateOf(g) === "post" ? " F" : ""}</span> : <span className="fl">{g.line}</span>}
+                </div>
+              </div>
+            );
+          })}
+        </div>
         <div className="wrap hx-in">
           <div className="hx-copy">
             <span className="hx-pill"><i />{now.length ? `${now.length} games live now` : ahead.length ? `Week ${s.week} · ${ahead.length} games on the board` : `Week ${s.week} is final`}</span>
@@ -249,7 +248,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="hm-two">
+        <section className="hm-two hm-flat">
           <div className="hm-panel">
             <h3>Where the numbers come from</h3>
             <ul className="hm-src-list">
@@ -278,7 +277,6 @@ export default async function Home() {
           <img src="/app/home.jpg" alt="TapeDog for iPhone" />
         </section>
 
-        <LegalNote />
       </div>
     </main>
   );

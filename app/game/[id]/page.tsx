@@ -1,5 +1,4 @@
 import Link from "next/link";
-import LegalNote from "@/components/LegalNote";
 import { notFound } from "next/navigation";
 import { getGameDetail, getSlate, lite } from "@/lib/data";
 import ViewTracker from "@/components/ViewTracker";
@@ -147,7 +146,6 @@ export default async function GamePage({ params }: { params: Promise<{ id: strin
         </div>
       </section>
       <div className="wrap gbody"><GameTabs tabs={tabs} /></div>
-      <div className="wrap"><LegalNote /></div>
       <div className="wrap"><RelatedGames games={(await getSlate()).games.filter((x) => x.state !== "post" && x.id !== g.id).map(lite)} /></div>
       <ViewTracker id={g.id} teams={[g.away.id, g.home.id]} />
     </main>
