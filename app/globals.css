@@ -2364,3 +2364,101 @@ body { letter-spacing: -.005em; }
 .rec-why-i:first-of-type { border-top: 0; }
 .rec-why-i small { display: block; color: var(--ink2); font-size: 13px; line-height: 1.45; margin-top: 3px; }
 .hm .hx { background-color: transparent; }
+
+/* ───────── Design pass: fewer boxes, clearer structure ───────── */
+
+/* Home hero: matchups drift behind the phone and fade out before they reach the headline */
+.hm .hx { background-color: var(--bg); }
+.hm-sky { position: absolute; inset: 0; z-index: 0; opacity: .85;
+  mask-image: linear-gradient(90deg, transparent 30%, #000 58%); -webkit-mask-image: linear-gradient(90deg, transparent 30%, #000 58%); }
+.hx-in { position: relative; z-index: 1; }
+@media (max-width: 900px) { .hm-sky { opacity: .3; mask-image: linear-gradient(transparent 52%, #000 78%); -webkit-mask-image: linear-gradient(transparent 52%, #000 78%); } }
+
+/* Home sections: a rule and a heading, not a box */
+.hm-body { gap: 64px; padding-top: 48px; padding-bottom: 64px; }
+.hm-h { margin-bottom: 18px; }
+.hm-h h2 { font-size: 22px; letter-spacing: -.02em; }
+
+.hm-spot h3 { font-family: var(--body); font-weight: 800; text-transform: none; font-size: 21px; line-height: 1.18; letter-spacing: -.015em; min-height: 2.36em; }
+
+.hm-steps { gap: 0; border-top: 1px solid var(--line); }
+.hm-steps > div { background: none; border: 0; border-radius: 0; padding: 24px 32px 0 0; gap: 8px; }
+.hm-steps > div + div { padding-left: 32px; border-left: 1px solid var(--line); }
+.hm-steps span { width: auto; height: auto; display: block; background: none; border-radius: 0; color: var(--tape); font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: .14em; }
+.hm-steps span::before { content: "0"; }
+.hm-steps b { font-size: 18px; letter-spacing: -.01em; margin-top: 2px; }
+.hm-steps p { font-size: 15px; max-width: 34ch; }
+
+.hm-feats { grid-template-columns: 1fr 1fr; gap: 0 56px; border-top: 1px solid var(--line); }
+.hm-feats a { position: relative; grid-template-columns: 168px 1fr; align-items: baseline; gap: 16px; padding: 17px 32px 17px 0; background: none; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; }
+.hm-feats a::after { content: "→"; position: absolute; right: 2px; top: 50%; translate: 0 -50%; color: var(--dim); transition: transform .15s, color .15s; }
+.hm-feats a:hover b, .hm-feats a:hover::after { color: var(--tape); }
+.hm-feats a:hover::after { transform: translateX(3px); }
+.hm-feats span { font-size: 14px; }
+
+.hm-flat { gap: 56px; }
+.hm-flat .hm-panel { background: none; border: 0; border-top: 1px solid var(--line); border-radius: 0; padding: 22px 0 0; }
+.hm-flat .hm-panel h3 { font-size: 20px; letter-spacing: -.02em; margin-bottom: 4px; }
+
+@media (max-width: 900px) {
+  .hm-body { gap: 48px; }
+  .hm-steps > div, .hm-steps > div + div { padding: 20px 0; border-left: 0; }
+  .hm-steps > div + div { border-top: 1px solid var(--line); }
+  .hm-feats { grid-template-columns: 1fr; }
+  .hm-flat { gap: 40px; }
+}
+@media (max-width: 560px) { .hm-feats a { grid-template-columns: 1fr; gap: 3px; } }
+
+/* Track record: one band of numbers, no boxes inside boxes */
+.rec-hero { gap: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; }
+.rec-hero.rec-two { grid-template-columns: 1fr 1fr; }
+.rec-hero div { background: none; border: 0; border-radius: 0; border-left: 1px solid var(--line); padding: 22px 24px; }
+.rec-hero div:first-child { border-left: 0; }
+.rec-live .rec-hero { background: none; border: 0; margin: 4px 0 12px; }
+.rec-live .rec-hero div { padding: 6px 24px; }
+.rec-live .rec-hero div:first-child { padding-left: 0; }
+@media (max-width: 720px) {
+  .rec-hero, .rec-hero.rec-two { grid-template-columns: 1fr; }
+  .rec-hero div { border-left: 0; border-top: 1px solid var(--line); }
+  .rec-hero div:first-child { border-top: 0; }
+  .rec-live .rec-hero div { padding: 12px 0; }
+}
+
+/* How it works */
+.about .pipe { gap: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-top: 48px; }
+.about .pflow { display: none; }
+.about .pnode { background: none; border: 0; border-left: 1px solid var(--line); border-radius: 0; text-align: left; padding: 26px 24px; }
+.about .pnode:first-child { border-left: 0; padding-left: 0; }
+.about .pnode span { letter-spacing: .12em; display: block; margin-top: 8px; }
+.about .aboutsteps { gap: 0; border-top: 1px solid var(--line); margin-top: 14px; }
+.about .bcard.why { background: none; border: 0; border-radius: 0; padding: 22px 32px 0 0; }
+.about .bcard.why + .bcard.why { padding-left: 32px; border-left: 1px solid var(--line); }
+.about .playbook { gap: 0; border-top: 1px solid var(--line); }
+.flagrow { display: grid; grid-template-columns: 96px 170px 1fr; gap: 16px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid var(--line); }
+.flagrow span { color: var(--fade); font-size: 14px; font-weight: 600; }
+.flagrow span.neg { color: var(--ok, #7BD88F); }
+.flagrow b { font-size: 16px; }
+.flagrow small { color: var(--muted); font-size: 14px; }
+.about .fgrid { grid-template-columns: 1fr 1fr; gap: 0 56px; border-top: 1px solid var(--line); margin-top: 14px; }
+.about .ftile { min-height: 0; background: none; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; padding: 17px 32px 17px 0; grid-template-columns: 150px 1fr; align-items: baseline; gap: 16px; transform: none; }
+.about .ftile:hover { transform: none; }
+.about .ftile:hover b { color: var(--tape); }
+.about .ftile b { font-size: 16px; }
+.about .ftile i { right: 2px; bottom: auto; top: 50%; translate: 0 -50%; }
+.about .srcgrid { gap: 0 40px; border-top: 1px solid var(--line); margin-top: 14px; }
+.about .src2 { background: none; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; padding: 14px 0; }
+@media (max-width: 900px) {
+  .about .pnode:nth-child(3) { border-left: 0; padding-left: 0; }
+  .about .pnode:nth-child(n+3) { border-top: 1px solid var(--line); }
+  .about .aboutsteps { grid-template-columns: 1fr; }
+  .about .bcard.why, .about .bcard.why + .bcard.why { padding: 20px 0; border-left: 0; }
+  .about .bcard.why + .bcard.why { border-top: 1px solid var(--line); }
+  .about .fgrid { grid-template-columns: 1fr; }
+  .about .srcgrid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .flagrow { grid-template-columns: 72px 1fr; }
+  .flagrow small { grid-column: 2; margin-top: -10px; }
+  .about .ftile { grid-template-columns: 1fr; gap: 3px; }
+  .about .srcgrid { grid-template-columns: 1fr; }
+}

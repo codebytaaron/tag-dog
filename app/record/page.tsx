@@ -10,7 +10,6 @@ export const revalidate = 1800;
 export const maxDuration = 300;
 export const metadata = { title: "Track record | TapeDog" };
 
-const pct = (a: number, b: number) => (b ? Math.round((a / b) * 100) : 0);
 const pc = (a: number, b: number) => (b ? `${Math.round((a / b) * 100)}%` : "–");
 
 export default async function RecordPage() {
@@ -22,7 +21,6 @@ export default async function RecordPage() {
   const all = stats(calls), fade = stats(calls.filter((c) => c.tier === "FADE")), watch = stats(calls.filter((c) => c.tier === "WATCH")), hold = stats(calls.filter((c) => c.tier === "HOLD"));
   const fades = calls.filter((c) => c.tier === "FADE").sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
   const weeks = [...new Set(calls.map((c) => c.week))].sort((a, b) => b - a);
-  const upLift = pct(fade.up, fade.n) - pct(all.up, all.n);
 
   return (
     <main className="wrap board">
@@ -32,9 +30,8 @@ export default async function RecordPage() {
 
       {(() => { const e = edgeFrom(year, calls); return e ? <div className="rec-edge"><EdgeStat e={e} link={false} /></div> : null; })()}
 
-      <div className="rec-hero">
-        <div><b>{fade.n}</b><span>Games flagged FADE</span></div>
-        <div><b className="c-fade">{pc(fade.up, fade.n)}</b><span>Of FADE favorites lost outright</span><small>All favorites: {pc(all.up, all.n)}{upLift ? ` (${upLift > 0 ? "+" : ""}${upLift} pts)` : ""}</small></div>
+      <div className="rec-hero rec-two">
+        <div><b>{fade.n}</b><span>Games flagged FADE</span><small>All favorites lost {pc(all.up, all.n)} of the time</small></div>
         <div><b className="c-tape">{pc(fade.cov, fade.graded)}</b><span>Of FADE underdogs covered</span><small>All underdogs: {pc(all.cov, all.graded)}</small></div>
       </div>
 

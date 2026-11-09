@@ -78,9 +78,10 @@ export default function How() {
         </div>
         <div className="playbook">
           {PLAYBOOK.map(([n, p, d]) => (
-            <div key={n} className="pb">
-              <span className={`pts mono ${p.startsWith("−") ? "neg" : ""}`}>{p}</span>
-              <div><b>{n}</b><small>{d}</small></div>
+            <div key={n} className="flagrow">
+              <span className={`mono ${p.startsWith("−") ? "neg" : ""}`}>{p}</span>
+              <b>{n}</b>
+              <small>{d}</small>
             </div>
           ))}
         </div>
