@@ -519,12 +519,12 @@
     "abbr": "KU",
     "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2305.png"
    },
-   "line": "WVU -2.5",
-   "spread": 2.5,
-   "score": 49,
-   "tier": "WATCH",
-   "upsetPct": 47,
-   "savedAt": "2026-11-10T04:01:50.111Z"
+   "line": "WVU -3",
+   "spread": 3,
+   "score": 57,
+   "tier": "FADE",
+   "upsetPct": 48,
+   "savedAt": "2026-11-10T12:54:39.619Z"
   },
   "401856862": {
    "id": "401856862",
@@ -548,8 +548,8 @@
    "spread": 10,
    "score": 57,
    "tier": "FADE",
-   "upsetPct": 27,
-   "savedAt": "2026-11-09T21:36:00.332Z"
+   "upsetPct": 26,
+   "savedAt": "2026-11-10T12:54:39.619Z"
   },
   "401856863": {
    "id": "401856863",
@@ -596,10 +596,10 @@
    },
    "line": "UTAH -2.5",
    "spread": 2.5,
-   "score": 44,
+   "score": 34,
    "tier": "WATCH",
-   "upsetPct": 46,
-   "savedAt": "2026-11-10T04:01:50.111Z"
+   "upsetPct": 44,
+   "savedAt": "2026-11-10T12:54:39.619Z"
   },
   "401856882": {
    "id": "401856882",
@@ -723,8 +723,8 @@
    "spread": 2.5,
    "score": 55,
    "tier": "FADE",
-   "upsetPct": 48,
-   "savedAt": "2026-11-10T04:01:50.111Z"
+   "upsetPct": 49,
+   "savedAt": "2026-11-10T12:54:39.619Z"
   },
   "401856887": {
    "id": "401856887",
@@ -748,8 +748,8 @@
    "spread": 1.5,
    "score": 29,
    "tier": "WATCH",
-   "upsetPct": 47,
-   "savedAt": "2026-11-10T04:01:50.111Z"
+   "upsetPct": 48,
+   "savedAt": "2026-11-10T12:54:39.619Z"
   },
   "401856888": {
    "id": "401856888",
@@ -1098,8 +1098,8 @@
    "spread": 13.5,
    "score": 45,
    "tier": "WATCH",
-   "upsetPct": 18,
-   "savedAt": "2026-11-09T21:36:00.332Z"
+   "upsetPct": 19,
+   "savedAt": "2026-11-10T12:54:39.619Z"
   },
   "401858297": {
    "id": "401858297",
@@ -1173,8 +1173,8 @@
    "spread": 15.5,
    "score": 67,
    "tier": "FADE",
-   "upsetPct": 16,
-   "savedAt": "2026-11-09T02:31:38.704Z"
+   "upsetPct": 17,
+   "savedAt": "2026-11-10T12:54:39.619Z"
   },
   "401858300": {
    "id": "401858300",
@@ -1198,8 +1198,8 @@
    "spread": 2.5,
    "score": 15,
    "tier": "HOLD",
-   "upsetPct": 41,
-   "savedAt": "2026-11-09T21:36:00.332Z"
+   "upsetPct": 40,
+   "savedAt": "2026-11-10T12:54:39.619Z"
   },
   "401858301": {
    "id": "401858301",
@@ -1548,8 +1548,8 @@
    "spread": 12.5,
    "score": 27,
    "tier": "HOLD",
-   "upsetPct": 20,
-   "savedAt": "2026-11-09T21:36:00.332Z"
+   "upsetPct": 21,
+   "savedAt": "2026-11-10T12:54:39.619Z"
   },
   "401858523": {
    "id": "401858523",
@@ -1571,10 +1571,10 @@
    },
    "line": "ORE -11.5",
    "spread": 11.5,
-   "score": 49,
+   "score": 39,
    "tier": "WATCH",
-   "upsetPct": 22,
-   "savedAt": "2026-11-10T04:01:50.111Z"
+   "upsetPct": 21,
+   "savedAt": "2026-11-10T12:54:39.619Z"
   },
   "401858524": {
    "id": "401858524",
@@ -1623,8 +1623,8 @@
    "spread": 13.5,
    "score": 43,
    "tier": "WATCH",
-   "upsetPct": 19,
-   "savedAt": "2026-11-10T04:01:50.111Z"
+   "upsetPct": 18,
+   "savedAt": "2026-11-10T12:54:39.619Z"
   },
   "401858526": {
    "id": "401858526",
@@ -1648,8 +1648,8 @@
    "spread": 10,
    "score": 31,
    "tier": "WATCH",
-   "upsetPct": 24,
-   "savedAt": "2026-11-09T21:36:00.332Z"
+   "upsetPct": 23,
+   "savedAt": "2026-11-10T12:54:39.619Z"
   },
   "401860911": {
    "id": "401860911",
@@ -1773,8 +1773,8 @@
    "spread": 2.5,
    "score": 28,
    "tier": "WATCH",
-   "upsetPct": 45,
-   "savedAt": "2026-11-10T04:01:50.111Z"
+   "upsetPct": 44,
+   "savedAt": "2026-11-10T12:54:39.619Z"
   },
   "401860916": {
    "id": "401860916",
@@ -1823,8 +1823,8 @@
    "spread": 9.5,
    "score": 7,
    "tier": "HOLD",
-   "upsetPct": 22,
-   "savedAt": "2026-11-10T04:01:50.111Z"
+   "upsetPct": 23,
+   "savedAt": "2026-11-10T12:54:39.619Z"
   },
   "401861967": {
    "id": "401861967",
@@ -1848,8 +1848,8 @@
    "spread": 4,
    "score": 17,
    "tier": "HOLD",
-   "upsetPct": 36,
-   "savedAt": "2026-11-10T04:01:50.111Z"
+   "upsetPct": 35,
+   "savedAt": "2026-11-10T12:54:39.619Z"
   },
   "401862817": {
    "id": "401862817",
@@ -2146,10 +2146,10 @@
    },
    "line": "RICE -2.5",
    "spread": 2.5,
-   "score": 27,
-   "tier": "HOLD",
-   "upsetPct": 45,
-   "savedAt": "2026-11-10T04:01:50.111Z"
+   "score": 37,
+   "tier": "WATCH",
+   "upsetPct": 47,
+   "savedAt": "2026-11-10T12:54:39.619Z"
   },
   "401862829": {
    "id": "401862829",
@@ -2371,10 +2371,10 @@
    },
    "line": "UNM -14",
    "spread": 14,
-   "score": 13,
+   "score": 23,
    "tier": "HOLD",
    "upsetPct": 16,
-   "savedAt": "2026-11-10T04:01:50.111Z"
+   "savedAt": "2026-11-10T12:54:39.619Z"
   },
   "401864540": {
    "id": "401864540",
@@ -2396,10 +2396,10 @@
    },
    "line": "WYO -7.5",
    "spread": 7.5,
-   "score": 60,
+   "score": 70,
    "tier": "FADE",
-   "upsetPct": 28,
-   "savedAt": "2026-11-10T04:01:50.111Z"
+   "upsetPct": 29,
+   "savedAt": "2026-11-10T12:54:39.619Z"
   },
   "401866455": {
    "id": "401866455",
@@ -2571,10 +2571,10 @@
    },
    "line": "BUFF -2.5",
    "spread": 2.5,
-   "score": 30,
-   "tier": "WATCH",
-   "upsetPct": 45,
-   "savedAt": "2026-11-10T04:01:50.111Z"
+   "score": 20,
+   "tier": "HOLD",
+   "upsetPct": 42,
+   "savedAt": "2026-11-10T12:54:39.619Z"
   },
   "401866462": {
    "id": "401866462",
@@ -2596,10 +2596,10 @@
    },
    "line": "CMU -18",
    "spread": 18,
-   "score": 0,
+   "score": 9,
    "tier": "HOLD",
    "upsetPct": 11,
-   "savedAt": "2026-11-10T04:01:50.111Z"
+   "savedAt": "2026-11-10T12:54:39.619Z"
   },
   "401866463": {
    "id": "401866463",
@@ -2623,8 +2623,8 @@
    "spread": 14.5,
    "score": 17,
    "tier": "HOLD",
-   "upsetPct": 16,
-   "savedAt": "2026-11-09T21:36:00.332Z"
+   "upsetPct": 15,
+   "savedAt": "2026-11-10T12:54:39.619Z"
   },
   "401869927": {
    "id": "401869927",
@@ -2721,10 +2721,10 @@
    },
    "line": "CCU -1.5",
    "spread": 1.5,
-   "score": 15,
+   "score": 5,
    "tier": "HOLD",
-   "upsetPct": 45,
-   "savedAt": "2026-11-10T04:01:50.111Z"
+   "upsetPct": 42,
+   "savedAt": "2026-11-10T12:54:39.619Z"
   },
   "401869945": {
    "id": "401869945",
@@ -3198,8 +3198,8 @@
    "spread": 3,
    "score": 13,
    "tier": "HOLD",
-   "upsetPct": 39,
-   "savedAt": "2026-11-10T04:01:50.111Z"
+   "upsetPct": 38,
+   "savedAt": "2026-11-10T12:54:39.619Z"
   }
  }
 }
