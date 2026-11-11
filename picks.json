@@ -498,8 +498,8 @@
    "spread": 9.5,
    "score": 28,
    "tier": "WATCH",
-   "upsetPct": 22,
-   "savedAt": "2026-11-11T15:59:58.136Z"
+   "upsetPct": 23,
+   "savedAt": "2026-11-11T22:38:25.403Z"
   },
   "401856861": {
    "id": "401856861",
@@ -523,8 +523,8 @@
    "spread": 3,
    "score": 57,
    "tier": "FADE",
-   "upsetPct": 47,
-   "savedAt": "2026-11-11T15:59:58.136Z"
+   "upsetPct": 48,
+   "savedAt": "2026-11-11T22:38:25.403Z"
   },
   "401856862": {
    "id": "401856862",
@@ -573,8 +573,8 @@
    "spread": 3.5,
    "score": 13,
    "tier": "HOLD",
-   "upsetPct": 38,
-   "savedAt": "2026-11-11T15:59:58.136Z"
+   "upsetPct": 37,
+   "savedAt": "2026-11-11T22:38:25.403Z"
   },
   "401856864": {
    "id": "401856864",
@@ -698,8 +698,8 @@
    "spread": 4,
    "score": 57,
    "tier": "FADE",
-   "upsetPct": 43,
-   "savedAt": "2026-11-11T15:59:58.136Z"
+   "upsetPct": 42,
+   "savedAt": "2026-11-11T22:38:25.403Z"
   },
   "401856886": {
    "id": "401856886",
@@ -723,33 +723,33 @@
    "spread": 2.5,
    "score": 43,
    "tier": "WATCH",
-   "upsetPct": 47,
-   "savedAt": "2026-11-11T15:59:58.136Z"
+   "upsetPct": 45,
+   "savedAt": "2026-11-11T22:38:25.403Z"
   },
   "401856887": {
    "id": "401856887",
    "date": "2026-11-14T21:15Z",
    "week": 11,
    "season": 2026,
-   "favHome": false,
+   "favHome": true,
    "fav": {
-    "id": "145",
-    "short": "Ole Miss",
-    "abbr": "MISS",
-    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/145.png"
-   },
-   "dog": {
     "id": "201",
     "short": "Oklahoma",
     "abbr": "OU",
     "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/201.png"
    },
-   "line": "MISS -1.5",
+   "dog": {
+    "id": "145",
+    "short": "Ole Miss",
+    "abbr": "MISS",
+    "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/145.png"
+   },
+   "line": "OU -1.5",
    "spread": 1.5,
-   "score": 29,
+   "score": 47,
    "tier": "WATCH",
-   "upsetPct": 50,
-   "savedAt": "2026-11-11T15:59:58.136Z"
+   "upsetPct": 53,
+   "savedAt": "2026-11-11T22:38:25.403Z"
   },
   "401856888": {
    "id": "401856888",
@@ -773,8 +773,8 @@
    "spread": 2.5,
    "score": 59,
    "tier": "FADE",
-   "upsetPct": 48,
-   "savedAt": "2026-11-09T21:36:00.332Z"
+   "upsetPct": 49,
+   "savedAt": "2026-11-11T22:38:25.403Z"
   },
   "401856889": {
    "id": "401856889",
@@ -794,12 +794,12 @@
     "abbr": "VAN",
     "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/238.png"
    },
-   "line": "ALA -15.5",
-   "spread": 15.5,
+   "line": "ALA -16.5",
+   "spread": 16.5,
    "score": 29,
    "tier": "WATCH",
    "upsetPct": 13,
-   "savedAt": "2026-11-11T15:59:58.136Z"
+   "savedAt": "2026-11-11T22:38:25.403Z"
   },
   "401858285": {
    "id": "401858285",
@@ -1023,8 +1023,8 @@
    "spread": 3.5,
    "score": 13,
    "tier": "HOLD",
-   "upsetPct": 38,
-   "savedAt": "2026-11-10T20:23:17.827Z"
+   "upsetPct": 37,
+   "savedAt": "2026-11-11T22:38:25.402Z"
   },
   "401858294": {
    "id": "401858294",
@@ -1098,8 +1098,8 @@
    "spread": 13.5,
    "score": 33,
    "tier": "WATCH",
-   "upsetPct": 18,
-   "savedAt": "2026-11-11T15:59:58.136Z"
+   "upsetPct": 17,
+   "savedAt": "2026-11-11T22:38:25.403Z"
   },
   "401858297": {
    "id": "401858297",
@@ -1223,8 +1223,8 @@
    "spread": 1.5,
    "score": 53,
    "tier": "FADE",
-   "upsetPct": 55,
-   "savedAt": "2026-11-11T15:59:58.136Z"
+   "upsetPct": 56,
+   "savedAt": "2026-11-11T22:38:25.403Z"
   },
   "401858510": {
    "id": "401858510",
@@ -1444,12 +1444,12 @@
     "abbr": "USC",
     "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/30.png"
    },
-   "line": "IU -7.5",
-   "spread": 7.5,
+   "line": "IU -10",
+   "spread": 10,
    "score": 21,
    "tier": "HOLD",
-   "upsetPct": 28,
-   "savedAt": "2026-11-11T15:59:58.136Z"
+   "upsetPct": 23,
+   "savedAt": "2026-11-11T22:38:25.403Z"
   },
   "401858519": {
    "id": "401858519",
@@ -1469,12 +1469,12 @@
     "abbr": "PUR",
     "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2509.png"
    },
-   "line": "IOWA -16.5",
-   "spread": 16.5,
+   "line": "IOWA -17.5",
+   "spread": 17.5,
    "score": 5,
    "tier": "HOLD",
    "upsetPct": 11,
-   "savedAt": "2026-11-11T15:59:58.136Z"
+   "savedAt": "2026-11-11T22:38:25.403Z"
   },
   "401858520": {
    "id": "401858520",
@@ -1548,8 +1548,8 @@
    "spread": 12.5,
    "score": 33,
    "tier": "WATCH",
-   "upsetPct": 21,
-   "savedAt": "2026-11-11T15:59:58.136Z"
+   "upsetPct": 20,
+   "savedAt": "2026-11-11T22:38:25.403Z"
   },
   "401858523": {
    "id": "401858523",
@@ -1569,12 +1569,12 @@
     "abbr": "MICH",
     "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/130.png"
    },
-   "line": "ORE -11.5",
-   "spread": 11.5,
+   "line": "ORE -10.5",
+   "spread": 10.5,
    "score": 27,
    "tier": "HOLD",
    "upsetPct": 21,
-   "savedAt": "2026-11-11T15:59:58.136Z"
+   "savedAt": "2026-11-11T22:38:25.403Z"
   },
   "401858524": {
    "id": "401858524",
@@ -1619,12 +1619,12 @@
     "abbr": "RUTG",
     "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/164.png"
    },
-   "line": "NEB -13.5",
-   "spread": 13.5,
+   "line": "NEB -14",
+   "spread": 14,
    "score": 43,
    "tier": "WATCH",
    "upsetPct": 19,
-   "savedAt": "2026-11-11T15:59:58.136Z"
+   "savedAt": "2026-11-11T22:38:25.403Z"
   },
   "401858526": {
    "id": "401858526",
@@ -1796,10 +1796,10 @@
    },
    "line": "TXST -10",
    "spread": 10,
-   "score": 23,
+   "score": 13,
    "tier": "HOLD",
    "upsetPct": 23,
-   "savedAt": "2026-11-11T15:59:58.136Z"
+   "savedAt": "2026-11-11T22:38:25.403Z"
   },
   "401860917": {
    "id": "401860917",
@@ -1848,8 +1848,8 @@
    "spread": 4,
    "score": 23,
    "tier": "HOLD",
-   "upsetPct": 36,
-   "savedAt": "2026-11-11T15:59:58.136Z"
+   "upsetPct": 35,
+   "savedAt": "2026-11-11T22:38:25.403Z"
   },
   "401862817": {
    "id": "401862817",
@@ -2048,8 +2048,8 @@
    "spread": 3.5,
    "score": 34,
    "tier": "WATCH",
-   "upsetPct": 40,
-   "savedAt": "2026-11-11T15:59:58.136Z"
+   "upsetPct": 39,
+   "savedAt": "2026-11-11T22:38:25.402Z"
   },
   "401862825": {
    "id": "401862825",
@@ -2148,8 +2148,8 @@
    "spread": 2.5,
    "score": 33,
    "tier": "WATCH",
-   "upsetPct": 47,
-   "savedAt": "2026-11-11T15:59:58.136Z"
+   "upsetPct": 46,
+   "savedAt": "2026-11-11T22:38:25.403Z"
   },
   "401862829": {
    "id": "401862829",
@@ -2371,10 +2371,10 @@
    },
    "line": "UNM -14",
    "spread": 14,
-   "score": 23,
+   "score": 13,
    "tier": "HOLD",
    "upsetPct": 16,
-   "savedAt": "2026-11-11T15:59:58.136Z"
+   "savedAt": "2026-11-11T22:38:25.403Z"
   },
   "401864540": {
    "id": "401864540",
@@ -2598,8 +2598,8 @@
    "spread": 17.5,
    "score": 5,
    "tier": "HOLD",
-   "upsetPct": 10,
-   "savedAt": "2026-11-11T15:59:58.136Z"
+   "upsetPct": 11,
+   "savedAt": "2026-11-11T22:38:25.402Z"
   },
   "401866463": {
    "id": "401866463",
@@ -2723,8 +2723,8 @@
    "spread": 1.5,
    "score": 5,
    "tier": "HOLD",
-   "upsetPct": 44,
-   "savedAt": "2026-11-11T00:49:21.405Z"
+   "upsetPct": 43,
+   "savedAt": "2026-11-11T22:38:25.403Z"
   },
   "401869945": {
    "id": "401869945",
@@ -2798,8 +2798,8 @@
    "spread": 5.5,
    "score": 23,
    "tier": "HOLD",
-   "upsetPct": 34,
-   "savedAt": "2026-11-11T15:59:58.136Z"
+   "upsetPct": 35,
+   "savedAt": "2026-11-11T22:38:25.403Z"
   },
   "401869964": {
    "id": "401869964",
@@ -2873,8 +2873,8 @@
    "spread": 10.5,
    "score": 36,
    "tier": "WATCH",
-   "upsetPct": 22,
-   "savedAt": "2026-11-09T21:36:00.332Z"
+   "upsetPct": 23,
+   "savedAt": "2026-11-11T22:38:25.402Z"
   },
   "401870752": {
    "id": "401870752",
@@ -3173,8 +3173,8 @@
    "spread": 17.5,
    "score": 5,
    "tier": "HOLD",
-   "upsetPct": 11,
-   "savedAt": "2026-11-11T07:39:12.699Z"
+   "upsetPct": 10,
+   "savedAt": "2026-11-11T22:38:25.403Z"
   },
   "401871100": {
    "id": "401871100",
