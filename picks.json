@@ -419,12 +419,12 @@
     "abbr": "ASU",
     "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/9.png"
    },
-   "line": "UCF -3.5",
-   "spread": 3.5,
+   "line": "UCF -3",
+   "spread": 3,
    "score": 13,
    "tier": "HOLD",
    "upsetPct": 38,
-   "savedAt": "2026-11-12T03:43:11.538Z"
+   "savedAt": "2026-11-12T12:27:26.740Z"
   },
   "401856858": {
    "id": "401856858",
@@ -494,12 +494,12 @@
     "abbr": "COLO",
     "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/38.png"
    },
-   "line": "HOU -10",
-   "spread": 10,
+   "line": "HOU -9.5",
+   "spread": 9.5,
    "score": 28,
    "tier": "WATCH",
-   "upsetPct": 23,
-   "savedAt": "2026-11-12T03:43:11.538Z"
+   "upsetPct": 24,
+   "savedAt": "2026-11-12T12:27:26.739Z"
   },
   "401856861": {
    "id": "401856861",
@@ -548,8 +548,8 @@
    "spread": 10.5,
    "score": 57,
    "tier": "FADE",
-   "upsetPct": 25,
-   "savedAt": "2026-11-12T03:43:11.538Z"
+   "upsetPct": 24,
+   "savedAt": "2026-11-12T12:27:26.740Z"
   },
   "401856863": {
    "id": "401856863",
@@ -673,8 +673,8 @@
    "spread": 3.5,
    "score": 57,
    "tier": "FADE",
-   "upsetPct": 43,
-   "savedAt": "2026-11-09T21:36:00.332Z"
+   "upsetPct": 44,
+   "savedAt": "2026-11-12T12:27:26.740Z"
   },
   "401856885": {
    "id": "401856885",
@@ -773,8 +773,8 @@
    "spread": 2.5,
    "score": 59,
    "tier": "FADE",
-   "upsetPct": 48,
-   "savedAt": "2026-11-12T03:43:11.538Z"
+   "upsetPct": 49,
+   "savedAt": "2026-11-12T12:27:26.740Z"
   },
   "401856889": {
    "id": "401856889",
@@ -1194,12 +1194,12 @@
     "abbr": "NCSU",
     "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/152.png"
    },
-   "line": "SYR -3",
-   "spread": 3,
-   "score": 23,
+   "line": "SYR -2.5",
+   "spread": 2.5,
+   "score": 15,
    "tier": "HOLD",
-   "upsetPct": 43,
-   "savedAt": "2026-11-11T15:59:58.136Z"
+   "upsetPct": 42,
+   "savedAt": "2026-11-12T12:27:26.740Z"
   },
   "401858301": {
    "id": "401858301",
@@ -1223,8 +1223,8 @@
    "spread": 1.5,
    "score": 53,
    "tier": "FADE",
-   "upsetPct": 55,
-   "savedAt": "2026-11-12T03:43:11.538Z"
+   "upsetPct": 54,
+   "savedAt": "2026-11-12T12:27:26.739Z"
   },
   "401858510": {
    "id": "401858510",
@@ -1448,8 +1448,8 @@
    "spread": 10,
    "score": 21,
    "tier": "HOLD",
-   "upsetPct": 23,
-   "savedAt": "2026-11-11T22:38:25.403Z"
+   "upsetPct": 22,
+   "savedAt": "2026-11-12T12:27:26.740Z"
   },
   "401858519": {
    "id": "401858519",
@@ -1619,12 +1619,12 @@
     "abbr": "RUTG",
     "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/164.png"
    },
-   "line": "NEB -15.5",
-   "spread": 15.5,
+   "line": "NEB -14.5",
+   "spread": 14.5,
    "score": 35,
    "tier": "WATCH",
-   "upsetPct": 17,
-   "savedAt": "2026-11-12T03:43:11.538Z"
+   "upsetPct": 16,
+   "savedAt": "2026-11-12T12:27:26.740Z"
   },
   "401858526": {
    "id": "401858526",
@@ -1848,8 +1848,8 @@
    "spread": 4,
    "score": 23,
    "tier": "HOLD",
-   "upsetPct": 34,
-   "savedAt": "2026-11-12T03:43:11.538Z"
+   "upsetPct": 35,
+   "savedAt": "2026-11-12T12:27:26.740Z"
   },
   "401862817": {
    "id": "401862817",
@@ -2048,8 +2048,8 @@
    "spread": 3.5,
    "score": 34,
    "tier": "WATCH",
-   "upsetPct": 39,
-   "savedAt": "2026-11-11T22:38:25.402Z"
+   "upsetPct": 40,
+   "savedAt": "2026-11-12T12:27:26.739Z"
   },
   "401862825": {
    "id": "401862825",
@@ -2346,10 +2346,10 @@
    },
    "line": "AFA -12.5",
    "spread": 12.5,
-   "score": 13,
+   "score": 23,
    "tier": "HOLD",
-   "upsetPct": 18,
-   "savedAt": "2026-11-11T15:59:58.136Z"
+   "upsetPct": 19,
+   "savedAt": "2026-11-12T12:27:26.740Z"
   },
   "401864539": {
    "id": "401864539",
@@ -2373,8 +2373,8 @@
    "spread": 14,
    "score": 23,
    "tier": "HOLD",
-   "upsetPct": 16,
-   "savedAt": "2026-11-12T03:43:11.538Z"
+   "upsetPct": 15,
+   "savedAt": "2026-11-12T12:27:26.740Z"
   },
   "401864540": {
    "id": "401864540",
@@ -2798,8 +2798,8 @@
    "spread": 6,
    "score": 23,
    "tier": "HOLD",
-   "upsetPct": 33,
-   "savedAt": "2026-11-12T03:43:11.538Z"
+   "upsetPct": 32,
+   "savedAt": "2026-11-12T12:27:26.740Z"
   },
   "401869964": {
    "id": "401869964",
